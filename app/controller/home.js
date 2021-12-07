@@ -39,7 +39,7 @@ class HomeController extends Controller {
   }
 
   async exportExcel(){
-    var title = ['姓名','性别','联系电话','身份证号'];
+    var title = ['姓名','性别','联系电话','身份证号2'];
     var results = [
       {
         'name':'张三',
