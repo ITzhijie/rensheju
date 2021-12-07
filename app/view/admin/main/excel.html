@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>新东方新零售后台-登录</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/public/admin/admin-lte/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <!-- <link rel="stylesheet" href="/public/admin/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css"> -->
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/public/admin/admin-lte/dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <style>
+  .login-page{
+    display: inherit;
+    min-width: 1280px;
+    min-height: 560px;
+    position: relative;
+    background-color: #fff;
+
+  }
+  .login-logo{
+    margin-bottom: 6rem;
+  }
+  .login-logo a, .register-logo a{
+    color: #000;
+    font-size: 27px;
+    font-weight: 700;
+  }
+ 
+  .navbar-dark {
+    background-color: #fff;
+
+  }
+  .login-box-msg{
+    text-align: left;
+    border-left: 4px solid #007bff;
+    padding-bottom: 0;
+    margin-bottom: 30px;
+  }
+  .leftBox{
+    width: 60%;
+    height: 100%;
+    display: inline-block;
+    padding: 0;
+    vertical-align: middle;
+    background: #fff url("/public/admin/images/login_bg.png") no-repeat center bottom/100%;
+
+  }
+  .rightBox{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  .mb-30{
+    margin-bottom:30px !important;
+  }
+  .login-card-body, .register-card-body{
+    padding:30px 20px;
+  }
+  </style>
+</head>
+<body class="hold-transition login-page">
+  <div class="login-page ">
+    <div class="leftBox"></div>
+    <div class="rightBox">
+      <div class=" login-box navbar-dark">
+        <div class="login-logo">
+          <a href="#">系统</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+          <div class="card-body login-card-body">
+            <p class="login-box-msg">登录</p>
+      
+            <form action="/import" method="post" enctype="multipart/form-data">
+              <div class="input-group mb-30">
+                <input class="fileImg" type="file" id="socialInput"  name="myfile">
+
+               
+              </div>
+
+                <div class="input-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">提交</button>
+                </div>
+            </form>
+      
+      
+          </div>
+          <!-- /.login-card-body -->
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="/public/admin/admin-lte/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/public/admin/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/public/admin/admin-lte/dist/js/adminlte.min.js"></script>
+
+</body>
+</html>
+
+

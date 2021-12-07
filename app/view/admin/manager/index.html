@@ -1,0 +1,85 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 管理员增加 {% endblock %}
+
+{% block main %}
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h3 class="card-title">管理员列表</h3>
+
+                            <!-- <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" name="table_search" class="form-control float-right"
+                                        placeholder="Search">
+
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>管理员姓名</th>
+                                        <th>管理员电话</th>
+                                        <!-- <th>管理员邮箱</th> -->
+                                        <th>管理员角色</th>
+                                        <th class="text-center">状态</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+                                    {# {% if list.is_super==0 %} #}
+
+                                    <tr>
+                                        <td>{{list.username}}</td>
+                                        <td>{{list.mobile}}</td>
+                                        <!-- <td>{{list.email}}</td> -->
+                                        <td>{{list.role[0].title}}</td>
+                                        <td class="text-center">
+                                            {% if list.status==1&&list.is_super==0 %}
+                                            <i class="icon fas fa-check text-success" style="cursor: pointer;"
+                                            onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                            {% else %}
+                                            <i class="icon fas fa-ban text-danger" style="cursor: pointer;"
+                                            onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if list.is_super==0 %}
+                                            <!-- <a href="/admin/manager/edit?id={{list._id}}">修改</a> -->
+
+                                            <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Admin&id={{list._id}}')">删除</a>
+
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {# {% endif %} #}
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

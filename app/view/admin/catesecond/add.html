@@ -1,0 +1,110 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 增加二级分类 {% endblock %}
+
+{% block main %}
+
+<style>
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+    .previewImg{
+        width:100px;
+        height:100px;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">增加二级分类</h3>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <form id="actionForm" role="form" action="/admin/catesecond/doAdd" method="post">
+                                    <div class="card-body">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">二级分类名称</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="catename">
+                                        </div>
+
+            
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="form-group col-md-12">
+                                            <label>所属一级分类</label>
+                                            <select class="form-control select2" style="width: 100%;" name="catefirst_id">
+                                                <option value="">请选择</option>
+                                                {% for item in catefirst %}
+                                                <option value="{{item._id}}">{{item.catename}}</option>
+
+                                                {% endfor %}
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">排序<span>（正整数，数字越大，越靠前）</span></label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="sort">
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button class="submitBtn btn btn-primary" type="button">提交</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+
+
+    $(".submitBtn").click(function () {
+
+        if (checkNull('catename') && checkNull('sort')  ) {
+            $("#actionForm").submit();
+
+        }else{
+            Swal.fire({
+                title: '请填写完整信息',
+                text: "",
+                icon: 'warning',
+                confirmButtonText: '好的'
+            })
+        }
+    })
+
+    function checkNull(name) {
+        if ($("input[name='" + name + "']").val() || $("select[name='" + name + "']").val()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+{% endblock %}

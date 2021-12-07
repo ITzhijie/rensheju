@@ -1,0 +1,274 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 编辑人才信息 {% endblock %}
+
+{% block main %}
+
+<style>
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+
+    label span {
+        font-size: 14px !important;
+        color: lightcoral;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">编辑人才信息</h3>
+                        <a class="float-right" href="/admin/goback?prevPage={{prevPage}}">返回</a>
+
+                    </div>
+                    <form id="actionForm" role="form" action="/admin/user/doEdit" method="post">
+                        <div class="card-body">
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputUsername">姓名</label>
+                                <input type="text" class="form-control" id="exampleInputUsername" name="username"
+                                    value="{{userResult.username}}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputMobile">电话</label>
+                                <input type="number" class="form-control" id="exampleInputMobile" name="phone"
+                                    value="{{userResult.phone}}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>企业</label>
+                                <select class="form-control select2" style="width: 100%;" name="company_name">
+                                    {% if userResult.company_name=="" or userResult.company_name==undefined %}
+                                    <option value="">请选择</option>
+                                    {% endif %}
+                                    {% for item in companyResult %}
+                                    <option value="{{item.company_name}}" {% if userResult.company_name == item.company_name %}selected{% endif %}>{{item.company_name}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputidcard">身份证号</label>
+                                <input type="text" class="form-control" id="exampleInputidcard" name="idcard"
+                                    value="{{userResult.idcard}}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">户籍</label>
+                                <div class="row mb-2 citySelectBox">
+                                    <div class="col-sm-6">
+                                        <select class="form-control prov" name="prov" id="provSct">
+                                            <option value="{{userResult.prov}}">{{userResult.prov}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control city" name="city" id="citySct" disabled>
+                                            <option value="{{userResult.city}}">{{userResult.city}}</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="custom-control custom-radio" style="display: inline-block; margin-right: 3rem; padding-left: 2.5rem;">
+                                    <input class="custom-control-input" type="radio" id="customRadio1" name="storage_status" value="2" {% if userResult.storage_status==2 %}checked{% endif %}>
+                                    <label for="customRadio1" class="custom-control-label">入库</label>
+                                  </div>
+                                  <div class="custom-control custom-radio" style="display: inline-block; margin-right: 3rem; padding-left: 2.5rem;">
+                                    <input class="custom-control-input" type="radio" id="customRadio2" name="storage_status"  value="3" {% if userResult.storage_status==3 %}checked{% endif %}>
+                                    <label for="customRadio2" class="custom-control-label">出库</label>
+                                  </div>
+                            </div>
+                            <!-- <div class="form-group row">
+                                <div class=" col-sm-6 ">
+                                    <label for="idcard_pic">身份证照片</label>
+                                    <div class="custom-file">
+    
+                                        <input type="file" class="custom-file-input" id="idcard_pic" name="idcard_pic">
+                                        <label class="custom-file-label" for="idcard_pic">选择</label>
+                                    </div>
+                                </div>
+                                <div class=" col-sm-6 ">
+                                    <label for="housebook_pic">户口本照片</label>
+                                    <div class="custom-file">
+    
+                                        <input type="file" class="custom-file-input" id="idcard_pic" name="housebook_pic">
+                                        <label class="custom-file-label" for="housebook_pic">选择</label>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <input id="idcard" type="hidden" name="idcard_pic" value="{{userResult.idcard_pic}}">
+                            <input id="housebook" type="hidden" name="housebook_pic"
+                                value="{{userResult.housebook_pic}}">
+                            <input id="social" type="hidden" name="social_pic" value="{{userResult.social_pic}}">
+                            <input id="contract" type="hidden" name="contract_pic" value="{{userResult.contract_pic}}">
+                            <input id="contract" type="hidden" name="id" value="{{userResult._id}}">
+                            <input id="contract" type="hidden" name="last_company_name" value="{{last_company_name}}">
+                            <input type="hidden" name="prevPage" readonly value="{{prevPage}}" />
+                            <input type="hidden" name="last_prevPage" readonly value="{{last_prevPage}}" />
+
+                            
+                    </form>
+                    <div class="form-group row">
+                        <div class=" col-sm-6 ">
+
+                            <label for="exampleInputFile">身份证照片</label>
+                            <div class="formBox">
+                                <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                                    <div class="fileImgBox">
+                                        {% if userResult.idcard_pic %}
+                                        <img class="previewImg" id="idcardPreview" src="{{userResult.idcard_pic}}">
+                                        {% else %}
+                                        <img class="previewImg" id="idcardPreview" src="/public/admin/images/add.png">
+                                        {% endif %}
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 ">
+
+                            <label for="exampleInputFile">户口本照片</label>
+                            <div class="formBox">
+                                <form class="imgForm" id="housebookForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="housebookInput" multiple name="myfile">
+                                    <div class="fileImgBox">
+
+                                        {% if userResult.housebook_pic %}
+                                        <img class="previewImg" id="housebookPreview"
+                                            src="{{userResult.housebook_pic}}">
+                                        {% else %}
+                                        <img class="previewImg" id="housebookPreview"
+                                            src="/public/admin/images/add.png">
+                                        {% endif %}
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class=" col-sm-6 ">
+                            <label for="exampleInputFile">社保流水照片
+                                <span>（后台人员修改只可上传一张图片)</span></label>
+                            <div class="formBox">
+                                <form class="imgForm" id="socialForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="socialInput"  name="myfile">
+                                    {% if userResult.social_pic !='' %}
+                                    {% for item in userResult.social_pic.split(',') %}
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="socialPreview{{loop.index0}}"
+                                            data-index="{{loop.index0}}" src="{{item}}">
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+
+                                    {% if userResult.social_pic.split(',').length < 3 %}
+
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="socialPreview" src="/public/admin/images/add.png">
+                                    </div>
+
+                                    {% endif %}
+
+
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 ">
+                            <label for="exampleInputFile">合同照片 <span>（后台人员修改只可上传一张图片)</span></label>
+                            <div class="formBox">
+                                <form class="imgForm" id="contractForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="contractInput"  name="myfile">
+                                    {% if userResult.contract_pic !='' %}
+                                    {% for item in userResult.contract_pic.split(',') %}
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="contractPreview{{loop.index0}}"
+                                            data-index="{{loop.index0}}" src="{{item}}">
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+
+                                    {% if userResult.contract_pic.split(',').length < 3 %}
+
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="contractPreview" src="/public/admin/images/add.png">
+                                    </div>
+
+                                    {% endif %}
+
+
+
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="submitBtn btn btn-primary" type="button">提交</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "idcard", 1);
+    app.fileChange("housebookInput", "housebookPreview", "housebookForm", "housebook", 1);
+    app.fileChange("socialInput", "socialPreview", "socialForm", "social", 1);
+    app.fileChange("contractInput", "contractPreview", "contractForm", "contract", 1);
+    $(".submitBtn").click(function () {
+        if (checkNull('username') && checkNull('phone') && checkNull('company_name') && checkNull('idcard') && checkNull('city')) {
+            $("#actionForm").submit();
+
+        }else{
+            Swal.fire({
+                title: '请填写完整信息',
+                text: "",
+                icon: 'warning',
+                confirmButtonText: '好的'
+            })
+        }
+    })
+
+    $(".citySelectBox").citySelect({
+        prov: '{{userResult.prov}}',
+        city: '{{userResult.city}}',
+        nodata: "none",
+        required: false
+    });
+    function checkNull(name) {
+
+        if ($("input[name='" + name + "']").val() ||$("select[name='" + name + "']").val() ) {
+ 
+            return true;
+        } else {
+    
+            return false;
+        }
+    }
+</script>
+
+{% endblock %}

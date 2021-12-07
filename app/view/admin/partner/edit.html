@@ -1,0 +1,163 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 增加合作商 {% endblock %}
+
+{% block main %}
+
+<style>
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+    .previewImg{
+        height:160px;
+        width:200px;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">增加合作商</h3>
+                    </div>
+                    
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card-body ">
+                                    <div class="form-group col-sm-12">
+
+                                        <label for="exampleInputFile">合作商图片<span>（上传宽高比为 5:4 的图片）</span></label>
+                                        <div class="formBox">
+                                            <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post"
+                                                name="fileinfo">
+                                                <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                                                <div class="fileImgBox">
+                                                    <img class="previewImg" id="idcardPreview" src="{{partnerResult.img_url}}">
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <form id="actionForm" role="form" action="/admin/partner/doEdit" method="post">
+                                    <div class="card-body">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">合作商名称</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="partner_name" value="{{partnerResult.partner_name}}">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">合作商电话</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="phone" value="{{partnerResult.phone}}">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">联系人</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="link_name" value="{{partnerResult.link_name}}">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">联系人电话</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="link_phone" value="{{partnerResult.link_phone}}">
+                                        </div>
+
+                                        <div class="form-group  col-md-12">
+                                            <label for="exampleInputEmail1">所属区域</label>
+                                            <div class="row mb-2 citySelectBox">
+                                                <div class="col-sm-4">
+                                                    <select class="form-control prov" name="prov" id="provSct">
+                                                        <option value="{{partnerResult.prov}}">{{partnerResult.prov}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <select class="form-control city" name="city" id="citySct" disabled>
+                                                        <option value="{{partnerResult.city}}">{{partnerResult.city}}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <select class="form-control dist" name="area" id="distSct" disabled>
+                                                        <option value="{{partnerResult.area}}">{{partnerResult.area}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label for="exdername">详细地址：</label>
+                                            <input type="text" class="form-control" id="exdername" name="address" placeholder="不用再填省市区" value="{{partnerResult.address}}">
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label for="exdername">排序<span>（正整数，数字越大，越靠前）</label>
+                                            <input type="text" class="form-control" id="exdername" name="sort" value="{{partnerResult.sort}}">
+                                        </div>
+
+
+                                        <input id="main_img" type="hidden" name="img_url"  value="{{partnerResult.img_url}}">
+                                        <input id="pid" type="hidden" name="id"  value="{{partnerResult._id}}">
+
+                                    </div>
+
+                                </form>
+                            </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button class="submitBtn btn btn-primary" type="button">提交</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+{# prov:"湖南", city:"长沙", dist:"岳麓区" #}
+    $(".citySelectBox").citySelect({
+        nodata: "none",
+        required: false,
+        prov:'{{partnerResult.prov}}',
+        city:'{{partnerResult.city}}',
+        dist:'{{partnerResult.area}}'
+    });
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "main_img", 1);
+
+    $(".submitBtn").click(function () {
+
+
+        if (checkNull('img_url') && checkNull('partner_name') && checkNull('link_phone') && checkNull('phone') && checkNull('link_name') && checkNull('address') && checkNull('prov')&& checkNull('city')) {
+            $("#actionForm").submit();
+
+        }else{
+            Swal.fire({
+                title: '请填写完整信息',
+                text: "",
+                icon: 'warning',
+                confirmButtonText: '好的'
+            })
+        }
+    })
+
+    function checkNull(name) {
+        if ($("input[name='" + name + "']").val() || $("select[name='" + name + "']").val()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+{% endblock %}

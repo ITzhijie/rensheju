@@ -1,0 +1,259 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/admin" class="brand-link">
+        <img src="/public/admin/images/logo.png" alt="AdminLTE Logo"
+            class="brand-image img-circle elevation-3" style="box-shadow: 0 0 15px #fff !important;">
+        <span class="brand-text font-weight-light">新东方俱乐部管理系统</span>
+    </a>
+
+
+
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column  " data-widget="treeview" role="menu"
+                data-accordion="false">
+
+                {% for asideList in asideLists %}
+
+                {% if (asideList.checked and asideList.type==1)or(userinfo.is_super==1 and asideList.type==1) %}
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas {{asideList.icon_class}}"></i>
+                        <p class="module_name">
+                            <span>{{asideList.module_name}}</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {% for item in asideList.items %}
+                        {% if (item.checked and item.type!=3)or(userinfo.is_super==1 and item.type!=3) %}
+                        <li class="nav-item">
+                            <a href="{{item.url}}" class="nav-link" target="iframBox">
+                                <i class="fas {{item.icon_class}} nav-icon"></i>
+                                <p class="action_name">{{item.action_name}}</p>
+                                <span class="badge badge-primary right"></span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if userinfo.is_super==1 %}
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-tie"></i>
+                        <p class="module_name">
+                            <span>管理员管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/manager" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">管理员列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/manager/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加管理员</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                {% endif %}
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p class="module_name">
+                            <span>分类管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/catefirst" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">一级分类列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/catefirst/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加一级分类</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="/admin/catesecond" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">二级分类列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/catesecond/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加二级分类</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-friends"></i>
+                        <p class="module_name">
+                            <span>用户管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/user" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">用户列表</p>
+                            </a>
+                        </li>
+        
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p class="module_name">
+                            <span>轮播图管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/banner" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">轮播图列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/banner/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加轮播图</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p class="module_name">
+                            <span>公告管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/announcement" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">公告列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/announcement/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加公告</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p class="module_name">
+                            <span>车辆管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/car" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">车辆列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/car/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加车辆</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p class="module_name">
+                            <span>合作商管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/partner" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">合作商列表</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/partner/add" class="nav-link" target="iframBox">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p class="action_name">增加合作商</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-friends"></i>
+                        <p class="module_name">
+                            <span>订单管理</span>
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="/admin/order" class="nav-link" target="iframBox">
+                                <i class="fas fa-list-ul nav-icon"></i>
+                                <p class="action_name">订单列表</p>
+                            </a>
+                        </li>
+        
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+

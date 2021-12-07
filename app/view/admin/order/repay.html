@@ -1,0 +1,186 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 设置还款计划 {% endblock %}
+
+{% block main %}
+
+<style>
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+
+    .checkInfoRow {
+        padding: 15px 0;
+    }
+
+    .checkInfoRow+.checkInfoRow {
+        border-top: 1px solid rgb(243, 243, 243);
+
+    }
+
+    .checkInfoRow .leftTxt {
+        width: 100px;
+        /* display: inline-block; */
+        text-align: right;
+        margin-right: 30px;
+        float: left;
+    }
+
+    .rightContent {
+        overflow: hidden;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">设置还款计划</h3>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">姓名</span>
+                                    <div class="rightContent">{{userInfo.username}}</div>
+                                </div>
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">电话</span>
+                                    <div class="rightContent">{{userInfo.phone}}</div>
+                                </div>
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">订单号</span>
+                                    <div class="rightContent">{{orderInfo.out_trade_no}}</div>
+                                </div>
+                                
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">车型</span>
+                                    <div class="rightContent">{{orderInfo.car[0].car_name}}</div>
+                                </div>
+
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">订单金额</span>
+                                    <div class="rightContent">{{orderInfo.total_fee/100}}元</div>
+                                </div>
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">支付时间</span>
+                                    <div class="rightContent">{{helper.formatTime(orderInfo.time_end)}}</div>
+                                </div>
+                                {% if periodData.length >0  %}
+                                <div class="checkInfoRow">
+                                    <span class="leftTxt">赠送期数</span>
+                                    <div class="rightContent">
+                                    {% for item in periodData %}
+                                    {{item.period}}
+                                    {% if loop.index<periodData.length %}
+                                    +
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <form id="actionForm" role="form" action="/admin/order/editRepay" method="post">
+                                    <div class="card-body">
+                                        <input id="content" type="hidden" name="content"  value="{{userInfo.repay[0].content}}">
+                                        <input id="repayId" type="hidden" name="id" value="{{userInfo.repay_id}}">
+                                        <input type="hidden" name="prevPage" value="{{prevPage}}">
+                                        <input type="hidden" name="last_prevPage" value="{{last_prevPage}}">
+
+
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div class="col-md-6">
+                                    <div class="card-body">
+
+                                        <label for="">还款计划详情</label>
+                                        <div id="editor">
+                                            {{userInfo.repay[0].content|safe}}
+                                        </div>
+
+                                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button class="submitBtn btn btn-primary" type="button">提交</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <script type="text/javascript" src="/public/admin/wangEditor/wangEditor.js"></script>
+
+<script>
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.customConfig.menus = [
+        'head',  // 标题
+        'bold',  // 粗体
+        'fontSize',  // 字号
+        //'fontName',  // 字体
+        'italic',  // 斜体
+        'underline',  // 下划线
+        //'strikeThrough',  // 删除线
+        'foreColor',  // 文字颜色
+        'backColor',  // 背景颜色
+        //'link',  // 插入链接
+        //'list',  // 列表
+        'justify',  // 对齐方式
+        'quote',  // 引用
+        //'emoticon',  // 表情
+        'image',  // 插入图片
+        'table',  // 表格
+        //'video',  // 插入视频
+        //'code',  // 插入代码
+        'undo',  // 撤销
+        'redo'  // 重复
+    ]
+    editor.customConfig.showLinkImg = false;
+    editor.customConfig.uploadImgServer = '/admin/wangUpload?_csrf=' + csrf;
+    editor.customConfig.uploadImgMaxLength = 10;
+    editor.customConfig.debug = 1
+    editor.create()
+
+    $(".submitBtn").click(function () {
+        console.log(editor.txt.html());
+        $("#content").val(editor.txt.html());
+
+        if ( checkNull('content') ) {
+            $("#actionForm").submit();
+
+        }else{
+            Swal.fire({
+                title: '请填写完整信息',
+                text: "",
+                icon: 'warning',
+                confirmButtonText: '好的'
+            })
+        }
+    })
+
+    function checkNull(name) {
+        if ($("input[name='" + name + "']").val() || $("select[name='" + name + "']").val()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+{% endblock %}

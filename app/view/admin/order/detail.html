@@ -1,0 +1,401 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 订单详情 {% endblock %}
+
+{% block main %}
+
+<style>
+    .checkInfoRow {
+        padding: 10px 0;
+    }
+
+    .checkInfoRow+.checkInfoRow {
+        border-top: 1px solid rgb(243, 243, 243);
+
+    }
+
+    .checkInfoRow .leftTxt {
+        width: 150px;
+        /* display: inline-block; */
+        text-align: right;
+        margin-right: 30px;
+        float: left;
+    }
+
+    .rightContent {
+        overflow: hidden;
+    }
+
+    .rightContent img {
+        width: 150px;
+        height: 90px;
+        margin-right: 20px;
+        border-radius: 5px;
+        cursor: zoom-in;
+    }
+
+    .card-footer button {
+        margin-left: 20px;
+    }
+
+    .select2-container--default.select2-container--open {
+        z-index: 999999;
+    }
+
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">订单详情</h3>
+                        <a class="float-right" href="{{last_prevPage}}">返回</a>
+                    </div>
+                    
+
+
+                    <div id="preImg" class="card-body">
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">订单号</span>
+                            <div class="rightContent">{{orderData.out_trade_no}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">车型图片</span>
+                            <div class="rightContent">
+                                <img src="{{orderData.car[0].main_img}}">
+                            </div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">订单车型</span>
+                            <div class="rightContent">{{orderData.car[0].car_name}}</div>
+                        </div>
+                        
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">厂商指导价</span>
+                            <div class="rightContent">{{orderData.car[0].firms_price}}元</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">新零售价</span>
+                            <div class="rightContent">{{orderData.car[0].first_price}}元</div>
+                        </div>
+                        
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">支付定金</span>
+                            <div class="rightContent">{{orderData.total_fee/100}}元</div>
+                        </div>
+
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">支付时间</span>
+                            <div class="rightContent">{{helper.formatTime(orderData.add_time)}}</div>
+                        </div>
+
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">订单状态</span>
+                            <div class="rightContent">
+                                    {% if orderData.status == 1 %}
+                                    <span class="text-primary">已支付定金,待征信审核</span>
+                                    {% elif orderData.status == 2 %}
+                                    <span class="text-danger">征信审核未通过，已退款</span>
+                                    {% elif orderData.status == 3 %}
+                                    <span class="text-success">征信审核通过，待线下提车</span>
+                                    {% elif orderData.status == 4 %}
+                                    <span class="text-success">提车成功</span>
+                                    {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="card-header">
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">客户信息</h3>
+                        </div>
+
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">姓名</span>
+                            <div class="rightContent">{{orderData.user[0].username}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">电话</span>
+                            <div class="rightContent">{{orderData.user[0].phone}}</div>
+                        </div>
+
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">身份证号</span>
+                            <div class="rightContent">{{orderData.user[0].idcard}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">银行卡号</span>
+                            <div class="rightContent">{{orderData.user[0].bank_card}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">所在区域</span>
+                            <div class="rightContent">{{orderData.user[0].prov}}{{orderData.user[0].city}}{{orderData.user[0].area}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">详细地址</span>
+                            <div class="rightContent">{{orderData.user[0].address}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">身份证正面</span>
+                            <div class="rightContent">
+                                <img src="{{orderData.user[0].idcard_z_url}}">
+                            </div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">身份证反面</span>
+                            <div class="rightContent">
+                                <img src="{{orderData.user[0].idcard_f_url}}">
+                            </div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">银行卡</span>
+                            <div class="rightContent">
+                                <img src="{{orderData.user[0].bank_card_url}}">
+                            </div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">驾照</span>
+                            <div class="rightContent">
+                                <img src="{{orderData.user[0].jsz_url}}">
+                            </div>
+                        </div>
+                        {% if periodData.length >0  %}
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">赠送期数</span>
+                            <div class="rightContent">
+                            {% for item in periodData %}
+                            {{item.period}}
+                            {% if loop.index<periodData.length %}
+                            +
+                            {% endif %}
+                            {% endfor %}
+                            
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if userPartner  %}
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">指定服务商</span>
+                            <div class="rightContent">{{userPartner.partner_name}}</div>
+                        </div>
+                        {% endif %}
+
+                        <div class="card-header">
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">推荐人信息</h3>
+                        </div>
+                        {% if orderData.share[0]%}
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">姓名</span>
+                            <div class="rightContent">{{orderData.share[0].username}}</div>
+                        </div>
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">电话</span>
+                            <div class="rightContent">{{orderData.share[0].phone}}</div>
+                        </div>
+                        
+                        {% if periodShareData.length >0  %}
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">赠送期数</span>
+                            <div class="rightContent">
+                            {% for item in periodShareData %}
+                            {{item.period}}
+                            {% if loop.index<periodShareData.length %}
+                            +
+                            {% endif %}
+                            {% endfor %}
+                            
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <div class="checkInfoRow">
+                            <span class="leftTxt">本订单</span>
+                            <div class="rightContent">无推荐人</div>
+                        </div>
+                        {% endif %}
+
+
+                    </div>
+                    <form id="changeForm" role="form" action="/admin/order/changeStatus" method="post">
+                        <input type="hidden" name="order_id" value="{{orderData._id}}">
+                        <input type="hidden" name="user_id" value="{{orderData.user[0]._id}}">
+                        <input type="hidden" name="openid" value="{{orderData.openid}}">
+
+                        <input type="hidden" name="share_id" value="{{orderData.share[0]._id}}">
+                        <input type="hidden" name="car_id" value="{{orderData.car_id}}">
+                        <input type="hidden" name="out_trade_no" value="{{orderData.out_trade_no}}">
+                        <input type="hidden" name="total_fee" value="{{orderData.total_fee}}">
+                        <input type="hidden" name="partner_id" value="">
+
+                        <!-- 1申请未审批 2审批未通过 3审批通过 -->
+                        <input type="hidden" name="status" value="">
+                        <input type="hidden" name="noreason" value="">
+
+                        <input type="hidden" name="last_prevPage" value="{{last_prevPage}}">
+
+                    </form>
+
+                    <div class="card-footer">
+
+                        {% if orderData.status == 1 %}
+                            <button type="button" class="btn btn-primary passBtn">征信审核通过</button>
+                            <button type="button" class="btn btn-danger noPass">征信审核不通过</button>
+
+                        {% elif orderData.status == 2 %}
+
+                        {% elif orderData.status == 3 %}
+                            {# 线下提车成功 同时设置 推荐人的赠送期数 #}
+                            <button type="button" class="btn btn-primary getCar">线下提车成功</button>
+
+                        {% elif orderData.status == 4 %}
+                            {# 提车成功后 可设置还款计划  #}
+                            <button type="button" class="btn btn-primary setUserPlan">设置还款计划</button>
+                            {% if orderData.share[0]%}
+                            <button type="button" class="btn btn-primary setSharePlan">设置推荐人还款计划</button>
+                            {% endif %}
+
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $('#preImg').viewer();//图片预览
+
+    $(".passBtn").click(function () {
+        $("input[name='status']").val(3);
+        $("#changeForm").submit();
+    })
+
+    //设置用户还款计划
+    $(".setUserPlan").click(function(){
+        window.location.href='/admin/order/repay?repay_id={{orderData.user[0].repay_id}}&user_id={{orderData.user_id}}&last_prevPage={{last_prevPage}}'
+    })
+
+    $(".setSharePlan").click(function(){
+        window.location.href='/admin/order/repay?repay_id={{orderData.share[0].repay_id}}&user_id={{orderData.share_id}}&last_prevPage={{last_prevPage}}'
+    })
+    $(".noPass").click(function () {
+        Swal.fire({
+            title: '请输入不通过原因',
+            text: '操作后，请进入微信商户平台进行退款操作',
+            input: 'textarea',
+            inputPlaceholder: '请输入详细原因，最多50字',
+            inputAttributes: {
+                maxlength: 30
+            },
+            showCancelButton: true,
+            cancelButtonColor: '#dc3545',
+            cancelButtonText: '取消',
+            confirmButtonText: '确定',
+            showLoaderOnConfirm: true,
+
+            reverseButtons: true
+
+        }).then((result) => {
+            console.log(result.value);
+            if (result.value == "") {
+                Swal.fire({
+                    title: "请输入不通过原因",
+                })
+            }
+
+            if (result.value) {
+                $("input[name='noreason']").val(result.value);
+                $("input[name='status']").val(2);
+                $("#changeForm").submit();
+            }
+        })
+    })
+    $(".saveBtn").click(function () {
+        swalSelect(function (result) {
+            var company_name = $('select[name="company_name"]').val();
+            if (result.value) {
+                if (company_name == "") {
+                    Swal.fire({
+                        title: "请选择一个存档企业",
+                    })
+                } else {
+                    $("input[name='checkType']").val("4");
+                    $("input[name='storage_status']").val(2);
+                    $("input[name='company_name']").val(company_name);
+                    $("#changeForm").submit();
+                }
+            }
+        })
+    })
+    $(".getCar").click(function () {
+        swalSelect(function (result) {
+            var partner_id = $('select[name="partner_id"]').val();
+            console.log(partner_id);
+            console.log(result);
+
+            if (result.value) {
+                if (partner_id == "") {
+                    Swal.fire({
+                        title: "请选择一个存档企业",
+                    })
+                } else {
+                    $("input[name='status']").val(4);
+                    $("input[name='partner_id']").val(partner_id);
+
+                    $("#changeForm").submit();
+                }
+            }
+        })
+
+    })
+
+
+    function swalSelect(cb) {
+        Swal.fire({
+            title: '请指定服务合作商',
+            text: '',
+            html: '<select class="form-control select2" style="width: 100%;" name="partner_id">' +
+                '<option value="">请选择</option>' +
+                '{% for item in partnerData %}' +
+                '<option value="{{item._id}}">{{item.partner_name}}</option>' +
+                '{% endfor %}' +
+                '</select>',
+            showCancelButton: true,
+            cancelButtonColor: '#dc3545',
+            cancelButtonText: '取消',
+            confirmButtonText: '确定',
+            showLoaderOnConfirm: true,
+            reverseButtons: true,
+            onOpen: function () {
+                $('.select2').select2();
+
+
+            }
+
+        }).then((result) => {
+            cb(result);
+
+
+        })
+    }
+
+
+
+
+</script>
+
+{% endblock %}

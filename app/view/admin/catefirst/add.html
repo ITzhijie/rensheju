@@ -1,0 +1,114 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 增加一级分类 {% endblock %}
+
+{% block main %}
+
+<style>
+    .select2-container .select2-selection--single {
+        height: inherit;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 8px;
+    }
+    .previewImg{
+        width:100px;
+        height:100px;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">增加一级分类</h3>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card-body ">
+                                    <div class="form-group col-sm-12">
+
+                                        <label for="exampleInputFile">一级分类图标<span>（上传宽高比为 1：1 的透明背景图标）</span></label>
+                                        <div class="formBox">
+                                            <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post"
+                                                name="fileinfo">
+                                                <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                                                <div class="fileImgBox">
+                                                    <img class="previewImg" id="idcardPreview" src="/public/admin/images/add02.png">
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <form id="actionForm" role="form" action="/admin/catefirst/doAdd" method="post">
+                                    <div class="card-body">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">一级分类名称</label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="catename">
+                                        </div>
+
+                                        <input id="main_img" type="hidden" name="imgurl" >
+
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputUsername">排序<span>（正整数，数字越大，越靠前）</span></label>
+                                            <input type="text" class="form-control" id="exampleInputUsername" name="sort">
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button class="submitBtn btn btn-primary" type="button">提交</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "main_img", 1);
+
+    $(".submitBtn").click(function () {
+
+        if (checkNull('catename') && checkNull('imgurl')&& checkNull('sort')  ) {
+            $("#actionForm").submit();
+
+        }else{
+            Swal.fire({
+                title: '请填写完整信息',
+                text: "",
+                icon: 'warning',
+                confirmButtonText: '好的'
+            })
+        }
+    })
+
+    function checkNull(name) {
+        if ($("input[name='" + name + "']").val() || $("select[name='" + name + "']").val()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+{% endblock %}

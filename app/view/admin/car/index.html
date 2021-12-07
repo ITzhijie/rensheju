@@ -1,0 +1,123 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 管理员增加 {% endblock %}
+
+{% block main %}
+    <style>
+        .bannerBox{
+            padding: 30px;
+        }
+        .bannerList{
+            margin: 0 auto;
+            width: 270px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            position:relative;
+        }
+        .bannerBox img{
+            width: 250px;
+            height: 125px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .bannerBox p{
+            margin-bottom: 10px;
+        }
+        .bannerList .brandImg{
+            position:absolute;
+            left:10px;
+            bottom:10px;
+            width:30px;
+            height:30px;
+            margin-bottom:0;
+        }
+        .carName{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight:700;
+        }
+    </style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h3 class="card-title">车辆列表</h3>
+                            <div class="card-tools">
+                                <form action="/admin/car" method="GET">
+                                    <div class="input-group input-group-sm" style="width: 200px;">
+
+                                        <input type="text" name="keyword" class="form-control float-right"
+                                            placeholder="请输入关键词" value="{{keyword}}">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="card-body table-responsive container-fluid">
+                            <div class="row">
+
+
+                                {% for list in lists %}
+
+                                <div class="bannerBox col-4">
+                                    <div class="bannerList">
+        
+                                        <img src="{{list.main_img}}">
+                                        <p class="carName">{{list.car_name}}</p>
+                                        <p style="color:red;">新零售价：{{list.first_price}}</p>
+                                        <p>销售量：<span onclick="app.editNum(this,'Car','edit_saled_num','{{list._id}}')">{{list.edit_saled_num}}</span></p>
+                                        <p>排序：<span onclick="app.editNum(this,'Car','sort','{{list._id}}')">{{list.sort}}</span></p>
+
+                                        <p style="text-align: right;">
+                                            <a
+                                            href="/admin/car/edit?id={{list._id}}">编辑</a>
+
+                                            <a class="delete" href="/admin/car/delete?id={{list._id}}">删除</a>
+                                        </p>
+                                        <img class="brandImg" src="{{list.brand[0].brand_img}}">
+
+                                    </div>
+
+    
+                                </div>
+                                {% endfor %}
+
+                            </div>
+
+
+
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

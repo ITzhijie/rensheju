@@ -1,0 +1,84 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 管理员增加 {% endblock %}
+
+{% block main %}
+    <style>
+        .bannerBox{
+            padding: 30px;
+        }
+        .bannerList{
+            margin: 0 auto;
+            width: 270px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .bannerBox img{
+            width: 250px;
+            height: 125px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .bannerBox p{
+            margin-bottom: 10px;
+        }
+    </style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h3 class="card-title">轮播图列表</h3>
+                        </div>
+                        <div class="card-body table-responsive container-fluid">
+                            <div class="row">
+
+
+                                {% for list in lists %}
+
+                                <div class="bannerBox col-4">
+                                    <div class="bannerList">
+        
+                                        <img src="{{list.main_img}}">
+                                        <p>{{list.title}}</p>
+                                        <p>排序：<span onclick="app.editNum(this,'Detail','sort','{{list._id}}')">{{list.sort}}</span></p>
+
+                                        <p style="text-align: right;">
+                                            <a
+                                            href="/admin/banner/edit?id={{list._id}}">编辑</a>
+
+                                            <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Detail&id={{list._id}}')">删除</a>
+                                        </p>
+                                    </div>
+
+    
+                                </div>
+                                {% endfor %}
+
+                            </div>
+
+
+
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 合作商列表 {% endblock %}
+
+{% block main %}
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">合作商列表</h3>
+
+                        <div class="card-tools">
+                            <form action="/admin/partner" method="GET">
+                                <div class="input-group input-group-sm" style="width: 200px;">
+
+                                    <input type="text" name="keyword" class="form-control float-right"
+                                        placeholder="请输入关键词" value="{{keyword}}">
+
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover  table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>联系电话</th>
+                                    <th>所属区域</th>
+                                    <th>详细地址</th>
+                                    <th>联系人</th>
+                                    <th>联系人电话</th>
+
+                                    <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for list in lists %}
+                                <tr>
+                                    <td>{{list.partner_name}}</td>
+                                    <td>{{list.phone}}</td>
+                                    <td>{{list.prov}} {{list.city}} {{list.area}}</td>
+                                    <td>{{list.address}}</td>
+                                    <td>{{list.link_name}}</td>
+                                    <td>{{list.link_phone}}</td>
+
+    
+                                    <td class="text-center">
+
+                                        <a
+                                            href="/admin/partner/edit?id={{list._id}}">编辑</a>
+
+                                        <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Partner&id={{list._id}}')">删除</a>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if lists.length == 0 %}
+                        <div class="text-center py-2">暂时没有信息哦</div>
+                        {% endif %}
+                    </div>
+                    {% if totalPages > 1 %}
+                    <div class="card-footer">
+                        <div id="page" class="pagination float-right"></div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+
+    $('#page').jqPaginator({
+        totalPages: Number('{{totalPages}}'),
+        visiblePages: 8,
+        currentPage: Number('{{page}}'),
+        onPageChange: function (num, type) {
+            console.log('当前第' + num + '页', type);
+
+            if (type == 'change') {
+
+                location.href = "/admin/partner?keyword={{keyword}}&page=" + num;
+            }
+        }
+    });
+
+
+
+
+</script>
+{% endblock %}

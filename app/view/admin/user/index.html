@@ -1,0 +1,112 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block main %}
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">用户列表</h3>
+
+                        <div class="card-tools">
+                            <form action="/admin/user" method="GET">
+                                <div class="input-group input-group-sm" style="width: 200px;">
+                                    <input type="hidden" name="last_company_name" value="{{last_company_name}}">
+                                    <input type="hidden" name="last_prevPage" value="{{last_prevPage}}">
+
+                                    <input type="text" name="keyword" class="form-control float-right"
+                                        placeholder="请输入关键词" value="{{keyword}}">
+
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover  table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>手机号</th>
+                                    <th>是否是会员</th>
+
+                                    <th>所属区域</th>
+                                    <th>注册时间</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for list in lists %}
+                                <tr>
+                                    <td>{{list.username}}</td>
+                                    <td>{{list.phone}}</td>
+                                    <td>
+                                    {% if list.is_vip==1 %}
+                                    是
+                                    {% else %}
+                                    否
+                                    {% endif %}
+                                    </td>
+
+                                    <td>{{list.prov}}{{list.city}}{{list.area}}</td>
+                                    <td>{{helper.formatTime(list.add_time)}}</td>
+
+                                    {# <td class="text-center">
+
+                                        <a
+                                            href="/admin/user/edit?id={{list._id}}&last_company_name={{last_company_name}}&last_prevPage={{last_prevPage}}">编辑</a>
+
+                                        <a class="delete" href="javascript:(0)"
+                                            onclick="app.deleteConfirm('/admin/user/deleteUser?id={{list._id}}')">删除</a>
+
+                                    </td> #}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if lists.length == 0 %}
+                        <div class="text-center py-2">暂时没有信息哦</div>
+                        {% endif %}
+                    </div>
+                    {% if totalPages > 1 %}
+                    <div class="card-footer">
+                        <div id="page" class="pagination float-right"></div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+
+    $('#page').jqPaginator({
+        totalPages: Number('{{totalPages}}'),
+        visiblePages: 8,
+        currentPage: Number('{{page}}'),
+        onPageChange: function (num, type) {
+            console.log('当前第' + num + '页', type);
+
+            if (type == 'change') {
+
+                location.href = "/admin/user?last_company_name={{last_company_name}}&last_prevPage={{last_prevPage}}&keyword={{keyword}}&page=" + num;
+            }
+        }
+    });
+
+
+
+
+</script>
+{% endblock %}

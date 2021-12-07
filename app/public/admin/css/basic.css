@@ -1,0 +1,81 @@
+.custom-file-label::after{
+    content: "选择";
+}
+/*修改数量*/
+.table .text-center span{
+    display: block;
+    /* background: red; */
+    /* cursor: pointer; */
+    text-align: center;
+}
+.table .text-center span input{
+    width: 60px;
+}
+section{
+    padding: 30px 15px;
+}
+
+.formBox {
+    position: relative;
+}
+.fileImgBox{
+    display: inline-block;
+    width: 300px;
+    margin-right: 2%;
+}
+
+.previewImg {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+}
+
+.fileImg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    cursor: pointer;
+    opacity: 0;
+}
+.brand-text{
+    font-size: 0.8rem;
+}
+label span{
+    font-size: 14px !important;
+    color: #1706f4;
+}
+body.text-sm .nav-sidebar>.nav-item .nav-icon.fas{
+    font-size: 0.85rem;
+}
+
+.swal2-container{
+    z-index: 10600 !important;
+}
+section p a,table td a{
+    color: #fff;
+    text-decoration: none;
+    background-color: #007bff;
+    display: inline-block;
+    height: 28px;
+    width: 50px;
+    text-align: center;
+    line-height: 28px;
+    margin-left: 6px;
+    border-radius: 4px;
+}
+.card-body>.table>thead>tr>td, .card-body>.table>thead>tr>th{
+    min-width: 85px;
+}
+table td a:hover{
+    color: #fff;
+}
+.delete{
+    background-color: #ff4161 !important;
+
+}
+.sort{
+    font-size: 20px;
+}
