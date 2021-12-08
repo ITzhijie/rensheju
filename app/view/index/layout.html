@@ -7,19 +7,88 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %} 首页 {% endblock %}</title>
 
-    <script>
+    <link rel="stylesheet" href="/public/index/bootstrap-3.4.1-dist/css/bootstrap.min.css">
 
-    </script>
+    <script type="text/javascript" src="/public/index/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/index/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/public/index/js/base.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+        html,body{
+            background: url('/public/index/images/bg.jpg') no-repeat top center/1980px;
+            min-width: 1280px;
+            width: 100%;
+        }
+        .centerBox{
+            width: 80%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        header{
+            height: 180px;
+            width: 100%;
+        }
+        .logo{
+            height: 100px;
+            margin-top: 40px;
+        }
+        footer{
+            width: 100%;
+            /* border-top: 5px solid #3681d2; */
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            background: url('/public/index/images/foot_bg.jpg') no-repeat top center/100% 100%;
+
+        }
+        .footLeft img{
+            width: 120px;
+        }
+        .footRight{
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .linkBox{
+            border-top: 3px solid rgb(180, 206, 255);
+            /* border-bottom: 1px solid rgb(156, 156, 156); */
+            margin: 20px ;
+            margin-bottom: 0;
+            padding: 10px 0;
+        }
+    </style>
 </head>
 <!-- text-sm 小字体 -->
-<body class="hold-transition  sidebar-mini layout-navbar-fixed layout-fixed text-sm">
-    <div class="wrapper skin-blue">
+<body>
+    <div class="centerBox">
+        <header>
+            <img class="logo" src="/public/index/images/logo3.png">
+        </header>
+    
+            {% block main %} "我是layout页面的默认内容" {% endblock %}
+    
 
-        {% block main %} "我是layout页面的默认内容" {% endblock %}
-
+        <div class="linkBox">
+            友情链接： <a href="#">全国人大</a> | <a href="#">全国政协</a> | <a href="#">国家监察委员会</a> | <a href="#">最高人民法院</a>
+        </div>
+    
     </div>
-
+    <footer>
+        <div class="footLeft">
+            <img src="/public/index/images/blue.png">
+        </div>
+        <div class="footRight">
+            <p>主办单位：咸宁市人力资源和社会保障局&nbsp;&nbsp;&nbsp;&nbsp;地址：湖北省咸宁市长安大道286号</p>
+            <p>Copyright © 2017 All Rights Reserved 版权所有 咸宁市人力资源和社会保障局</p>
+            <p>鄂公网安备 42010602000839号</p>
+        </div>
+    </footer>
 </body>
 
 </html>
