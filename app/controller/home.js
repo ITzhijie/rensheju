@@ -64,7 +64,8 @@ class HomeController extends Controller {
 
     var filePath=await this.service.tools.buildExcel(title,results);
 
-
+    this.ctx.attachment(filePath);
+    this.ctx.set("Content-Type", "application/octet-stream");
     this.ctx.body =fs.createReadStream(filePath);
     
   }
