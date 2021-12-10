@@ -1,0 +1,84 @@
+{% extends "./layout.html" %}
+
+{% block title %} 咸宁市报考平台 {% endblock %}
+
+{% block main %}
+<style>
+	.loginBox {
+		background: rgba(255, 255, 255, 0.8);
+		padding: 20px;
+	}
+
+	.loginInBox {
+		border: 1px solid #c5c5c5;
+		margin-right: 0;
+		margin-left: 0;
+		padding: 30px;
+	}
+	.title{
+		font-size: 22px;
+		color: #015293;
+		font-weight: 700;
+		display: block;
+		width: 100%;
+		border-bottom: 1px solid #015293;
+		padding-bottom: 5px;
+	}
+	.titleRow{
+		margin-bottom: 30px;
+	}
+	.form-group{
+		margin-bottom: 30px;
+	}
+	.mb10{
+		margin-bottom: 15px;
+	}
+    .yzmInput{
+        width: 318px !important;
+    }
+</style>
+<div class="loginBox container-fluid">
+	<div class="loginInBox row">
+		<div class="col-xs-6 col-xs-offset-3 titleRow"><span class="title">注 册</span></div>
+		<form class="col-xs-6 col-xs-offset-3">
+			<div class="form-group">
+			  <label >姓名</label>
+			  <input type="text" class="form-control input-lg" name="username">
+			</div>
+			<div class="form-group">
+			  <label >身份证号码</label>
+			  <input type="text" class="form-control input-lg" name="idcard">
+            </div>
+            
+			<div class="form-group">
+                <label >手机号码</label>
+                <input type="text" class="form-control input-lg " name="phone">
+
+            </div>
+			<div class="form-group">
+                <label >验证码</label>
+                <div class=" form-inline">
+                    <input type="text" class="form-control input-lg yzmInput" name="phone">
+                    <button type="submit" class="btn btn-lg btn-default pull-right">发送验证码</button>
+                </div>
+              
+            </div>
+			<div class="form-group">
+			  <label >密码</label>
+			  <input type="password" class="form-control input-lg"  name="password">
+            </div>
+            
+			<div class="form-group mb10">
+                <label >确认密码</label>
+                <input type="password" class="form-control input-lg"  name="repassword">
+              </div>
+			<div class="text-right  mb10">
+				<a href="/">已有账号，去登陆</a>
+			</div>
+
+			<button type="submit" class="btn btn-primary btn-lg btn-block">立即注册</button>
+		  </form>
+	</div>
+</div>
+
+{% endblock %}
