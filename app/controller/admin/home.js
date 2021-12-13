@@ -18,6 +18,14 @@ class HomeController extends BaseController {
         await this.ctx.render('index/forget', {});
 
     }
+
+    async index(){
+        await this.ctx.render('index/index', {});
+
+    }
+
+
+    
 }
 
 module.exports = HomeController;
