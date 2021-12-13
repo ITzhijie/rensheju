@@ -3,8 +3,15 @@ module.exports = app => {
 	const Schema = mongoose.Schema;
 
 
-
-	const AdminSchema = new Schema({
+	//管理员
+	const schema = new Schema({
+		// 用户名	
+		// 手机号	
+		// 邮箱	
+		// 密码	
+		// 所属机构	
+		// 状态	
+		// 是否是超级管理员
 		username: { type: String },
 		password: { type: String },
 		mobile: { type: String },
@@ -28,5 +35,5 @@ module.exports = app => {
 	});
 
 
-	return mongoose.model('Admin', AdminSchema, 'admin');
+	return mongoose.model('Admin', schema, 'admin');
 }

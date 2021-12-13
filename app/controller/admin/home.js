@@ -4,7 +4,7 @@ var BaseController = require('./base.js');
 
 
 class HomeController extends BaseController {
-    async index() {
+    async login() {
   
         await this.ctx.render('index/login', {});
     }
