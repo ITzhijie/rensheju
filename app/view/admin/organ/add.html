@@ -1,0 +1,49 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 增加机构 {% endblock %}
+
+{% block main %}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">增加机构 <span>（添加后不可修改和删除）</span></h3>
+                    </div>
+                    <form role="form" action="/admin/organ/doAdd" method="post">
+                        <div class="card-body">
+                            <div class="form-group col-md-6">
+                                <label for="organ_name">机构名称</label>
+                                <input type="text" class="form-control" id="organ_name" name="organ_name" required="required">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="organ_person">机构联系人</label>
+                                <input type="text" class="form-control" id="organ_person" name="organ_person" required="required">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="organ_phone">机构电话</label>
+                                <input type="text" class="form-control" id="organ_phone" name="organ_phone" required="required">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="organ_addr">机构地址</label>
+                                <input type="text" class="form-control" id="organ_addr" name="organ_addr" required="required">
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

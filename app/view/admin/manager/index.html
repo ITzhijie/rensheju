@@ -12,6 +12,7 @@
                     <div class="card ">
                         <div class="card-header">
                             <h3 class="card-title">管理员列表</h3>
+                            <a href="/admin/manager/add" class="btn btn-primary float-right">增加管理员</a>
 
                             <!-- <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -29,10 +30,9 @@
                             <table class="table table-hover  table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>管理员姓名</th>
-                                        <th>管理员电话</th>
-                                        <!-- <th>管理员邮箱</th> -->
-                                        <th>管理员角色</th>
+                                        <th>用户名</th>
+                                        <th>手机号</th>
+                                        <th>所属机构</th>
                                         <th class="text-center">状态</th>
                                         <th class="text-center">操作</th>
                                     </tr>
@@ -44,24 +44,25 @@
                                     <tr>
                                         <td>{{list.username}}</td>
                                         <td>{{list.mobile}}</td>
-                                        <!-- <td>{{list.email}}</td> -->
-                                        <td>{{list.role[0].title}}</td>
+                                        <td>{{list.organ[0].organ_name}}</td>
                                         <td class="text-center">
-                                            {% if list.status==1&&list.is_super==0 %}
-                                            <i class="icon fas fa-check text-success" style="cursor: pointer;"
-                                            onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                            {% if list.very_super==0 %}
+                                                {% if list.status==1 %}
+                                                <i class="icon fas fa-check text-success" style="cursor: pointer;"
+                                                onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                                {% else %}
+                                                <i class="icon fas fa-ban text-danger" style="cursor: pointer;"
+                                                onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                                {% endif %}
                                             {% else %}
-                                            <i class="icon fas fa-ban text-danger" style="cursor: pointer;"
-                                            onclick="app.changeStatus(this,'Admin','status','{{list._id}}')" ></i>
+                                                <i class="icon fas fa-check text-success" ></i>
                                             {% endif %}
                                         </td>
                                         <td class="text-center">
-                                            {% if list.is_super==0 %}
-                                            <!-- <a href="/admin/manager/edit?id={{list._id}}">修改</a> -->
-
-                                            <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Admin&id={{list._id}}')">删除</a>
-
+                                            {% if list.very_super==0 %}
+                                            <a href="/admin/manager/edit?id={{list._id}}">修改</a>
                                             {% endif %}
+                                            <!-- <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Admin&id={{list._id}}')">删除</a> -->
                                         </td>
                                     </tr>
                                     {# {% endif %} #}

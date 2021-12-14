@@ -17,28 +17,20 @@
                         <div class="card-body">
                             <div class="form-group col-md-6">
                                 <label for="exampleInputUsername">姓名</label>
-                                <input type="text" class="form-control" id="exampleInputUsername" name="username">
+                                <input type="text" class="form-control" id="exampleInputUsername" name="username" required>
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="exampleInputPassword1">管理员密码</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-                            </div> -->
                             <div class="form-group col-md-6">
                                 <label for="exampleInputMobile">电话 <span>（登录密码默认为手机号后 6 位）</span></label>
-                                <input type="number" class="form-control" id="exampleInputMobile" name="mobile">
+                                <input type="number" class="form-control" id="exampleInputMobile" name="mobile" required>
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="exampleInputEmail1">管理员邮箱</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" name="email">
-                            </div> -->
-                            {# <div class="form-group col-md-6">
-                                <label for="role_id">管理员角色</label>
-                                <select class="form-control" name="role_id" id="role_id">
-                                    {% for roleResult in roleResults %}
-                                    <option value="{{roleResult._id}}">{{roleResult.title}}</option>
+                            <div class="form-group col-md-6">
+                                <label for="organ_id">所属机构</label>
+                                <select class="form-control" name="organ_id" id="organ_id">
+                                    {% for organResult in organResults %}
+                                    <option value="{{organResult._id}}">{{organResult.organ_name}}</option>
                                     {% endfor %}
                                 </select>
-                            </div> #}
+                            </div> 
                         </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">提交</button>

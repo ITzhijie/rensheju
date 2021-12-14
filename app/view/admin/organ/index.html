@@ -1,0 +1,66 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 机构列表 {% endblock %}
+
+{% block main %}
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h3 class="card-title">机构列表</h3>
+                            <a href="/admin/organ/add" class="btn btn-primary float-right">增加机构</a>
+                        
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>机构名称</th>
+                                        <th>机构联系人</th>
+                                        <th>机构电话</th>
+                                        <th>机构地址</th>
+                                        <!-- <th class="text-center">操作</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+                                    {# {% if list.is_super==0 %} #}
+
+                                    <tr>
+                                        <td>{{list.organ_name}}</td>
+                                        <td>{{list.organ_person}}</td>
+                                        <td>{{list.organ_phone}}</td>
+                                        <td>{{list.organ_addr}}</td>
+
+                                        <!-- <td class="text-center">
+                                            {% if list.is_super==1 %}
+                                            <a href="/admin/manager/edit?id={{list._id}}">修改</a>
+
+                                            <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Admin&id={{list._id}}')">删除</a>
+
+                                            {% endif %}
+                                        </td> -->
+                                    </tr>
+                                    {# {% endif %} #}
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

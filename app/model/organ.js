@@ -30,5 +30,5 @@ module.exports = app => {
 	});
 
 
-	return mongoose.model('Organization', schema, 'organization');
+	return mongoose.model('Organ', schema, 'organ');
 }

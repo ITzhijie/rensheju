@@ -47,6 +47,10 @@ label span{
     font-size: 14px !important;
     color: #1706f4;
 }
+.card-title span{
+    font-size: 14px !important;
+    color: #1706f4;
+}
 body.text-sm .nav-sidebar>.nav-item .nav-icon.fas{
     font-size: 0.85rem;
 }

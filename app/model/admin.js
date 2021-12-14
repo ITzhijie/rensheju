@@ -11,8 +11,6 @@ module.exports = app => {
 		password: { type: String },
 		// 手机号	
 		mobile: { type: String },
-		// 邮箱	
-		email: { type: String },
 		// 状态	
 		status: { type: Number, default: 1 },
 		// 所属机构	

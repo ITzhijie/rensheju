@@ -19,29 +19,22 @@
                                 <input type="text" class="form-control" id="exampleInputUsername" name="username"
                                     readonly value="{{adminResult.username}}">
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="exampleInputPassword1">管理员密码</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-                            </div> -->
+                            
                             <div class="form-group col-md-6">
                                 <label for="exampleInputMobile">管理员电话</label>
                                 <input type="number" class="form-control" id="exampleInputMobile" name="mobile"
-                                    value="{{adminResult.mobile}}">
+                                    value="{{adminResult.mobile}}" required>
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="exampleInputEmail1">管理员邮箱</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                                    value="{{adminResult.email}}">
-                            </div> -->
+                          
                             <div class="form-group col-md-6">
-                                <label for="role_id">管理员角色</label>
-                                <select class="form-control" name="role_id" id="role_id">
-                                    {% for roleResult in roleResults %}
-                                    {% if roleResult._id.toString()==adminResult.role_id.toString() %}
-                                    <option value="{{roleResult._id}}" selected>{{roleResult.title}}</option>
+                                <label for="organ_id">所属平台</label>
+                                <select class="form-control" name="organ_id" id="organ_id">
+                                    {% for organResult in organResults %}
+                                    {% if organResult._id.toString()==adminResult.organ_id.toString() %}
+                                    <option value="{{organResult._id}}" selected>{{organResult.organ_name}}</option>
 
                                     {% else %}
-                                    <option value="{{roleResult._id}}">{{roleResult.title}}</option>
+                                    <option value="{{organResult._id}}">{{organResult.organ_name}}</option>
 
                                     {% endif %}
                                     {% endfor %}

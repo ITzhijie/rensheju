@@ -29,6 +29,12 @@ module.exports = app => {
   router.get('/admin/loginOut', controller.admin.login.loginOut);
 
 
+  router.get('/admin/organ', controller.admin.organ.index);
+  router.get('/admin/organ/add', controller.admin.organ.add);
+  router.post('/admin/organ/doAdd', controller.admin.organ.doAdd);
+  router.get('/admin/organ/edit', controller.admin.organ.edit);
+  router.post('/admin/organ/doEdit', controller.admin.organ.doEdit);
+
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);
   router.post('/admin/manager/doAdd', controller.admin.manager.doAdd);
