@@ -7,6 +7,7 @@ module.exports = options => {
          1、用户没有登录跳转到登录页面
          2、只有登录以后才可以访问后台管理系统
         */
+        console.log("========中间件===adminauth======================");
 
         ctx.state.csrf = ctx.csrf;   //全局变量
 
@@ -18,8 +19,8 @@ module.exports = options => {
         ctx.state.curPathname=pathname;//储存当前的路径
 
 
-        if (ctx.session.userinfo) {
-            ctx.state.userinfo = ctx.session.userinfo;
+        if (ctx.session.adminInfo) {
+            ctx.state.adminInfo = ctx.session.adminInfo;
 
             await next();
         } else {

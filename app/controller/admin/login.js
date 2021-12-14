@@ -29,7 +29,7 @@ class LoginController extends BaseController {
                     //登录成功
 
                     // 1、保存用户信息
-                    this.ctx.session.userinfo = result[0];
+                    this.ctx.session.adminInfo = result[0];
 
                     //2、跳转到用户中心
                     this.ctx.redirect('/admin');
@@ -51,7 +51,7 @@ class LoginController extends BaseController {
 
     //退出
     async loginOut() {
-        this.ctx.session.userinfo = null;
+        this.ctx.session.adminInfo = null;
         this.ctx.redirect('/admin/login');
     }
 }

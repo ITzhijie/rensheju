@@ -28,7 +28,7 @@
     <!-- Messages Dropdown Menu -->
 
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="javascript:(0)" class="nav-link">{{userinfo.username}}</a>
+      <a href="javascript:(0)" class="nav-link">{{adminInfo.username}}</a>
     </li>
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
@@ -95,11 +95,11 @@
       })
       return
     }
-    console.log("{{userinfo._id.toString()}}");
+    console.log("{{adminInfo._id.toString()}}");
 
     $.post("/admin/manager/changepsw?_csrf={{csrf}}", {
       newpsw: pwd1,
-      userid: "{{userinfo._id.toString()}}"
+      userid: "{{adminInfo._id.toString()}}"
     }, function (res) {
       console.log(res);
       $("#newPassword1").val("");

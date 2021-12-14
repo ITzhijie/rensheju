@@ -5,14 +5,23 @@ module.exports = app => {
 
 	//用户表
 	const schema = new Schema({
-        // 姓名
-        // 身份证号	
-        // 手机号	
-        // 密码	
-        // 登记照地址	
-        // 身份证正面	
-        // 身份证反面
-        // 状态		
+		// 姓名
+		uname: { type: String },
+		// 身份证号	
+		idcode: { type: String },
+		// 手机号	
+		phone: { type: String },
+		// 密码	
+		pwd: { type: String },
+		// 登记照地址	
+		photo: { type: String },
+		// 身份证正面	
+		idcard_z: { type: String },
+		// 身份证反面
+		idcard_f: { type: String },
+		// 状态		
+		status: { type: Number, default: 1 },
+		
 		add_time: {
 			type: Date,
 			default: Date.now

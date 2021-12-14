@@ -1,9 +1,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin" class="brand-link">
-        <img src="/public/admin/images/logo.png" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="box-shadow: 0 0 15px #fff !important;">
-        <span class="brand-text font-weight-light">新东方俱乐部管理系统</span>
+        <!-- <img src="/public/admin/images/logo.png" alt="AdminLTE Logo"
+            class="brand-image img-circle elevation-3" style="box-shadow: 0 0 15px #fff !important;"> -->
+        <span class="brand-text font-weight-light">市人事报考平台后台管理系统</span>
     </a>
 
 
@@ -19,7 +19,7 @@
 
                 {% for asideList in asideLists %}
 
-                {% if (asideList.checked and asideList.type==1)or(userinfo.is_super==1 and asideList.type==1) %}
+                {% if (asideList.checked and asideList.type==1)or(adminInfo.is_super==1 and asideList.type==1) %}
                 <li class="nav-item has-treeview ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas {{asideList.icon_class}}"></i>
@@ -30,7 +30,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         {% for item in asideList.items %}
-                        {% if (item.checked and item.type!=3)or(userinfo.is_super==1 and item.type!=3) %}
+                        {% if (item.checked and item.type!=3)or(adminInfo.is_super==1 and item.type!=3) %}
                         <li class="nav-item">
                             <a href="{{item.url}}" class="nav-link" target="iframBox">
                                 <i class="fas {{item.icon_class}} nav-icon"></i>
@@ -46,7 +46,7 @@
                 {% endif %}
                 {% endfor %}
 
-                {% if userinfo.is_super==1 %}
+                {% if adminInfo.is_super==1 %}
                 <li class="nav-item has-treeview ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user-tie"></i>
@@ -60,13 +60,13 @@
                         <li class="nav-item">
                             <a href="/admin/manager" class="nav-link" target="iframBox">
                                 <i class="fas fa-list-ul nav-icon"></i>
-                                <p class="action_name">管理员列表</p>
+                                <p class="action_name">机构管理</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/manager/add" class="nav-link" target="iframBox">
+                            <a href="/admin/manager" class="nav-link" target="iframBox">
                                 <i class="fas fa-plus nav-icon"></i>
-                                <p class="action_name">增加管理员</p>
+                                <p class="action_name">管理员管理</p>
                             </a>
                         </li>
 
