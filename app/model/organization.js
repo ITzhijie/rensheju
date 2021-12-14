@@ -5,10 +5,17 @@ module.exports = app => {
 
 	//机构表
 	const schema = new Schema({
-        // 机构名称	
-        // 机构电话	
-        // 机构地址	
-        // 机构联系人		
+		// 机构名称
+		organ_name: { type: String },
+		// 机构电话	
+		organ_phone: { type: String },
+		// 机构地址	
+		organ_addr: { type: String },
+		// 机构联系人
+		organ_person: { type: String },
+		// 是否是超级管理机构	
+		is_super: { type: Number, default: 0 },
+		
 		add_time: {
 			type: Date,
 			default: Date.now

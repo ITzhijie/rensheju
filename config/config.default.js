@@ -33,9 +33,13 @@ module.exports = appInfo => {
     renew:true //演唱会话有效期
   };
   // add your middleware config here
-  config.middleware = ['adminauth'];
+  config.middleware = ['adminauth','indexauth'];
   config.adminauth={
     match:'/admin'
+  }
+  
+  config.indexauth={
+    match:'/home'
   }
 
   config.view = {
