@@ -2,7 +2,7 @@
 
 var BaseController = require('./base.js');
 
-class ManagerController extends BaseController {
+class Controller extends BaseController {
 	async index() {
 		let findJson = {
 			$lookup: {
@@ -119,4 +119,4 @@ class ManagerController extends BaseController {
 
 }
 
-module.exports = ManagerController;
+module.exports = Controller;

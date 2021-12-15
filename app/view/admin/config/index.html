@@ -1,0 +1,91 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 编辑友情链接 {% endblock %}
+
+{% block main %}
+<style>
+    .fileImgBox{
+        display: inline-block;
+        width: inherit;
+        margin-right: 2%;
+    }
+
+    .previewImg {
+        /* width: 100%; */
+        height: 80px;
+        border-radius: 5px;
+    }
+
+    .fileImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        cursor: pointer;
+        opacity: 0;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">网站设置</h3>
+                    </div>
+                    <div class="card-body ">
+                        <div class="col-sm-12">
+
+                            <label for="exampleInputFile">网站logo</label>
+                            <div class="formBox">
+                                <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="idcardPreview" src="{{data.logo_url}}">
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <form role="form" action="/admin/config/doEdit" method="post">
+                        <div class="card-body">
+                            <div class="form-group col-md-12">
+                                <label for="bottom01">首页底部第一行文字</label>
+                                <input type="text" class="form-control" id="bottom01" name="bottom01" value="{{data.bottom01}}" required="required">
+                            </div>
+                            
+                            <div class="form-group col-md-12">
+                                <label for="bottom02">首页底部第二行文字</label>
+                                <input type="text" class="form-control" id="bottom02" name="bottom02" value="{{data.bottom02}}" required="required">
+                            </div>
+                            
+                            <div class="form-group col-md-12">
+                                <label for="bottom03">首页底部第三行文字</label>
+                                <input type="text" class="form-control" id="bottom03" name="bottom03" value="{{data.bottom03}}" required="required">
+                            </div>
+
+                        </div>
+                        
+                        <input type="hidden" name="id" readonly value="{{data._id}}" />
+                        <input id="logo_url" type="hidden" name="logo_url" value="{{data.logo_url}}">
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "logo_url", 1);
+</script>
+
+{% endblock %}

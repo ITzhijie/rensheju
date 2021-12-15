@@ -1,0 +1,59 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 链接列表 {% endblock %}
+
+{% block main %}
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h3 class="card-title">友情链接列表</h3>
+                            <a href="/admin/link/add" class="btn btn-primary float-right">增加链接</a>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>链接名称</th>
+                                        <th>链接地址</th>
+                                        <th>排序</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{list.link_name}}</td>
+                                        <td>{{list.link_url}}</td>
+                                        <td><span onclick="app.editNum(this,'Link','sort','{{list._id}}')">{{list.sort}}</span></td>
+
+                                        <td class="text-center">
+                                            <a href="/admin/link/edit?id={{list._id}}">修改</a>
+
+                                            <a class="delete" href="javascript:(0)" onclick="app.deleteConfirm('/admin/delete?model=Link&id={{list._id}}')">删除</a>
+
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -267,7 +267,9 @@ var app = {
 
 			$.get('/admin/editNum', { model: model, attr: attr, id: id, num: num }, function (data) {
 				console.log(data);
+				window.location.reload();
 			})
+			
 		})
 	}
 }

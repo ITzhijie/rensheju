@@ -32,8 +32,21 @@ module.exports = app => {
   router.get('/admin/organ', controller.admin.organ.index);
   router.get('/admin/organ/add', controller.admin.organ.add);
   router.post('/admin/organ/doAdd', controller.admin.organ.doAdd);
-  router.get('/admin/organ/edit', controller.admin.organ.edit);
-  router.post('/admin/organ/doEdit', controller.admin.organ.doEdit);
+
+  router.get('/admin/link', controller.admin.link.index);
+  router.get('/admin/link/add', controller.admin.link.add);
+  router.post('/admin/link/doAdd', controller.admin.link.doAdd);
+  router.get('/admin/link/edit', controller.admin.link.edit);
+  router.post('/admin/link/doEdit', controller.admin.link.doEdit);
+
+  router.get('/admin/config', controller.admin.config.index);
+  router.post('/admin/config/doEdit', controller.admin.config.doEdit);
+
+  router.get('/admin/exam', controller.admin.exam.index);
+  router.get('/admin/exam/add', controller.admin.exam.add);
+  router.post('/admin/exam/doAdd', controller.admin.exam.doAdd);
+  router.get('/admin/exam/edit', controller.admin.exam.edit);
+  router.post('/admin/exam/doEdit', controller.admin.exam.doEdit);
 
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);
