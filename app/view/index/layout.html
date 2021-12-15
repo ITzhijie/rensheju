@@ -68,7 +68,7 @@
 <body>
     <div class="centerBox">
         <header>
-            <img class="logo" src="/public/index/images/logo3.png">
+            <img class="logo" src="{{config.logo_url}}">
         </header>
     
             {% block main %} "我是layout页面的默认内容" {% endblock %}
@@ -84,9 +84,10 @@
             <img src="/public/index/images/blue.png">
         </div>
         <div class="footRight">
-            <p>主办单位：咸宁市人力资源和社会保障局&nbsp;&nbsp;&nbsp;&nbsp;地址：湖北省咸宁市长安大道286号</p>
-            <p>Copyright © 2017 All Rights Reserved 版权所有 咸宁市人力资源和社会保障局</p>
-            <p>鄂公网安备 42010602000839号</p>
+            <p>{{config.bottom01 | safe}}</p>
+            <p>{{config.bottom02}}</p>
+            <p>{{config.bottom03}}</p>
+
         </div>
     </footer>
 </body>

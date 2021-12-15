@@ -6,10 +6,6 @@ module.exports = options => {
 
         console.log("========中间件indexauth======================");
 
-        ctx.state.csrf = ctx.csrf;   //全局变量
-
-        ctx.state.prevPage = ctx.request.header['referer'];
-        
 
         var pathname = url.parse(ctx.request.url).pathname;
         

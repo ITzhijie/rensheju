@@ -1,6 +1,6 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 增加链接 {% endblock %}
+{% block title %} 增加考试 {% endblock %}
 
 {% block main %}
 
@@ -11,35 +11,85 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">增加链接</h3>
+                        <h3 class="card-title">增加考试</h3>
                     </div>
                     <form role="form" action="/admin/link/doAdd" method="post">
                         <div class="card-body">
                             <div class="form-group col-md-6">
-                                <label for="link_name">链接名称</label>
-                                <input type="text" class="form-control" id="link_name" name="link_name" required="required">
+                                <label for="exam_name">考试类型名称</label>
+                                <input type="text" class="form-control" id="exam_name" name="exam_name" required>
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="link_url">链接地址</label>
-                                <input type="text" class="form-control" id="link_url" name="link_url" required="required">
+                                <label for="exam_year">考试年份</label>
+                                <input type="text" class="form-control" id="exam_year" name="exam_year" required>
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="sort">排序 <span>（数字越大，权重越大）</span></label>
-                                <input type="text" class="form-control" id="sort" name="sort" required="required">
+                                <label for="title">考试公告标题</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
                             </div>
 
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
+                        <input id="content" type="hidden" name="content">
+                        
                     </form>
+                    <div class="col-md-12">
+                        <div class="card-body">
+                    
+                            <label for="">考试公告内容</label>
+                            <div id="editor">
+                                
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary submitBtn">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script type="text/javascript" src="/public/admin/wangEditor/wangEditor.js"></script>
+<script>
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.customConfig.menus = [
+        'head',  // 标题
+        'bold',  // 粗体
+        'fontSize',  // 字号
+        //'fontName',  // 字体
+        'italic',  // 斜体
+        'underline',  // 下划线
+        //'strikeThrough',  // 删除线
+        'foreColor',  // 文字颜色
+        'backColor',  // 背景颜色
+        //'link',  // 插入链接
+        //'list',  // 列表
+        'justify',  // 对齐方式
+        'quote',  // 引用
+        //'emoticon',  // 表情
+        'image',  // 插入图片
+        'table',  // 表格
+        //'video',  // 插入视频
+        //'code',  // 插入代码
+        'undo',  // 撤销
+        'redo'  // 重复
+    ]
+    editor.customConfig.showLinkImg = false;
+    editor.customConfig.uploadImgServer = '/admin/wangUpload?_csrf=' + csrf;
+    editor.customConfig.uploadImgMaxLength = 10;
+    editor.customConfig.debug = 1
+    editor.create()
 
+    $(".submitBtn").click(function () {
+        console.log(editor.txt.html());
+        $("#content").val(editor.txt.html());
 
+        $("#actionForm").submit();
+    })
+</script>  
 {% endblock %}
