@@ -47,6 +47,9 @@ module.exports = app => {
   router.post('/admin/exam/doAdd', controller.admin.exam.doAdd);
   router.get('/admin/exam/edit', controller.admin.exam.edit);
   router.post('/admin/exam/doEdit', controller.admin.exam.doEdit);
+  router.post('/admin/exam/changeStatus', controller.admin.exam.changeStatus);
+
+  router.get('/admin/classify', controller.admin.classify.index);
 
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);

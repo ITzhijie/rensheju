@@ -1189,7 +1189,7 @@ Panel.prototype = {
         $container.append($tabTitleContainer).append($tabContentContainer);
 
         // 设置高度
-        var height = opt.height;
+        var height = opt.height||500;
         if (height) {
             $tabContentContainer.css('height', height + 'px').css('overflow-y', 'auto');
         }
@@ -4379,7 +4379,7 @@ Editor.prototype = {
 
         var config$$1 = this.config;
         var zIndex = config$$1.zIndex;
-        var H=config$$1.height||300;
+        var H=config$$1.height||400;
 
         // 定义变量
         var $toolbarElem = void 0,

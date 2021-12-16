@@ -57,7 +57,7 @@ class Controller extends BaseController {
         ]);
         console.log(lists);
 
-        await this.ctx.render('admin/exam/index', {
+        await this.ctx.render('admin/classify/index', {
             lists,keyword
         });
 

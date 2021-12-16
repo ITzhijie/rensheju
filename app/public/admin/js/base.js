@@ -24,6 +24,23 @@ var app = {
 		$("#iframBox").height(heights);
 		// document.getElementById('iframBox').height = heights;
 	},
+	//确认弹框
+	ajaxPost:function(url,param,cb){
+		$.ajax({
+            type: "post", //方法类型
+            dataType: "json", //预期服务器返回的数据类型
+            url: url+"?_csrf="+csrf, //url
+            data: param,
+            async: false,
+            timeout: 90000,
+            success: function (res) {
+                cb(res)
+            },
+            error: function (err) {
+				alert(JSON.stringify(err));
+            },
+        });
+	},
 	//删除按钮确认
 	deleteConfirm: function (url) {
 

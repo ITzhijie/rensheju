@@ -83,3 +83,38 @@ table td a:hover{
 .sort{
     font-size: 20px;
 }
+
+.pb0{
+    padding-bottom: 0 !important;
+}
+.pt0{
+    padding-top: 0 !important;
+}
+.input-group .input-group-addon{
+    width: 38px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+table td .successBtn{
+    background: rgb(17, 201, 0);
+}
+table td .dangerBtn{
+    background: rgb(255, 31, 31);
+}
+
+.card-header .toolBtn{
+    height: 38px !important;
+    line-height: 26px !important;
+    margin-left: 40px;
+}
