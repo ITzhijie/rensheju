@@ -64,7 +64,9 @@ class Controller extends BaseController {
     }
 
     async add() {
-        await this.ctx.render('admin/exam/add', {});
+        var examLists = await this.ctx.model.Exam.find();
+
+        await this.ctx.render('admin/classify/add', {examLists});
     }
 
     async doAdd() {

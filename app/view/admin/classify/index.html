@@ -1,6 +1,6 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 考试列表 {% endblock %}
+{% block title %} 专业列表 {% endblock %}
 
 {% block main %}
 
@@ -12,13 +12,13 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">考试列表</h3>
+                            <h3 class="card-title">专业列表</h3>
 
-                            <a href="/admin/exam/add" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">增加考试</a>
+                            <a href="/admin/classify/add" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">设置专业</a>
 
                             <div class="card-tools">
 
-                                <form action="/admin/exam" method="GET">
+                                <form action="/admin/classify" method="GET">
                                     <div class="input-group input-group" style="width: 250px;margin:0;">
 
                                         <input type="text" name="keyword" class="form-control float-right"

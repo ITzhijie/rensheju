@@ -10,26 +10,53 @@
 <link rel="stylesheet" href="/public/admin/datepicker/prettify-1.0.css">
 <link rel="stylesheet" href="/public/admin/datepicker/bootstrap-datetimepicker.css">
 
+<style>
+    .card-second-header{
+        margin-bottom: 15px;
+        color: rgb(255, 115, 0);
+        padding-left: 5px !important;
+    }
+    .card-second-header .card-title{
+        font-weight: 700 !important;
 
+    }
+</style>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">增加考试</h3>
+                        <h3 class="card-title">新增专业</h3>
                     </div>
-                    <form id="actionForm" role="form" action="/admin/exam/doAdd" method="post">
+                    <form id="actionForm" role="form" action="/admin/classify/doAdd" method="post">
                         <div class="card-body pb0">
+                            <div class="card-header card-second-header">
+                                <h3 class="card-title">基本信息</h3>
+                            </div>
                             <div class="form-group col-md-6">
-                                <label for="exam_name">考试类型名称</label>
-                                <input type="text" class="form-control" id="exam_name" name="exam_name" required>
+                                <label for="exam_id">考试类别</label>
+                                <select class="form-control" name="exam_id" id="exam_id">
+                                    {% for item in examLists %}
+                                    <option value="{{item._id}}">{{item.exam_name}}({{item.exam_year}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div> 
+
+                            <div class="form-group col-md-6">
+                                <label for="classify_name">专业名称</label>
+                                <input type="text" class="form-control" id="classify_name" name="classify_name" required>
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="exam_year">考试年份</label>
-                                <div class='input-group date' id='datetimepicker10'>
-                                    <input type='text' class="form-control"  id="exam_year" name="exam_year" required/>
+                                <label for="classify_code">专业代码</label>
+                                <input type="text" class="form-control" id="classify_code" name="classify_code" required>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="apply_start">报名开始时间</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type='text' class="form-control"  id="apply_start" name="apply_start" required/>
                                     <span class="input-group-addon">
                                         <span class="fas fa-calendar">
                                         </span>
@@ -38,25 +65,47 @@
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="title">考试公告标题</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
+                                <label for="apply_end">报名结束时间</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='text' class="form-control"  id="apply_end" name="apply_end" required/>
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar">
+                                        </span>
+                                    </span>
+                                </div>
                             </div>
 
+                            <div class="form-group col-md-6">
+                                <label for="pay_end">缴费截止时间</label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input type='text' class="form-control"  id="pay_end" name="pay_end" required/>
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="apply_fee">报名费用<span>（单位：元）</span></label>
+                                <input type="number" class="form-control" id="apply_fee" name="apply_fee" required>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="annex">附件要求 <span>（描述考生报名时需要上传的附件，附件以图片形式上传）</span></label>
+                                <input type="text" class="form-control" id="annex" name="annex" required placeholder="例：需上传毕业证书与学位证书照片">
+                            </div>
                         </div>
-                        <input id="content" type="hidden" name="content">
                         
                     </form>
-                    <div class="col-md-12">
-                        <div class="card-body pt0">
-                    
-                            <label for="">考试公告内容</label>
-                            <div id="editor">
-                                
-                            </div>
-                    
+                    <div class="card-body pb0">
+                        <div class="card-header card-second-header">
+                            <h3 class="card-title">科目信息</h3>
                         </div>
-                    
+
+                        
                     </div>
+                    
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary submitBtn">提交</button>
                     </div>
@@ -77,47 +126,22 @@
 
 <script type="text/javascript" src="/public/admin/wangEditor/wangEditor.js"></script>
 <script>
-    $('#datetimepicker10').datetimepicker({
+    $('#datetimepicker1').datetimepicker({
         viewMode: 'years',
-        format: 'YYYY'
+        format: 'YYYY-MM-DD'
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY-MM-DD'
+    });
+    $('#datetimepicker3').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY-MM-DD'
     });
 
 
-    var E = window.wangEditor
-    var editor = new E('#editor')
-    editor.customConfig.menus = [
-        'head',  // 标题
-        'bold',  // 粗体
-        'fontSize',  // 字号
-        //'fontName',  // 字体
-        'italic',  // 斜体
-        'underline',  // 下划线
-        //'strikeThrough',  // 删除线
-        'foreColor',  // 文字颜色
-        'backColor',  // 背景颜色
-        //'link',  // 插入链接
-        //'list',  // 列表
-        'justify',  // 对齐方式
-        'quote',  // 引用
-        //'emoticon',  // 表情
-        'image',  // 插入图片
-        'table',  // 表格
-        //'video',  // 插入视频
-        //'code',  // 插入代码
-        'undo',  // 撤销
-        'redo'  // 重复
-    ]
-    editor.customConfig.showLinkImg = false;
-    editor.customConfig.uploadImgServer = '/admin/wangUpload?_csrf=' + csrf;
-    editor.customConfig.uploadImgMaxLength = 10;
-    editor.customConfig.debug = 1;
-    editor.customConfig.height = 500;
-
-    editor.create()
-
     $(".submitBtn").click(function () {
-        console.log(editor.txt.html());
-        $("#content").val(editor.txt.html());
 
         $("#actionForm").submit();
     })

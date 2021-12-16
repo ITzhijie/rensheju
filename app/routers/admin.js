@@ -50,6 +50,7 @@ module.exports = app => {
   router.post('/admin/exam/changeStatus', controller.admin.exam.changeStatus);
 
   router.get('/admin/classify', controller.admin.classify.index);
+  router.get('/admin/classify/add', controller.admin.classify.add);
 
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);
