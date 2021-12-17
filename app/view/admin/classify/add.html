@@ -100,7 +100,7 @@
                     </form>
                     <div class="card-body pb0">
                         <div class="card-header card-second-header">
-                            <h3 class="card-title">科目信息</h3>
+                            <h3 class="card-title">科目信息 <span>（如考试科目无细分项，可直接填写专业名称）</span></h3>
                         </div>
 
                         
@@ -128,16 +128,26 @@
 <script>
     $('#datetimepicker1').datetimepicker({
         viewMode: 'years',
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
     });
 
     $('#datetimepicker2').datetimepicker({
         viewMode: 'years',
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
     });
+    $("#datetimepicker1").on("dp.change",function (e) {
+        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepicker2").on("dp.change",function (e) {
+        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+    });
+
     $('#datetimepicker3').datetimepicker({
         viewMode: 'years',
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
     });
 
 
