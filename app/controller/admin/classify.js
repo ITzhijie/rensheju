@@ -4,83 +4,107 @@ var BaseController = require('./base.js');
 
 class Controller extends BaseController {
     async index() {
-        let keyword = this.ctx.request.query.keyword || "";
-        let findJson1 = {
+        let exam_id = this.ctx.request.query.exam_id || "";
+        let examLists=[];
+        let findJson = {
             $lookup: {
-                from: 'organ',
-                localField: 'organ_id',
+                from: 'exam',
+                localField: 'exam_id',
                 foreignField: '_id',
-                as: 'organ'
+                as: 'exam'
             }
         }
-        let findJson2 = {
-            $lookup: {
-                from: 'admin',
-                localField: 'admin_id',
-                foreignField: '_id',
-                as: 'admin'
-            }
-        }
+        
 
-        let matchJson;
+        let matchJson={};
         if (this.ctx.session.adminInfo.is_super == 1) {
-            matchJson = {
-                $match: {
-                    $or: [
-                        { "exam_name": { "$regex": keyword } },
-                        { "exam_year": { "$regex": keyword } },
-                        { "title": { "$regex": keyword } }
-                    ]
+            examLists = await this.ctx.model.Exam.find();
+            if(exam_id){
+                matchJson = {
+                    $match: {
+                        "exam_id":this.app.mongoose.Types.ObjectId(exam_id)
+                    }
+                }
+            }else{
+                matchJson = {
+                    $match: {
+                        
+                    }
                 }
             }
+            
         } else {
-            let organ_id=this.ctx.session.adminInfo.organ_id;
-            matchJson = {
-                $match: {
-                    "organ_id": this.app.mongoose.Types.ObjectId(organ_id),
-                    $or: [
-                        { "exam_name": { "$regex": keyword } },
-                        { "exam_year": { "$regex": keyword } },
-                        { "title": { "$regex": keyword } }
-                    ]
+            let admin_organ_id=this.ctx.session.adminInfo.organ_id;
+            examLists = await this.ctx.model.Exam.find({organ_id:admin_organ_id});
+            if (exam_id) {
+                matchJson = {
+                    $match: {
+                        "exam_id":this.app.mongoose.Types.ObjectId(exam_id)
+                    }
+                }
+            }else{
+                matchJson = {
+                    $match: {
+                        "organ_id":this.app.mongoose.Types.ObjectId(admin_organ_id)
+                    }
                 }
             }
+            
         }
 
-        var lists = await this.ctx.model.Exam.aggregate([
-            findJson1,
-            findJson2,
+        var lists = await this.ctx.model.Classify.aggregate([
+            findJson,
             matchJson,
             {
                 $sort: { add_time: -1 }
             }
         ]);
+        console.log("lists=========++++++++++");
         console.log(lists);
-
         await this.ctx.render('admin/classify/index', {
-            lists,keyword
+            lists,exam_id,examLists
         });
 
     }
 
     async add() {
-        var examLists = await this.ctx.model.Exam.find();
+        var examLists=[];
+        if (this.ctx.session.adminInfo.is_super == 1) {
+            examLists = await this.ctx.model.Exam.find();
+        } else {
+            let organ_id=this.ctx.session.adminInfo.organ_id;
+            examLists = await this.ctx.model.Exam.find({organ_id:organ_id});
+        }
+        
 
         await this.ctx.render('admin/classify/add', {examLists});
     }
 
     async doAdd() {
-
+        /*
+        * 1.储存专业信息 返回专业id
+        * 2.储存科目信息 JSON.parse转义 遍历储存
+        */
+        const {ctx}=this;
         var addResult = this.ctx.request.body;
-        addResult.organ_id = this.ctx.session.adminInfo.organ_id;
-        addResult.admin_id = this.ctx.session.adminInfo._id;
+        console.log("====1111111111=====addResult==========");
+        
+        let subjectArr=JSON.parse(addResult.subjectArr);
+        addResult.apply_start=new Date(addResult.apply_start+" 00:00");
+        addResult.apply_end=new Date(addResult.apply_end+" 23:59");
+        addResult.pay_end=new Date(addResult.pay_end+" 23:59");
+        let examData=await this.ctx.model.Exam.findOne({_id:addResult.exam_id});
+        addResult.organ_id=examData.organ_id;
+        var res =await new this.ctx.model.Classify(addResult).save();
 
+        subjectArr.forEach(function(v){
+            v.classify_id=res._id;
+            v.exam_date=new Date(v.exam_date);
+            new ctx.model.Subject(v).save();
+        })
 
-        var res = new this.ctx.model.Exam(addResult);
-
-        res.save();
-        await this.success('/admin/exam', '增加考试公告成功');
-
+        await this.success('/admin/classify', '增加专业成功');
+   
     }
 
 
@@ -90,38 +114,57 @@ class Controller extends BaseController {
 
         var id = this.ctx.request.query.id;
 
-        var data = await this.ctx.model.Exam.find({ "_id": id });
+        var data = await this.ctx.model.Classify.find({ "_id": id });
 
-        await this.ctx.render('admin/exam/edit', {
-            data: data[0]
+        var examLists=await this.ctx.model.Exam.find({organ_id:data[0].organ_id});
+        // if (this.ctx.session.adminInfo.is_super == 1) {
+        //     examLists = await this.ctx.model.Exam.find();
+        // } else {
+        //     let organ_id=this.ctx.session.adminInfo.organ_id;
+        //     examLists = await this.ctx.model.Exam.find({organ_id:organ_id});
+        // }
+        var subjectData=await this.ctx.model.Subject.find({classify_id:id});
+        var subjectStr=JSON.stringify(subjectData);
+
+        await this.ctx.render('admin/classify/edit', {
+            data: data[0],
+            examLists,
+            subjectStr,
+            subjectData
         });
     }
 
     async doEdit() {
 
-        let editData = this.ctx.request.body;
-        console.log(editData);
+        const {ctx}=this;
+        var editData = this.ctx.request.body;
+        console.log("====1111111111=====editData==========");
+        
+        let subjectArr=JSON.parse(editData.subjectArr);
+        console.log(subjectArr);
+        
 
-        await this.ctx.model.Exam.updateOne({ "_id": editData.id }, editData)
+        editData.apply_start=new Date(editData.apply_start+" 00:00");
+        editData.apply_end=new Date(editData.apply_end+" 23:59");
+        editData.pay_end=new Date(editData.pay_end+" 23:59");
+      
+        
+        await this.ctx.model.Classify.updateOne({ "_id": editData.id }, editData);
 
-        await this.success('/admin/exam', '修改考试公告成功')
+        await this.ctx.model.Subject.deleteMany({ "classify_id": this.app.mongoose.Types.ObjectId(editData.id) });
+        subjectArr.forEach(function(v){
+            v.classify_id=editData.id;
+            v.exam_date=new Date(v.exam_date);
+            new ctx.model.Subject(v).save();
+        })
+
+
+
+        await this.success('/admin/classify', '修改考试专业成功')
 
     }
 
 
-    async changeStatus() {
-
-        let id = this.ctx.request.body.id;
-        let curStatus = this.ctx.request.body.curStatus;
-        let newStatus=curStatus==0?1:0;
-
-        await this.ctx.model.Exam.updateOne({ "_id": id }, {"status":newStatus})
-        let responseData = {
-            code: "00",
-            msg: "修改状态成功"
-        }
-        this.ctx.body = responseData;
-    }
     
 
 }

@@ -1,6 +1,6 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 编辑考试 {% endblock %}
+{% block title %} 增加考试 {% endblock %}
 
 {% block main %}
 
@@ -10,26 +10,68 @@
 <link rel="stylesheet" href="/public/admin/datepicker/prettify-1.0.css">
 <link rel="stylesheet" href="/public/admin/datepicker/bootstrap-datetimepicker.css">
 
+<style>
+    .card-second-header{
+        margin-bottom: 15px;
+        color: rgb(255, 115, 0);
+        padding-left: 5px !important;
+    }
+    .card-second-header .card-title{
+        font-weight: 700 !important;
 
+    }
+    .classifyTable>tbody>tr{
+        height: 38px;
+        line-height: 38px;
+        box-sizing: border-box;
+    }
+
+    .dropdown-menu td, .dropdown-menu th {
+        border: 0px solid #dee2e6; 
+    }
+
+    .dropdown-menu td, .dropdown-menu th {
+        padding: 0; 
+        vertical-align: top; 
+        border-top: 0; 
+    }
+</style>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">编辑考试</h3>
+                        <h3 class="card-title">编辑专业</h3>
                     </div>
-                    <form id="actionForm" role="form" action="/admin/exam/doEdit" method="post">
+                    <form id="actionForm" role="form" action="/admin/classify/doEdit" method="post">
                         <div class="card-body pb0">
+                            <div class="card-header card-second-header">
+                                <h3 class="card-title">基本信息</h3>
+                            </div>
                             <div class="form-group col-md-6">
-                                <label for="exam_name">考试类型名称</label>
-                                <input type="text" class="form-control" id="exam_name" name="exam_name" value="{{data.exam_name}}"  required>
+                                <label for="exam_id">考试类别 <span>（机构内部可调整）</span></label>
+                                <select class="form-control" name="exam_id" id="exam_id">
+                                    {% for item in examLists %}
+                                    <option value="{{item._id}}"  {% if item._id.toString()==data.exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div> 
+
+                            <div class="form-group col-md-6">
+                                <label for="classify_name">专业名称</label>
+                                <input type="text" class="form-control" id="classify_name" name="classify_name" value="{{data.classify_name}}" required>
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="exam_year">考试年份</label>
-                                <div class='input-group date' id='datetimepicker10'>
-                                    <input type='text' class="form-control"  id="exam_year" name="exam_year" value="{{data.exam_year}}" required/>
+                                <label for="classify_code">专业代码</label>
+                                <input type="text" class="form-control" id="classify_code" name="classify_code" value="{{data.classify_code}}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="apply_start">报名开始时间</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type='text' class="form-control"  id="apply_start" name="apply_start" value="{{helper.formatTime2(data.apply_start)}}" required/>
                                     <span class="input-group-addon">
                                         <span class="fas fa-calendar">
                                         </span>
@@ -38,26 +80,101 @@
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="title">考试公告标题</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{data.title}}" required>
+                                <label for="apply_end">报名结束时间</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='text' class="form-control"  id="apply_end" name="apply_end" value="{{helper.formatTime2(data.apply_end)}}" required/>
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar">
+                                        </span>
+                                    </span>
+                                </div>
                             </div>
 
+                            <div class="form-group col-md-6">
+                                <label for="pay_end">缴费截止时间</label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input type='text' class="form-control"  id="pay_end" name="pay_end" value="{{helper.formatTime2(data.pay_end)}}" required/>
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="apply_fee">报名费用<span>（单位：元）</span></label>
+                                <input type="number" class="form-control" id="apply_fee" name="apply_fee" value="{{data.apply_fee}}" required>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="annex">附件要求 <span>（描述考生报名时需要上传的附件，附件以图片形式上传）</span></label>
+                                <input type="text" class="form-control" id="annex" name="annex" value="{{data.annex}}" required placeholder="例：需上传毕业证书与学位证书照片">
+                            </div>
                         </div>
-                        <input id="content" type="hidden" name="content" value="{{data.content}}">
-                        <input type="hidden" name="id" readonly value="{{data._id}}" />
+                        <input id="subjectArr" type="hidden" name="subjectArr" value="{{subjectStr}}">
+                        <input id="_id" type="hidden" name="id" value="{{data._id}}">
                         
                     </form>
-                    <div class="col-md-12">
-                        <div class="card-body pt0">
-                    
-                            <label for="">考试公告内容</label>
-                            <div id="editor">
-                                {{data.content | safe}}
-                            </div>
-                    
+                    <div class="card-body pb0">
+                        <div class="card-header card-second-header">
+                            <h3 class="card-title">科目信息 <span>（如考试科目无细分项，可直接填写专业名称）</span></h3>
                         </div>
-                    
+
+                        <table class="table table-hover  table-bordered classifyTable">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>科目名称</th>
+                                    <th>考试日期</th>
+                                    <th>考试时间</th>
+                                    <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="classifyLists">
+                                {% for list in subjectData %}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    <td>{{list.subject_name}}</td>
+                                    <td>{{helper.formatTime2(list.exam_date)}}</td>
+                                    <td>{{list.exam_time}}</td>
+                                    <td class="text-center">
+                                        <button data-curIndex="{{loop.index0}}" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>
+                                    </td>
+                                </tr>
+                                    
+
+                                    {% endfor %}
+                            </tbody>
+                            <tbody class="addTbody">
+                                <tr>
+                                    <td class="addIndex">1</td>
+                                    <td>                                
+                                        <input type="text" class="form-control" id="subject_name" name="subject_name" required placeholder="输入科目名称">
+                                    </td>
+                                    <td>
+                                        <div class='input-group date classifyDate'  id='datetimepicker4'>
+                                            <input type='text' class="form-control" id="exam_date" name="exam_date" required/>
+                                            <span class="input-group-addon">
+                                                <span class="fas fa-calendar">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>                                        
+                                        <input type="text" class="form-control" id="exam_time" name="exam_time" required placeholder="例：9:00-12:00">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-primary addClassifyBtn">增加</button>
+                                        
+                                    </td>
+
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                        
                     </div>
+                    
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary submitBtn">提交</button>
                     </div>
@@ -78,49 +195,129 @@
 
 <script type="text/javascript" src="/public/admin/wangEditor/wangEditor.js"></script>
 <script>
-    $('#datetimepicker10').datetimepicker({
+    $('#datetimepicker1').datetimepicker({
         viewMode: 'years',
-        format: 'YYYY'
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
+    });
+    $("#datetimepicker1").on("dp.change",function (e) {
+        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepicker2").on("dp.change",function (e) {
+        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+    });
+
+    $('#datetimepicker3').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
+    });
+    
+
+    $('#datetimepicker4').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY-MM-DD',
+        locale: 'zh-cn'
     });
 
 
-    var E = window.wangEditor
-    var editor = new E('#editor')
-    editor.customConfig.menus = [
-        'head',  // 标题
-        'bold',  // 粗体
-        'fontSize',  // 字号
-        //'fontName',  // 字体
-        'italic',  // 斜体
-        'underline',  // 下划线
-        //'strikeThrough',  // 删除线
-        'foreColor',  // 文字颜色
-        'backColor',  // 背景颜色
-        //'link',  // 插入链接
-        //'list',  // 列表
-        'justify',  // 对齐方式
-        'quote',  // 引用
-        //'emoticon',  // 表情
-        'image',  // 插入图片
-        'table',  // 表格
-        //'video',  // 插入视频
-        //'code',  // 插入代码
-        'undo',  // 撤销
-        'redo'  // 重复
-    ]
-    editor.customConfig.showLinkImg = false;
-    editor.customConfig.uploadImgServer = '/admin/wangUpload?_csrf=' + csrf;
-    editor.customConfig.uploadImgMaxLength = 10;
-    editor.customConfig.debug = 1;
-    editor.customConfig.height = 500;
-
-    editor.create()
-
     $(".submitBtn").click(function () {
-        console.log(editor.txt.html());
-        $("#content").val(editor.txt.html());
-
+        if (!$("#classify_name").val()||!$("#classify_code").val()||!$("#apply_start").val()||!$("#apply_end").val()||!$("#pay_end").val()||$("#apply_fee").val()==""||!$("#annex").val()) {
+            Swal.fire({
+                title: "温馨提示",
+                text: "请填写完整专业信息",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }
+        if ($(".classifyLists tr").length==0) {
+            Swal.fire({
+                title: "温馨提示",
+                text: "请至少输入一项科目信息",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }
         $("#actionForm").submit();
     })
+
+    //点击增加按钮
+    var subjectData=JSON.parse('{{subjectStr | safe}}');
+    
+    $(".addClassifyBtn").click(function(){
+        
+        if (!$("#subject_name").val()||!$("#exam_date").val()||!$("#exam_time").val()) {
+            Swal.fire({
+                title: "温馨提示",
+                text: "请输入完整科目信息",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }
+        var num=+$(".classifyLists tr").length;
+        var obj={
+            subject_name:$("#subject_name").val(),
+            exam_date:$("#exam_date").val(),
+            exam_time:$("#exam_time").val(),
+        };
+        subjectData.push(obj);
+        $("#subjectArr").val(JSON.stringify(subjectData));
+        var str='<tr>'+
+        '    <td>'+(num+1)+'</td>'+
+        '    <td>'+obj.subject_name+'</td>'+
+        '    <td>'+obj.exam_date+'</td>'+
+        '    <td>'+obj.exam_time+'</td>'+
+        '    <td class="text-center">'+
+        '        <button data-curIndex="'+num+'" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>'+
+        '    </td>'+
+        '</tr>';
+
+        $(".classifyLists").append(str);
+
+        $("#subject_name").val("");
+        $("#exam_date").val("");
+        $("#exam_time").val("");
+        $(".addIndex").text(1+$(".classifyLists tr").length);
+
+    })
+
+    //删除
+    $(".classifyLists").on("click",".deleteClassifyBtn",function(){
+        var index=+$(this).attr("data-curIndex");
+        subjectData.splice(index,1);
+        $("#subjectArr").val(JSON.stringify(subjectData));
+        var strAll="";
+        subjectData.forEach(function(v,i){
+            var str='<tr>'+
+            '    <td>'+(i+1)+'</td>'+
+            '    <td>'+v.subject_name+'</td>'+
+            '    <td>'+v.exam_date+'</td>'+
+            '    <td>'+v.exam_time+'</td>'+
+            '    <td class="text-center">'+
+            '        <button data-curIndex="'+i+'" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>'+
+            '    </td>'+
+            '</tr>';
+            strAll+=str;
+        })
+        $(".classifyLists").html(strAll);
+        $(".addIndex").text(1+$(".classifyLists tr").length);
+    })
+
+
 </script>  
 {% endblock %}

@@ -12,11 +12,9 @@ module.exports = app => {
         subject_name: { type: String },
         // 考试日期
         exam_date: { type: Date },
-        // 开始时间	
-        start_time: { type: String },
-        // 结束时间	
-        end_time: { type: String },
-
+        // 开始时间-结束时间	
+        exam_time: { type: String },
+       
 		add_time: {
 			type: Date,
 			default: Date.now

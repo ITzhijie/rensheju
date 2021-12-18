@@ -16,8 +16,7 @@ class Controller extends BaseController {
         let findJson2 = {
             $lookup: {
                 from: 'admin',
-                localField: 'admin_id',
-                foreignField: '_id',
+                localField: 'admin_id',                foreignField: '_id',
                 as: 'admin'
             }
         }

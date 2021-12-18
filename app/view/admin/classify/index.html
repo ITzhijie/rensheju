@@ -18,18 +18,18 @@
 
                             <div class="card-tools">
 
-                                <form action="/admin/classify" method="GET">
-                                    <div class="input-group input-group" style="width: 250px;margin:0;">
+                                <div class="input-group input-group" style="width: 250px;margin:0;">
 
-                                        <input type="text" name="keyword" class="form-control float-right"
-                                            placeholder="请输入关键词" value="{{keyword}}">
+                                    <select class="form-control" id="examSelect">
+                                        <option value="" {% if exam_id=="" %}selected{% endif %}>全部</option>
 
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary"><i
-                                                    class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
+                                        {% for item in examLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                </div>
 
                             </div>
                         </div>
@@ -37,12 +37,11 @@
                             <table class="table table-hover  table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>序号</th>
                                         <th>考试名称</th>
-                                        <th>考试年份</th>
-                                        <th>公告标题</th>
-                                        <th>发布机构</th>
-                                        <th>发布人</th>
-                                        <th>当前状态</th>
+                                        <th>专业名称</th>
+                                        <th>专业代码</th>
+                                        <th>报名起止时间</th>
 
                                         <th class="text-center">操作</th>
                                     </tr>
@@ -51,28 +50,17 @@
                                     {% for list in lists %}
 
                                     <tr>
-                                        <td>{{list.exam_name}}</td>
-                                        <td>{{list.exam_year}}</td>
-                                        <td>{{list.title}}</td>
-                                        <td>{{list.organ[0].organ_name}}</td>
-                                        <td>{{list.admin[0].username}}</td>
-                                        <td>
-                                            {% if list.status==0 %}
-                                             <span class="text-danger">未发布</span>
-                                            {% else %}
-                                             <span class="text-success">已发布</span>
-                                            {% endif %}
-                                        </td>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.exam[0].exam_name}}</td>
+                                        <td>{{list.classify_name}}</td>
+                                        <td>{{list.classify_code}}</td>
+                                        <td>{{helper.formatTime2(list.apply_start)}} 至 {{helper.formatTime2(list.apply_end)}}</td>
+                                        
 
                                         <td class="text-center">
-                                            <a href="/admin/exam/edit?id={{list._id}}">编辑</a>
+                                            <a href="/admin/classify/edit?id={{list._id}}">编辑</a>
 
-                                            {% if list.status==0 %}
-                                            <a class="successBtn changeStatus" data-id="{{list._id}}" data-status="{{list.status}}" href="javascript:(0)">上线</a>
-                                            {% else %}
-                                            <a class="dangerBtn changeStatus" data-id="{{list._id}}" data-status="{{list.status}}" href="javascript:(0)">下线</a>
-                                            {% endif %}
-
+                                      
                                         </td>
                                     </tr>
 
@@ -80,7 +68,7 @@
                                 </tbody>
                             </table>
                             {% if lists.length == 0 %}
-                            <div class="text-center py-2">暂时没有信息哦</div>
+                            <div class="text-center py-2">暂时未设置专业信息，请前往设置</div>
                             {% endif %}
                         </div>
                         
@@ -92,6 +80,10 @@
         </div>
     </section>
     <script>
+        $("#examSelect").change(function(){
+            window.location.href="/admin/classify?exam_id="+$(this).val()
+        })
+
         $(".changeStatus").click(function(){
             var status=$(this).attr("data-status");
             var id=$(this).attr("data-id");

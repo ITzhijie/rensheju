@@ -18,7 +18,6 @@ module.exports = options => {
         ctx.state.curPathname=pathname;//储存当前的路径
 
         var config = await ctx.model.Config.findOne();
-        console.log(config);
         ctx.state.config=config;
 
         await next();

@@ -37,6 +37,7 @@
                             <table class="table table-hover  table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>序号</th>
                                         <th>考试名称</th>
                                         <th>考试年份</th>
                                         <th>公告标题</th>
@@ -51,6 +52,7 @@
                                     {% for list in lists %}
 
                                     <tr>
+                                        <td>{{loop.index}}</td>
                                         <td>{{list.exam_name}}</td>
                                         <td>{{list.exam_year}}</td>
                                         <td>{{list.title}}</td>

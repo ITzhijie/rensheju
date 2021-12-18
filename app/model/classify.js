@@ -5,7 +5,8 @@ module.exports = app => {
 
 	//专业表
 	const schema = new Schema({
-
+		// 所属机构	
+		organ_id: { type: Schema.Types.ObjectId },
         // 所属考试
         exam_id: { type: Schema.Types.ObjectId },
         // 专业名称
@@ -13,11 +14,11 @@ module.exports = app => {
         // 专业代码
         classify_code: { type: String },
         // 报名开始时间	
-        apply_start: { type: String },
+        apply_start:  { type: Date },
         // 报名结束时间	
-        apply_end: { type: String },
+        apply_end: { type: Date },
         // 缴费截止时间
-        pay_end: { type: String },
+        pay_end: { type: Date },
         // 报名费用
         apply_fee: { type: Number },
         // 附件要求	

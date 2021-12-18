@@ -51,6 +51,9 @@ module.exports = app => {
 
   router.get('/admin/classify', controller.admin.classify.index);
   router.get('/admin/classify/add', controller.admin.classify.add);
+  router.post('/admin/classify/doAdd', controller.admin.classify.doAdd);
+  router.get('/admin/classify/edit', controller.admin.classify.edit);
+  router.post('/admin/classify/doEdit', controller.admin.classify.doEdit);
 
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);
