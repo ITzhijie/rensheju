@@ -1,0 +1,189 @@
+{% extends "./layout.html" %}
+
+{% block title %} 咸宁市报考平台-补充信息 {% endblock %}
+
+{% block main %}
+<style>
+    .loginBox {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+    }
+
+    .loginInBox {
+        border: 1px solid #c5c5c5;
+        margin-right: 0;
+        margin-left: 0;
+        padding: 30px;
+    }
+
+    .title {
+        font-size: 22px;
+        color: #015293;
+        font-weight: 700;
+        display: block;
+        width: 100%;
+        border-bottom: 1px solid #015293;
+        padding-bottom: 5px;
+    }
+
+    .titleRow {
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 30px;
+    }
+
+    .mb10 {
+        margin-bottom: 15px;
+    }
+
+    .formBox {
+        position: relative;
+    }
+
+    .fileImgBox {
+        display: inline-block;
+        width: 300px;
+        margin-right: 2%;
+    }
+    .formBox3 .fileImgBox {
+        width: 150px;
+    }
+
+    .previewImg {
+        width: 100%;
+        height: 190px;
+        border-radius: 5px;
+    }
+    .formBox3 .previewImg {
+        width: 100%;
+        height: 210px;
+        border-radius: 5px;
+    }
+    .fileImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 300px;;
+        height: 100%;
+        outline: none;
+        cursor: pointer;
+        opacity: 0;
+    }
+    .formBox3 .fileImg{
+        width: 150px;
+    }
+    .tipBox{
+        width: 50%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        line-height: 2;
+    }
+    .tipBox h4{
+        color: coral;
+    }
+    .tipBox a{
+        font-weight: 700;
+    }
+</style>
+<div class="loginBox container-fluid">
+    <div class="loginInBox row">
+        <div class="col-xs-6 col-xs-offset-3 titleRow"><span class="title">上 传 证 件</span></div>
+        <div class="col-xs-6 col-xs-offset-3">
+            <div class="form-group">
+                <label>身份证正面</label>
+                <div class="formBox">
+                    <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post" name="fileinfo">
+                        <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                        <div class="fileImgBox">
+                            <img class="previewImg" id="idcardPreview" src="/public/admin/images/add.png">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>身份证反面</label>
+                <div class="formBox">
+                    <form class="imgForm" id="idcardForm2" enctype="multipart/form-data" method="post" name="fileinfo">
+                        <input class="fileImg" type="file" id="idcardInput2" multiple name="myfile">
+                        <div class="fileImgBox">
+                            <img class="previewImg" id="idcardPreview2" src="/public/admin/images/add.png">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>登记照</label>
+                <div class="formBox formBox3">
+                    <form class="imgForm" id="idcardForm3" enctype="multipart/form-data" method="post" name="fileinfo">
+                        <input class="fileImg" type="file" id="idcardInput3" multiple name="myfile">
+                        <div class="fileImgBox">
+                            <img class="previewImg" id="idcardPreview3" src="/public/admin/images/addphoto.png">
+                        </div>
+                        <div class="tipBox">
+                            <h4>友情提示：</h4>
+                            <p>1、登记照宽高比为5:7，红底或蓝底免冠。</p>
+                            <p>2、为提高报名审核通过率，您可以点击下载 <a href="https://ouma-oss-sdgwy.oss-cn-haidian-a.aliyuncs.com/zhaopianshenhe.zip">照片处理工具</a>，对照片进行审核处理，否则无法正常完成报名流程。</p>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <input id="photo" type="hidden" name="photo">
+            <input id="idcard_z" type="hidden" name="idcard_z">
+            <input id="idcard_f" type="hidden" name="idcard_f">
+
+            <button type="button" class="btn btn-primary btn-lg btn-block addBtn">确认上传</button>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "idcard_z", 1);
+    app.fileChange("idcardInput2", "idcardPreview2", "idcardForm2", "idcard_f", 1);
+    app.fileChange("idcardInput3", "idcardPreview3", "idcardForm3", "photo", 1);
+
+    $(".addBtn").click(function () {
+        if (!$("#photo").val()||!$("#idcard_z").val()||!$("#idcard_f").val()) {
+            Swal.fire({
+                title: "温馨提示",
+                text: "所有证件信息均需上传",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }
+        app.ajaxPost("/home/doAddphoto", {
+            photo: $("#photo").val(),
+            idcard_z: $("#idcard_z").val(),
+            idcard_f: $("#idcard_f").val()
+        }, function (res) {
+            console.log(res);
+            if (res.code == 0) {
+                window.location.href = "/home/index";
+
+            } else {
+                Swal.fire({
+                    title: "温馨提示",
+                    text: res.msg,
+                    icon: 'info',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: '确定',
+                })
+            }
+        })
+    })
+</script>
+{% endblock %}

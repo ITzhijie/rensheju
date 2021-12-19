@@ -36,23 +36,46 @@
 </style>
 <div class="loginBox container-fluid">
 	<div class="loginInBox row">
-		<div class="col-md-6 col-md-offset-3 titleRow"><span class="title">登 录</span></div>
-		<form class="col-md-6 col-md-offset-3">
+		<div class="col-xs-6 col-xs-offset-3 titleRow"><span class="title">登 录</span></div>
+		<form class="col-xs-6 col-xs-offset-3">
 			<div class="form-group">
-			  <label >身份证号码</label>
-			  <input type="text" class="form-control input-lg" name="idcard">
+			  <label >手机号</label>
+			  <input type="text" class="form-control input-lg" id="phone" required onkeyup="value=value.replace(/[^0-9]/ig,'')">
 			</div>
 			<div class="form-group mb10">
 			  <label >密码</label>
-			  <input type="password" class="form-control input-lg"  name="password">
+			  <input type="password" class="form-control input-lg"  id="pwd" required>
 			</div>
 			<div class="text-right  mb10">
 				<a href="/register">注册账号</a> | <a href="/forget">忘记密码</a>
 			</div>
 
-			<button type="submit" class="btn btn-primary btn-lg btn-block">立即登录</button>
+			<button type="button" class="btn btn-primary btn-lg btn-block loginBtn">立即登录</button>
 		  </form>
 	</div>
 </div>
 
+<script>
+	$(".loginBtn").click(function(){
+		app.ajaxPost("/doLogin",{
+			phone:$("#phone").val(),
+			pwd:$("#pwd").val()
+		},function(res){
+			console.log(res);
+			if (res.code==0) {
+				window.location.href="/home/addphoto";
+				
+			}else{
+				Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'info',
+					showCancelButton: false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '确定',
+				})
+			}
+		})
+	})
+</script>
 {% endblock %}

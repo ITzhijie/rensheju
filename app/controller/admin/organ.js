@@ -7,7 +7,7 @@ class ManagerController extends BaseController {
 
 		//查询管理员表并管理角色表
 		var result = await this.ctx.model.Organ.find();
-		console.log(result);
+		
 
 		await this.ctx.render('admin/organ/index', {
 			lists: result

@@ -5,7 +5,8 @@ module.exports = options => {
     return async function indexauth(ctx, next) {
 
         console.log("========中间件indexauth======================");
-
+        console.log(ctx.session.userInfo);
+        
 
         var pathname = url.parse(ctx.request.url).pathname;
         
@@ -16,6 +17,7 @@ module.exports = options => {
 
             await next();
         } else {
+            console.log("========中间件indexauth排除不需要做权限判断的页面======================");
 
             //排除不需要做权限判断的页面  
             var passPath=[];
