@@ -65,7 +65,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 300px;;
+        width: 300px;
         height: 100%;
         outline: none;
         cursor: pointer;
@@ -164,6 +164,16 @@
             })
             return
         }
+
+        Swal.fire({
+            title: "温馨提示",
+            text: "证件一经上传将不可自助更改个人信息，如需更改信息需本人携带身份证到人社局大厅",
+            icon: 'info',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: '确定',
+        })
+
         app.ajaxPost("/home/doAddphoto", {
             photo: $("#photo").val(),
             idcard_z: $("#idcard_z").val(),

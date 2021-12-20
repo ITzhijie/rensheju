@@ -220,8 +220,24 @@ class Controller extends BaseController {
     async confirm(){
         var classify_id = this.ctx.request.query.id;
         
-
-        await this.ctx.render('index/confirm', {classify_id});
+        var lists = await this.ctx.model.Classify.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },
+            {
+                $match: { 
+                    "_id":this.app.mongoose.Types.ObjectId(classify_id)
+                }
+            }
+        ]);
+        console.log(lists);
+        
+        await this.ctx.render('index/confirm', {classifyData:lists[0]});
 
     }
 

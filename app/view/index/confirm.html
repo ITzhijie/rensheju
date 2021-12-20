@@ -1,0 +1,165 @@
+{% extends "./layout.html" %}
+
+{% block title %} 咸宁市报考平台-确认信息 {% endblock %}
+
+{% block main %}
+<style>
+	.baokaoBox {
+		background: rgba(255, 255, 255, 0.8);
+		padding: 20px;
+    }
+    .topBox{
+		background: rgba(255, 255, 255, 0.8);
+        border-bottom: 2px solid rgb(180, 206, 255);
+        padding: 10px;
+    }
+
+	.mb10{
+		margin-bottom: 15px;
+    }
+    .leftBox{
+        float: left;
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 30px 0;
+    }
+    .leftBox a{
+        display: block;
+        width: 80px;
+        margin-bottom: 20px;
+    }
+    .rightBox{
+        overflow: hidden;
+        min-height: 200px;
+        border-left: 1px solid  rgb(180, 206, 255);
+        padding-left: 20px;
+    }
+    .classifyBox{
+        min-height: 200px;
+        padding: 20px;
+    }
+    .rightBox a{
+        width: 300px;
+        margin: 15px;
+    }
+    .topBox{
+		background: rgba(255, 255, 255, 0.8);
+        border-bottom: 2px solid rgb(180, 206, 255);
+        padding: 10px;
+    }
+    
+    .topBox h5 span{
+        color: rgb(255, 94, 0);
+        font-weight: 700;
+    }
+    .titleBox{
+        padding: 0px 15px;
+        border-left: 4px solid #007bff;
+        color: #007bff;
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+    .titleBox span{
+        color: coral;
+        font-weight: 500;
+    }
+    .applyBtn{
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+    .left{
+        float: left;
+        width: 100px;
+        text-align: right;
+        font-size: 16px;
+        margin-right: 20px;
+        color: #666;
+    }
+    .right{
+        overflow: hidden;
+        font-size: 16px;
+
+    }
+    .baseInfoList{
+        margin-bottom: 20px;
+    }
+    .right img{
+        width: 200px;
+        height: 128px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+    .right .photo{
+        width: 150px;
+        height: 210px;
+    }
+</style>
+<div class="topBox">
+    <span>你好，{{userInfo.uname}}</span>
+    <a class="pull-right" href="/home/loginout">退出</a>
+
+</div>
+<div class="baokaoBox">
+    
+    <div class="leftBox">
+        <a class="btn btn-info" href="/home/index">考试报名</a>
+        <a class="btn btn-default" href="/home/myApply">我的报名</a>
+        <a class="btn btn-default" href="/home/myInfo">我的资料</a>
+    </div>
+    <div class="rightBox">
+        <div class="topBox">
+            <h5>【{{classifyData.exam[0].exam_name}}】 > 【{{classifyData.classify_name}}】 > <span> 确认报名信息</span> </h5>
+        
+        </div>
+        <div class="classifyBox" id="preImg">
+            <div class="titleBox">基本信息<span>（如需修改基本信息，请本人凭身份证到市人社局进行修改）</span></div>
+            <div class="baseInfoList">
+                <div class="left">姓名</div>
+                <div class="right">{{userInfo.uname}}</div>
+            </div>
+            <div class="baseInfoList">
+                <div class="left">手机号</div>
+                <div class="right">{{userInfo.phone}}</div>
+            </div>
+            <div class="baseInfoList">
+                <div class="left">身份证号</div>
+                <div class="right">{{userInfo.idcode}}</div>
+            </div>
+            <div class="baseInfoList">
+                <div class="left">身份证照片</div>
+                <div class="right">
+                    <img src="{{userInfo.idcard_z}}">
+                    <img src="{{userInfo.idcard_f}}">
+                </div>
+            </div>
+
+            <div class="baseInfoList">
+                <div class="left">登记照</div>
+                <div class="right">
+                    <img class="photo" src="{{userInfo.photo}}">
+                </div>
+            </div>
+
+            <div class="titleBox">附件上传<span>（附件要求：{{classifyData.annex}}）</span></div>
+            <div class="baseInfoList">
+                <div class="left">附件</div>
+                <div class="right">
+                    <img src="{{userInfo.idcard_z}}">
+                    <img src="{{userInfo.idcard_f}}">
+                </div>
+            </div>
+            <div class="btn btn-primary btn-lg applyBtn">确认提交</div>
+        </div>
+        
+    </div>
+</div>
+<script>
+    $('#preImg').viewer();//图片预览
+</script>
+
+{% endblock %}
