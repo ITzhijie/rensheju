@@ -35,14 +35,22 @@
         overflow: hidden;
         min-height: 200px;
         border-left: 1px solid  rgb(180, 206, 255);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
+        padding-left: 20px;
     }
     .rightBox a{
         width: 300px;
         margin: 15px;
+    }
+    .contentBox{
+        padding: 10px 20px;
+        margin: 20px 15px;
+        box-shadow: 0px 0px 6px 5px rgb(196, 196, 196);
+        border-radius: 10px;
+    }
+    .applyBtn{
+        width: 200px;
+        display: block;
+        margin: 0 auto;
     }
 </style>
 <div class="topBox">
@@ -59,16 +67,37 @@
 
     </div>
     <div class="rightBox">
-        {% for list in lists %}
-        <a class="btn btn-primary btn-lg" href="/home/examInfo?id={{list._id}}">{{list.exam_name}}</a>
-
-        {% endfor %}
-
-        {% if lists.length == 0 %}
-        <div class="text-center text-danger py-2">暂时没有可报名的考试信息哦</div>
-        {% endif %}
+        <div class="topBox">
+            <span>{{data.exam_name}}（{{data.exam_year}}）</span>
+        </div>
+        <div class="contentBox">
+            <h2 class="text-center">{{data.title}}</h2>
+            <div class="inBox">
+                {{data.content | safe}}
+            </div>
+            
+        </div>
+        <div class="btn btn-primary btn-lg applyBtn">申请报名</div>
     </div>
 </div>
 
+<script>
+    var length=Number("{{classifyLists.length}}")
+    $(".applyBtn").click(function(){
+        if(length<=0){
+            Swal.fire({
+                title: "温馨提示",
+                text: "该考试尚未发布专业及科目，请稍后再申请",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }else{
+            window.location.href="/home/classifyLists?id={{data._id}}&exam_name={{data.exam_name}}";
+        }
+    })
+</script>
 
 {% endblock %}

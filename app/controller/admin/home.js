@@ -120,7 +120,9 @@ class Controller extends BaseController {
         if(!userInfo.photo||!userInfo.idcard_z||!userInfo.idcard_f){
             await this.ctx.render('index/addphoto', {});
         }else{
-            await this.ctx.render('index/index', {});
+            var lists = await this.ctx.model.Exam.find({ "status": 1 });
+
+            await this.ctx.render('index/index', {lists});
         }
         
     }
@@ -172,14 +174,60 @@ class Controller extends BaseController {
 
     }
 
-    //首页
+    //首页 考试报名
     async index(){
-        await this.ctx.render('index/index', {});
+
+        var lists = await this.ctx.model.Exam.find({ "status": 1 });
+
+        await this.ctx.render('index/index', {lists});
 
     }
     
+    //我的报名
+    async myApply(){
+        await this.ctx.render('index/myApply', {});
 
-    
+    }
+    //我的资料 
+
+    async myInfo(){
+        
+        await this.ctx.render('index/myInfo', {});
+
+    }
+    //考试公告 
+    async examInfo(){
+        var id = this.ctx.request.query.id;
+
+        var data = await this.ctx.model.Exam.findOne({ "_id": id });
+        var classifyLists = await this.ctx.model.Classify.find({ "exam_id": data._id });
+
+        await this.ctx.render('index/examInfo', {data,classifyLists});
+
+    }
+    //选择专业 exam_name
+    async classifyLists(){
+        var id = this.ctx.request.query.id;
+        var exam_name = this.ctx.request.query.exam_name;
+
+        var classifyLists = await this.ctx.model.Classify.find({ "exam_id": id });
+
+        await this.ctx.render('index/classifyLists', {classifyLists,exam_name});
+
+    }
+
+    //确认 
+    async confirm(){
+        var classify_id = this.ctx.request.query.id;
+        
+
+        await this.ctx.render('index/confirm', {classify_id});
+
+    }
+
+
+
+
 }
 
 module.exports = Controller;

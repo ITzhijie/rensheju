@@ -118,3 +118,10 @@ table td .dangerBtn{
     line-height: 26px !important;
     margin-left: 40px;
 }
+
+.tableNoWrap>tbody>tr>td{
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

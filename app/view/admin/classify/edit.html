@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exam_id">考试类别 <span>（机构内部可调整）</span></label>
-                                <select class="form-control" name="exam_id" id="exam_id">
+                                <select class="form-control" name="exam_id" id="exam_id" disabled="disabled">
                                     {% for item in examLists %}
                                     <option value="{{item._id}}"  {% if item._id.toString()==data.exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
                                     {% endfor %}

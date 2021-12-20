@@ -1,6 +1,6 @@
 {% extends "./layout.html" %}
 
-{% block title %} 咸宁市报考平台 {% endblock %}
+{% block title %} 咸宁市报考平台-我的报名 {% endblock %}
 
 {% block main %}
 <style>
@@ -35,14 +35,6 @@
         overflow: hidden;
         min-height: 200px;
         border-left: 1px solid  rgb(180, 206, 255);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-    .rightBox a{
-        width: 300px;
-        margin: 15px;
     }
 </style>
 <div class="topBox">
@@ -53,20 +45,13 @@
 <div class="baokaoBox">
     
     <div class="leftBox">
-        <a class="btn btn-info" href="/home/index">考试报名</a>
-        <a class="btn btn-default" href="/home/myApply">我的报名</a>
+        <a class="btn btn-default" href="/home/index">考试报名</a>
+        <a class="btn btn-info" href="/home/myApply">我的报名</a>
         <a class="btn btn-default" href="/home/myInfo">我的资料</a>
 
     </div>
     <div class="rightBox">
-        {% for list in lists %}
-        <a class="btn btn-primary btn-lg" href="/home/examInfo?id={{list._id}}">{{list.exam_name}}</a>
 
-        {% endfor %}
-
-        {% if lists.length == 0 %}
-        <div class="text-center text-danger py-2">暂时没有可报名的考试信息哦</div>
-        {% endif %}
     </div>
 </div>
 
