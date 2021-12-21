@@ -5,6 +5,7 @@ module.exports = app => {
 
 	//报名考生表
 	const schema = new Schema({
+        user_id:{ type: Schema.Types.ObjectId },
         // 姓名
         uname: { type: String },
         // 身份证号	
@@ -26,6 +27,7 @@ module.exports = app => {
         apply_time: { type: Date },
         // 报名附件
         apply_annex: { type: String },
+        
         // 审核状态
         verify_status: { type: Number, default: 0 },
         // 审核人

@@ -240,8 +240,47 @@ class Controller extends BaseController {
         await this.ctx.render('index/confirm', {classifyData:lists[0]});
 
     }
+    
+    // 确认提交
+    async doConfirm() {
+        var data=this.ctx.request.body;
+        var userInfo=this.ctx.session.userInfo;
+        var examineeData={
+            user_id:userInfo._id,
+            uname:userInfo.uname,
+            idcode:userInfo.idcode,
+            phone:userInfo.phone,
+            photo:userInfo.photo,
+            idcard_z:userInfo.idcard_z,
+            idcard_f:userInfo.idcard_f,
+
+            exam_id:data.exam_id,
+            classify_id:data.classify_id,
+            apply_annex:data.apply_annex,
+            apply_time:new Date(),
+        };
+
+        var res = await this.ctx.model.Examinee.findOne({
+            user_id:userInfo._id,
+            classify_id:data.classify_id,
+        });
+        if(res){
+            this.ctx.body={
+                code:1,
+                msg:"您已经报名过该考试，请在【我的报名】中查看"
+            }
+            return
+        }
 
 
+        await new this.ctx.model.Examinee(examineeData).save();
+        
+        this.ctx.body={
+            code:0,
+            msg:"报名成功"
+        }
+        
+    }
 
 
 }

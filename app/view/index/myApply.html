@@ -36,6 +36,25 @@
         min-height: 200px;
         border-left: 1px solid  rgb(180, 206, 255);
     }
+    .tabBox{
+        padding: 20px;
+    }
+    .tabBox li{
+        display: inline-block;
+        padding: 0 15px;
+        height: 30px;
+        line-height: 28px;
+        text-align: center;
+        border: 1px solid rgb(131, 131, 131);
+        color:  rgb(131, 131, 131);
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .tabBox .current{
+        border: none;
+        background: rgb(255, 118, 38);
+        color: #fff;
+    }
 </style>
 <div class="topBox">
     <span>你好，{{userInfo.uname}}</span>
@@ -51,7 +70,12 @@
 
     </div>
     <div class="rightBox">
-
+        <ul class="tabBox">
+            <li class="current">已申请</li>
+            <li>待缴费</li>
+            <li>待考试</li>
+            <li>成绩查询</li>
+        </ul>
     </div>
 </div>
 

@@ -67,7 +67,7 @@
         color: coral;
         font-weight: 500;
     }
-    .applyBtn{
+    .confirmBtn{
         width: 200px;
         display: block;
         margin: 0 auto;
@@ -98,6 +98,33 @@
         width: 150px;
         height: 210px;
     }
+    .formBox {
+        position: relative;
+    }
+
+    .fileImgBox {
+        display: inline-block;
+        width: 200px;
+        margin-right: 2%;
+    }
+
+    .previewImg {
+        width: 100%;
+        height: 128px;
+        border-radius: 5px;
+    }
+  
+    .fileImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        cursor: pointer;
+        opacity: 0;
+    }
+
 </style>
 <div class="topBox">
     <span>你好，{{userInfo.uname}}</span>
@@ -145,21 +172,95 @@
                 </div>
             </div>
 
-            <div class="titleBox">附件上传<span>（附件要求：{{classifyData.annex}}）</span></div>
-            <div class="baseInfoList">
+            {% if classifyData.annex %}
+            <div class="titleBox">附件上传<span>（附件要求：{{classifyData.annex}}，最多上传9张图，单张大小3M以内）</span></div>
+            <div class="baseInfoList annexBox">
                 <div class="left">附件</div>
                 <div class="right">
-                    <img src="{{userInfo.idcard_z}}">
-                    <img src="{{userInfo.idcard_f}}">
+                    <div class="formBox">
+                        <form class="imgForm" id="idcardForm2" enctype="multipart/form-data" method="post" name="fileinfo">
+                            <input class="fileImg" type="file" id="idcardInput2" multiple name="myfile">
+                            <div class="fileImgBox">
+                                <img class="previewImg" id="idcardPreview2" src="/public/admin/images/add.png">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="btn btn-primary btn-lg applyBtn">确认提交</div>
+            {% endif %}
+            <div class="btn btn-primary btn-lg confirmBtn">确认提交</div>
         </div>
+        <input id="apply_annex" type="hidden" name="apply_annex">
         
     </div>
 </div>
 <script>
     $('#preImg').viewer();//图片预览
+
+    app.fileChange("idcardInput2", "idcardPreview2", "idcardForm2", "apply_annex", 9);
+
+    $(".confirmBtn").click(function(){
+        console.log($("#apply_annex").val()=="");
+        if($(".annexBox").length && !$("#apply_annex").val()){
+            Swal.fire({
+                title: '温馨提示',
+                text: "您未上传任何附件，是否继续提交",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                reverseButtons:true
+            }).then(function(result){
+                if (result.value) {
+                    submitFunc();
+                }
+            })
+            return
+        }
+        submitFunc();
+        
+    })
+    function submitFunc(){
+        app.ajaxPost("/home/doConfirm", {
+            exam_id: '{{classifyData.exam_id}}',
+            classify_id: '{{classifyData._id}}',
+            apply_annex: $("#apply_annex").val()
+        }, function (res) {
+            console.log(res);
+            if (res.code == 0) {
+                Swal.fire({
+                    title: "报名成功",
+                    text: "请等待后台审核，通过后即可缴费。审核结果会以短信通知您。",
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick:false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: '确定',
+                }).then(function(result){
+                    if (result.value) {
+                        window.location.href = "/home/myApply";
+                    }
+                })
+
+            } else {
+                Swal.fire({
+                    title: "温馨提示",
+                    text: res.msg,
+                    icon: 'info',
+                    showCancelButton: false,
+                    allowOutsideClick:false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: '确定',
+                }).then(function(result){
+                    if (result.value) {
+                        window.location.href = "/home/myApply";
+                    }
+                })
+            }
+        })
+    }
 </script>
 
 {% endblock %}
