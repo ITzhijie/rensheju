@@ -185,7 +185,36 @@ class Controller extends BaseController {
     
     //我的报名
     async myApply(){
-        await this.ctx.render('index/myApply', {});
+        
+
+        var lists = await this.ctx.model.Examinee.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },{
+                $lookup: {
+                    from: 'classify',
+                    localField: 'classify_id',
+                    foreignField: '_id',
+                    as: 'classify'
+                }
+            },
+            {
+                $match: {
+                    "user_id":this.app.mongoose.Types.ObjectId(this.ctx.session.userInfo._id)
+                }
+            },
+            {
+                $sort: { apply_time: -1 }
+            }
+        ]);
+        console.log(lists);
+
+        await this.ctx.render('index/myApply', {lists});
 
     }
     //我的资料 

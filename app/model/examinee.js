@@ -28,8 +28,10 @@ module.exports = app => {
         // 报名附件
         apply_annex: { type: String },
         
-        // 审核状态
+        // 审核状态 0待审核  1审核通过 2审核不通过
         verify_status: { type: Number, default: 0 },
+        // 审核不通过原因
+        verify_reason: { type: String },
         // 审核人
         verify_admin: { type: Schema.Types.ObjectId },
         // 审核时间
