@@ -19,6 +19,7 @@ module.exports = app => {
   router.post('/home/doAddphoto', controller.admin.home.doAddphoto);
 
 
+  router.get('/home/loginout', controller.admin.home.loginout);//退出
   
   router.get('/home/index', controller.admin.home.index);//首页 考试报名
   router.get('/home/myApply', controller.admin.home.myApply);//我的报名

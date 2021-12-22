@@ -6,10 +6,14 @@ var BaseController = require('./base.js');
 class Controller extends BaseController {
     //登录
     async login() {
-        this.ctx.session.adminInfo = null;
+        this.ctx.session.userInfo = null;
         await this.ctx.render('index/login', {});
     }
-
+    
+    async loginout() {
+        this.ctx.session.userInfo = null;
+        await this.ctx.render('index/login', {});
+    }
     async doLogin() {
         var phone=this.ctx.request.body.phone;
         var pwd= await this.service.tools.md5(this.ctx.request.body.pwd);
@@ -26,7 +30,7 @@ class Controller extends BaseController {
         if(res.status==0){
             this.ctx.body={
                 code:2,
-                msg:"该用户已被禁用"
+                msg:"您的账号已被禁用"
             }
             return   
         }
@@ -51,7 +55,7 @@ class Controller extends BaseController {
 
     //注册页面
     async register(){
-        this.ctx.session.adminInfo = null;
+        this.ctx.session.userInfo = null;
         await this.ctx.render('index/register', {});
 
     }
@@ -292,6 +296,7 @@ class Controller extends BaseController {
         var res = await this.ctx.model.Examinee.findOne({
             user_id:userInfo._id,
             classify_id:data.classify_id,
+            verify_status:1
         });
         if(res){
             this.ctx.body={

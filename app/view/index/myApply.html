@@ -60,6 +60,13 @@
         cursor: pointer;
         color: rgb(67, 67, 255);
     }
+    .table{
+        display: none;
+    }
+    
+    .table0{
+        display: table;
+    }
 </style>
 <div class="topBox">
     <span>你好，{{userInfo.uname}}</span>
@@ -121,7 +128,7 @@
 
             </tbody>
         </table>
-        <!-- 代缴费 -->
+        <!-- 待缴费 -->
         <table class="table table-bordered table1">
             <thead>
                 <tr>
@@ -194,7 +201,7 @@
             </tbody>
         </table>
         <!-- 成绩查询 -->
-        <table class="table table-bordered table2">
+        <table class="table table-bordered table3">
             <thead>
                 <tr>
                     <th>报考类型</th>
@@ -224,16 +231,25 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
-
+                
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    //console.log({{lists[0].classify[0].exam_end.getTime()}});
 
-    //console.log({{lists[0].classify[0].exam_end-lists[0].classify[0].exam_start}});
+    $(".tabBox li").click(function(){
+        var index=$(this).index();
+        console.log(index);
+        $(this).addClass("current").siblings("li").removeClass("current");
+        $(".table").hide();
 
+        $(".table"+index).show();
+        if ($(".table"+index+" tbody").find("tr").length==0) {
+            $(".table"+index+" tbody").html('<tr><td class="text-center" colspan="4">暂无对应报考信息</td></tr>');
+        }
+    })
+  
     $(".reason").click(function(){
         var _this=$(this);
         Swal.fire({

@@ -12,7 +12,7 @@ var app={
                 cb(res)
             },
             error: function (err) {
-				alert(JSON.stringify(err));
+				window.location.href="/";
             },
         });
 	},

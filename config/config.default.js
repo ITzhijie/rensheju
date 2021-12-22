@@ -27,7 +27,7 @@ module.exports = appInfo => {
 
   config.session = {
     key: 'SESSION_ID',
-    maxAge: 24 * 3600 * 1000, // 1 天
+    maxAge: 30 * 24 * 3600 * 1000, // 30 天
     httpOnly: true,
     encrypt: true,
     renew:true //演唱会话有效期
