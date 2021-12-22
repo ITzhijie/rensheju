@@ -52,6 +52,12 @@ module.exports = app => {
         room_num: { type: String },
         // 座位号
         seat_num: { type: String },
+        // 准考证号
+        exam_card: { type: String },
+        // 下载日期
+        downcard_date: { type: Date },
+        // 是否发布成绩
+        result_status: { type: Number, default: 0 },
         
 		add_time: {
 			type: Date,

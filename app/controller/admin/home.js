@@ -213,8 +213,8 @@ class Controller extends BaseController {
             }
         ]);
         console.log(lists);
-
-        await this.ctx.render('index/myApply', {lists});
+        let nowDate=new Date();
+        await this.ctx.render('index/myApply', {lists,nowDate});
 
     }
     //我的资料 

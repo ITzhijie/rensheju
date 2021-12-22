@@ -93,6 +93,9 @@ class Controller extends BaseController {
         addResult.apply_start=new Date(addResult.apply_start+" 00:00");
         addResult.apply_end=new Date(addResult.apply_end+" 23:59");
         addResult.pay_end=new Date(addResult.pay_end+" 23:59");
+        addResult.exam_start=new Date(subjectArr[0].exam_date+" 00:00");
+        addResult.exam_end=new Date(subjectArr[subjectArr.length-1].exam_date+" 23:59");
+
         let examData=await this.ctx.model.Exam.findOne({_id:addResult.exam_id});
         addResult.organ_id=examData.organ_id;
         var res =await new this.ctx.model.Classify(addResult).save();
@@ -148,7 +151,9 @@ class Controller extends BaseController {
         editData.apply_end=new Date(editData.apply_end+" 23:59");
         editData.pay_end=new Date(editData.pay_end+" 23:59");
       
-        
+        editData.exam_start=new Date(subjectArr[0].exam_date+" 00:00");
+        editData.exam_end=new Date(subjectArr[subjectArr.length-1].exam_date+" 23:59");
+
         await this.ctx.model.Classify.updateOne({ "_id": editData.id }, editData);
 
         await this.ctx.model.Subject.deleteMany({ "classify_id": this.app.mongoose.Types.ObjectId(editData.id) });

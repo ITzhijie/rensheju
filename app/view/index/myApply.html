@@ -56,7 +56,7 @@
         background: rgb(255, 118, 38);
         color: #fff;
     }
-    .reason{
+    .handlebtn{
         cursor: pointer;
         color: rgb(67, 67, 255);
     }
@@ -81,6 +81,7 @@
             <li>待考试</li>
             <li>成绩查询</li>
         </ul>
+        <!-- 已申请 -->
         <table class="table table-bordered table0">
             <thead>
                 <tr>
@@ -93,8 +94,9 @@
                 </tr>
             </thead>
             <tbody>
-                {% if list.verify_status !=1 %}
                 {% for list in lists %}
+                {% if list.verify_status != 1 %}
+
                 <tr>
                     <td>{{list.exam[0].exam_name}}</td>
                     <td>{{list.classify[0].classify_name}}</td>
@@ -109,55 +111,129 @@
                     <td>{{helper.formatTime(list.verify_time)}}</td>
                     <td>
                         {% if list.verify_status ==2 %}
-                        <span class="reason" data-reason="{{list.verify_reason}}">查看原因</span>
+                        <span class="handlebtn reason" data-reason="{{list.verify_reason}}">查看原因</span>
                         {% endif %}
                     </td>
                 </tr>
-                {% endfor %}
                 {% endif %}
+
+                {% endfor %}
 
             </tbody>
         </table>
+        <!-- 代缴费 -->
         <table class="table table-bordered table1">
             <thead>
                 <tr>
                     <th>报考类型</th>
                     <th>报考专业</th>
-                    <th>报名时间</th>
+                    <th>考试时间</th>
                     <th>当前状态</th>
-                    <th>审核时间</th>
+                    <th>缴费截止时间</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                {% if list.verify_status !=1 %}
                 {% for list in lists %}
+                {% if list.verify_status ==1 and list.pay_status==0 %}
+
                 <tr>
                     <td>{{list.exam[0].exam_name}}</td>
                     <td>{{list.classify[0].classify_name}}</td>
-                    <td>{{helper.formatTime(list.apply_time)}}</td>
+                    <td>{{helper.formatTime2(list.classify[0].exam_start)}}</td>
+                    <td><span class="label label-success">审核通过待缴费</span></td>
+                    <td>{{helper.formatTime2(list.classify[0].pay_end)}}</td>
                     <td>
-                        {% if list.verify_status ==0 %}
-                        <span class="label label-warning">待审核</span>
-                        {% else %}
-                        <span class="label label-danger">审核不通过</span>
-                        {% endif %}
-                    </td>
-                    <td>{{helper.formatTime(list.verify_time)}}</td>
-                    <td>
-                        {% if list.verify_status ==2 %}
-                        <span class="reason" data-reason="{{list.verify_reason}}">查看原因</span>
-                        {% endif %}
+                        <span class="handlebtn payBtn" data-id="{{list._id}}">缴费</span>
                     </td>
                 </tr>
-                {% endfor %}
                 {% endif %}
+                {% endfor %}
+
+            </tbody>
+        </table>
+        <!-- 待考试 -->
+        <table class="table table-bordered table2">
+            <thead>
+                <tr>
+                    <th>报考类型</th>
+                    <th>报考专业</th>
+                    <th>当前状态</th>
+
+                    <th>考试时间</th>
+
+                    <th>准考证号</th>
+                    <th>考试地点</th>
+
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for list in lists %}
+                {% if list.verify_status ==1 and list.pay_status==1 and (nowDate < list.classify[0].exam_end) %}
+
+                <tr>
+                    <td>{{list.exam[0].exam_name}}</td>
+                    <td>{{list.classify[0].classify_name}}</td>
+                    <td><span class="label label-warning">待考试</span></td>
+                    <td>{{helper.formatTime2(list.classify[0].exam_start)}}</td>
+                    <td>{{list.exam_card}}</td>
+                    <td>{{list.room_name}}</td>
+
+                    <td>
+                        {% if  (nowDate > list.downcard_date) %}
+
+                        <span class="handlebtn downCard" data-id="{{list._id}}">下载准考证</span>
+                        {% endif %}
+                    
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+
+            </tbody>
+        </table>
+        <!-- 成绩查询 -->
+        <table class="table table-bordered table2">
+            <thead>
+                <tr>
+                    <th>报考类型</th>
+                    <th>报考专业</th>
+                    <th>考试时间</th>
+                    <th>考试结果</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for list in lists %}
+                {% if list.verify_status ==1 and list.pay_status==1 and (nowDate > list.classify[0].exam_end) %}
+
+                <tr>
+                    <td>{{list.exam[0].exam_name}}</td>
+                    <td>{{list.classify[0].classify_name}}</td>
+                    <td>{{helper.formatTime2(list.exam[0].exam_start)}}</td>
+                    <td>
+                        {% if  list.result_status==1 %}
+
+                        <span class="handlebtn getResult" data-id="{{list._id}}">查看</span>
+                        {% else %}
+                        <span class="label label-warning">待公布</span>
+
+                        {% endif %}
+                    
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
 
             </tbody>
         </table>
     </div>
 </div>
 <script>
+    //console.log({{lists[0].classify[0].exam_end.getTime()}});
+
+    //console.log({{lists[0].classify[0].exam_end-lists[0].classify[0].exam_start}});
+
     $(".reason").click(function(){
         var _this=$(this);
         Swal.fire({

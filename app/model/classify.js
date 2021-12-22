@@ -17,6 +17,10 @@ module.exports = app => {
         apply_start:  { type: Date },
         // 报名结束时间	
         apply_end: { type: Date },
+        // 考试开始时间	
+        exam_start:  { type: Date },
+        // 考试结束时间	
+        exam_end: { type: Date },
         // 缴费截止时间
         pay_end: { type: Date },
         // 报名费用
