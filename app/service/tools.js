@@ -66,10 +66,10 @@ class ToolsService extends Service {
         /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
         let maxPos = chars.length;
         var requestId = '';
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
             requestId += chars.charAt(Math.floor(Math.random() * maxPos));
         }
-        requestId=new Date().getTime()+requestId;
+        requestId=new Date().getTime()+"asdfgh";
 
         var spCode="265309";
         var appKey="xn_ksy";
@@ -92,22 +92,26 @@ class ToolsService extends Service {
         var sign=sm3(signStr);
         console.log("====sign=====");
         console.log(sign);
+        console.log("====requestId=====");
+        console.log(requestId);
 
+        console.log("====content=====");
+        console.log(content);
         
         let res = await this.ctx.curl("https://api.ums86.com/api/sms/send", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
                 "x-app-key": appKey,
                 "x-request-id": requestId,
                 "x-sign": sign,
                 "x-sp-code": spCode
             },
             data: {
-                MessageContent:"验证码为5566，有效期为30分钟。",
+                MessageContent:"验证码为2233，有效期为30分钟。",
                 UserNumber:"18607135858",
                 templateId:"2431012153320",
-                SerialNumber:requestId,
+                SerialNumber:requestId.replace("1","2"),
                 extendAccessNum: ""
             },
             dataType: 'json',
