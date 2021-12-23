@@ -1,4 +1,5 @@
 'use strict';
+const sm3 = require('sm3');
 
 var BaseController = require('./base.js');
 
@@ -169,12 +170,35 @@ class Controller extends BaseController {
     async sendCode(){
         var phone = this.ctx.request.body.phone;
         var code = Math.floor(Math.random() * 10000);
-        if (code < 1000) {code += 1000}
+        if (code < 1000) {code += 1000};
 
+        // var codeRes = await this.ctx.model.Code.findOne({ "phone": phone }).sort({"add_time":-1});
+        // console.log(codeRes);
+        // let t=new Date() - codeRes.add_time;
+        // console.log(t);
 
+        var data=await this.ctx.service.tools.sendMsg();
 
-        await this.ctx.render('index/register', {});
+        console.log(data);
+        // var contentData={
+        //     "messageContent": "您有一个任务编号:1234待处理",
+        //     "serialNumber": "162688646466241767824",
+        //     "templateId": "20000",
+        //     "userNumber": "13000000000",
+        // }
+        // var contentStr="messageContent="+contentData.messageContent
+        //                 +"&serialNumber="+contentData.serialNumber
+        //                 +"&templateId="+contentData.templateId
+        //                 +"&userNumber="+contentData.userNumber;
 
+        // var content= encodeURIComponent(contentStr);
+        // console.log("content=======================");
+
+        this.ctx.body={
+            code:0,
+            msg:"验证码发送成功",
+            data:data
+        }
 
     }
 

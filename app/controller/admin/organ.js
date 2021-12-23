@@ -2,7 +2,7 @@
 
 var BaseController = require('./base.js');
 
-class ManagerController extends BaseController {
+class Controller extends BaseController {
 	async index() {
 
 		//查询管理员表并管理角色表
@@ -57,4 +57,4 @@ class ManagerController extends BaseController {
 
 }
 
-module.exports = ManagerController;
+module.exports = Controller;

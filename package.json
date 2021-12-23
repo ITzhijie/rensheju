@@ -16,6 +16,7 @@
     "mz-modules": "^2.1.0",
     "node-xlsx": "^0.17.2",
     "silly-datetime": "^0.1.2",
+    "sm3": "^1.0.3",
     "svg-captcha": "^1.4.0",
     "sweetalert2": "^9.5.3",
     "xlsx": "^0.17.4",

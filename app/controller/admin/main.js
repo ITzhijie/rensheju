@@ -3,7 +3,7 @@
 var BaseController = require('./base.js');
 
 
-class MainController extends BaseController {
+class Controller extends BaseController {
     async index() {
         await this.ctx.render('admin/main/index', {});
     }
@@ -12,4 +12,4 @@ class MainController extends BaseController {
     }
 }
 
-module.exports = MainController;
+module.exports = Controller;

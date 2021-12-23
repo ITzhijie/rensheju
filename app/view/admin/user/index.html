@@ -1,0 +1,113 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block main %}
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">用户列表</h3>
+
+                            <!-- <a href="/admin/exam/add" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">增加考试</a> -->
+
+                            <div class="card-tools">
+
+                                <form action="/admin/user" method="GET">
+                                    <div class="input-group input-group" style="width: 250px;margin:0;">
+
+                                        <input type="text" name="keyword" class="form-control float-right"
+                                            placeholder="请输入关键词" value="{{keyword}}">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover tableNoWrap table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>身份证号</th>
+                                        <th>注册时间</th>
+                                        <th>状态</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.uname}}</td>
+                                        <td>{{list.phone}}</td>
+                                        <td>{{list.idcode}}</td>
+                                        <td>{{helper.formatTime(list.add_time)}}</td>
+                                        <td>
+                                            {% if list.status==1 %}
+                                            <i class="icon fas fa-check text-success" style="cursor: pointer;"
+                                            onclick="app.changeStatus(this,'User','status','{{list._id}}')" ></i>
+                                            {% else %}
+                                            <i class="icon fas fa-ban text-danger" style="cursor: pointer;"
+                                            onclick="app.changeStatus(this,'User','status','{{list._id}}')" ></i>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a href="/admin/user/edit?id={{list._id}}">编辑</a>
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有信息哦</div>
+                            {% endif %}
+                        </div>
+                        {% if totalPages > 1 %}
+                        <div class="card-footer">
+                            <div id="page" class="pagination float-right"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script>
+
+        $('#page').jqPaginator({
+            totalPages: Number('{{totalPages}}'),
+            visiblePages: 8,
+            currentPage: Number('{{page}}'),
+            onPageChange: function (num, type) {
+                console.log('当前第' + num + '页', type);
+    
+                if (type == 'change') {
+    
+                    location.href = "/admin/user?last_company_name={{last_company_name}}&last_prevPage={{last_prevPage}}&keyword={{keyword}}&page=" + num;
+                }
+            }
+        });
+    
+    
+    
+    
+    </script>
+
+{% endblock %}

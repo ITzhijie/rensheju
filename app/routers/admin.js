@@ -28,6 +28,11 @@ module.exports = app => {
   router.post('/admin/doLogin', controller.admin.login.doLogin);
   router.get('/admin/loginOut', controller.admin.login.loginOut);
 
+ 
+  router.get('/admin/user', controller.admin.user.index);
+  router.get('/admin/user/edit', controller.admin.user.edit);
+  router.post('/admin/user/doEdit', controller.admin.user.doEdit);
+
 
   router.get('/admin/organ', controller.admin.organ.index);
   router.get('/admin/organ/add', controller.admin.organ.add);

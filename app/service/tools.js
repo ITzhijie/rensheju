@@ -8,7 +8,7 @@ const mkdirp = require('mz-modules/mkdirp');
 const XLSX = require('node-xlsx');
 const pump = require('mz-modules/pump');
 const fs = require('fs');
-
+const sm3 = require('sm3');
 const Service = require('egg').Service;
 
 class ToolsService extends Service {
@@ -60,6 +60,63 @@ class ToolsService extends Service {
         }
     }
 
+    //发送验证码  sendMsg
+    async sendMsg(){
+        let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        let maxPos = chars.length;
+        var requestId = '';
+        for (let i = 0; i < 6; i++) {
+            requestId += chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        requestId=new Date().getTime()+requestId;
+
+        var spCode="265309";
+        var appKey="xn_ksy";
+        var appSecret="d9409d6c396732451b1a9391dc141a06";
+
+        var contentData={
+            "messageContent": "验证码为2233，有效期为30分钟。",
+            "serialNumber": requestId,
+            "templateId": "2431012153320",
+            "userNumber": "18607135858",
+        }
+        var contentStr="messageContent="+contentData.messageContent
+                        +"&serialNumber="+contentData.serialNumber
+                        +"&templateId="+contentData.templateId
+                        +"&userNumber="+contentData.userNumber;
+
+        var content=encodeURIComponent(contentStr);
+
+        var signStr=spCode+appKey+appSecret+content+requestId;
+        var sign=sm3(signStr);
+        console.log("====sign=====");
+        console.log(sign);
+
+        
+        let res = await this.ctx.curl("https://api.ums86.com/api/sms/send", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "x-app-key": appKey,
+                "x-request-id": requestId,
+                "x-sign": sign,
+                "x-sp-code": spCode
+            },
+            data: {
+                MessageContent:"验证码为5566，有效期为30分钟。",
+                UserNumber:"18607135858",
+                templateId:"2431012153320",
+                SerialNumber:requestId,
+                extendAccessNum: ""
+            },
+            dataType: 'json',
+            timeout:30000
+        });
+        return res
+
+
+    }
 
     // 导入表格 解析excel.xlsx
     async parseExcel(ctx) {

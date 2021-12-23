@@ -1,0 +1,155 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 修改用户信息 {% endblock %}
+
+{% block main %}
+<style>
+    .formBox {
+        position: relative;
+    }
+
+    .fileImgBox {
+        display: inline-block;
+        width: 300px;
+        margin-right: 2%;
+    }
+    .formBox3 .fileImgBox {
+        width: 150px;
+    }
+
+    .previewImg {
+        width: 100%;
+        height: 190px;
+        border-radius: 5px;
+    }
+    .formBox3 .previewImg {
+        width: 100%;
+        height: 210px;
+        border-radius: 5px;
+    }
+    .fileImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 300px;
+        height: 100%;
+        outline: none;
+        cursor: pointer;
+        opacity: 0;
+    }
+    .formBox3 .fileImg{
+        width: 150px;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">修改用户信息</h3>
+                    </div>
+                    <form id="actionForm" role="form" action="/admin/user/doEdit" method="post">
+                        <div class="card-body" style="padding-bottom: 0;">
+                            <div class="form-group col-md-6">
+                                <label for="uname">姓名</label>
+                                <input type="text" class="form-control" id="uname" name="uname"
+                                    value="{{data.uname}}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="phone">电话</label>
+                                <input type="number" class="form-control" id="phone" name="phone"
+                                    value="{{data.phone}}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="idcode">身份证号</label>
+                                <input type="number" class="form-control" id="idcode" name="idcode"
+                                    value="{{data.idcode}}" required>
+                            </div>
+                          
+                            
+          
+                        </div>
+                        <input type="hidden" name="id" readonly value="{{data._id}}" />
+                        <input id="idcard_z" type="hidden" name="idcard_z" value="{{data.idcard_z}}">
+                        <input id="idcard_f" type="hidden" name="idcard_f" value="{{data.idcard_f}}">
+                        <input id="photo" type="hidden" name="photo" value="{{data.photo}}">
+                        
+                        
+                    </form>
+                    <div class="card-body" style="padding-top: 0;">
+                        <div class="form-group col-sm-6">
+                            <label for="exampleInputFile">身份证正面</label>
+                            <div class="formBox formBox1">
+                                <form class="imgForm" id="idcardForm" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="idcardPreview" src="{{data.idcard_z}}">
+                                    </div>
+                                </form>
+    
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="exampleInputFile">身份证反面</label>
+                            <div class="formBox formBox2">
+                                <form class="imgForm" id="idcardForm2" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="idcardInput2" multiple name="myfile">
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="idcardPreview2" src="{{data.idcard_f}}">
+                                    </div>
+                                </form>
+    
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="exampleInputFile">登记照</label>
+                            <div class="formBox formBox3">
+                                <form class="imgForm" id="idcardForm3" enctype="multipart/form-data" method="post"
+                                    name="fileinfo">
+                                    <input class="fileImg" type="file" id="idcardInput3" multiple name="myfile">
+                                    <div class="fileImgBox">
+                                        <img class="previewImg" id="idcardPreview3" src="{{data.photo}}">
+                                    </div>
+                                </form>
+    
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary submitBtn">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    app.fileChange("idcardInput", "idcardPreview", "idcardForm", "idcard_z", 1);
+    app.fileChange("idcardInput2", "idcardPreview2", "idcardForm2", "idcard_f", 1);
+    app.fileChange("idcardInput3", "idcardPreview3", "idcardForm3", "photo", 1);
+
+    $(".submitBtn").click(function(){
+        if(!$("#uname").val()||!$("#idcode").val()||!$("#phone").val()||!$("#photo").val()||!$("#idcard_z").val()||!$("#idcard_f").val()){
+            Swal.fire({
+                title: "温馨提示",
+                text: "请填写完整用户信息",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+        }
+        $("#actionForm").submit();
+
+    })
+
+
+
+</script>
+
+{% endblock %}

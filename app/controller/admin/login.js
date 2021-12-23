@@ -3,7 +3,7 @@
 var BaseController = require('./base.js');
 
 
-class LoginController extends BaseController {
+class Controller extends BaseController {
     async index() {
         await this.ctx.render('admin/login', {});
     }
@@ -56,4 +56,4 @@ class LoginController extends BaseController {
     }
 }
 
-module.exports = LoginController;
+module.exports = Controller;
