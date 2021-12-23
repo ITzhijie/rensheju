@@ -180,11 +180,17 @@ class Controller extends BaseController {
         var data=await this.ctx.service.tools.sendMsg();
 
         console.log(data);
+
+
+        // var spCode="265309";
+        // var appKey="xn_ksy";
+        // var appSecret="d9409d6c396732451b1a9391dc141a06";
+        // var requestId="1640271876527ojQ4U3";
         // var contentData={
-        //     "messageContent": "您有一个任务编号:1234待处理",
-        //     "serialNumber": "162688646466241767824",
-        //     "templateId": "20000",
-        //     "userNumber": "13000000000",
+        //     "messageContent": "验证码为3333，有效期为30分钟。",
+        //     "serialNumber": "12345678900123456789",
+        //     "templateId": "2431012153320",
+        //     "userNumber": "18607135858",
         // }
         // var contentStr="messageContent="+contentData.messageContent
         //                 +"&serialNumber="+contentData.serialNumber
@@ -193,11 +199,17 @@ class Controller extends BaseController {
 
         // var content= encodeURIComponent(contentStr);
         // console.log("content=======================");
+        // console.log(content);
+        
+        // var signStr=spCode+appKey+appSecret+content+requestId;
+        // var sign=sm3(signStr);
+        // console.log("sign=======================");
+        // console.log(sign);
 
         this.ctx.body={
             code:0,
             msg:"验证码发送成功",
-            data:data
+            // data:data
         }
 
     }

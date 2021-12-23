@@ -66,20 +66,21 @@ class ToolsService extends Service {
         /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
         let maxPos = chars.length;
         var requestId = '';
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 6; i++) {
             requestId += chars.charAt(Math.floor(Math.random() * maxPos));
         }
-        requestId=new Date().getTime()+"asdfgh";
+        requestId=new Date().getTime()+requestId;
 
         var spCode="265309";
         var appKey="xn_ksy";
         var appSecret="d9409d6c396732451b1a9391dc141a06";
 
+        var serialNumber=new Date().getTime()+"1234567";
         var contentData={
-            "messageContent": "验证码为2233，有效期为30分钟。",
-            "serialNumber": requestId,
+            "messageContent": "验证码为4578，有效期为30分钟。",
+            "serialNumber": serialNumber,
             "templateId": "2431012153320",
-            "userNumber": "18607135858",
+            "userNumber": "18062591515",
         }
         var contentStr="messageContent="+contentData.messageContent
                         +"&serialNumber="+contentData.serialNumber
@@ -92,8 +93,8 @@ class ToolsService extends Service {
         var sign=sm3(signStr);
         console.log("====sign=====");
         console.log(sign);
-        console.log("====requestId=====");
-        console.log(requestId);
+        console.log("====serialNumber=====");
+        console.log(serialNumber);
 
         console.log("====content=====");
         console.log(content);
@@ -101,22 +102,41 @@ class ToolsService extends Service {
         let res = await this.ctx.curl("https://api.ums86.com/api/sms/send", {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                //"content-type":"application/json;charset=utf-8",
+                
                 "x-app-key": appKey,
                 "x-request-id": requestId,
                 "x-sign": sign,
-                "x-sp-code": spCode
+                "x-sp-code": spCode,
             },
-            data: {
-                MessageContent:"验证码为2233，有效期为30分钟。",
-                UserNumber:"18607135858",
+            body: {
+                MessageContent:"验证码为4578，有效期为30分钟。",
+                UserNumber:"18062591515",
                 templateId:"2431012153320",
-                SerialNumber:requestId.replace("1","2"),
-                extendAccessNum: ""
+                SerialNumber:serialNumber
             },
-            dataType: 'json',
-            timeout:30000
+            dataType: 'text'
         });
+
+
+        // let res = await this.ctx.curl("https://api.ums86.com:9600/sms/Api/Send.do", {
+        //     method: 'POST',
+        //     headers: {
+        //         //"Content-Type": "application/x-www-form-urlencoded;charset=GB2312",
+                
+        //     },
+        //     data: {
+        //         SpCode:spCode,
+        //         LoginName:appKey,
+        //         Password:appSecret,
+        //         MessageContent:"验证码为1234，有效期为30分钟。",
+        //         UserNumber:"18607135858",
+        //         templateId:"2431012153320",
+        //         SerialNumber:serialNumber
+        //     },
+        //     //dataType: 'json',
+        //     timeout:30000
+        // });
         return res
 
 
