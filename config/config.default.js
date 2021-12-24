@@ -24,7 +24,13 @@ module.exports = appInfo => {
       ".jpg",".jpeg",".png",".xlsx",".xls",".mp4"
     ]
   }
-
+  config.cluster = {
+    listen:{
+        path: '',
+        port: 8080,
+        hostname: '0.0.0.0', //localhost
+    }
+};
   config.session = {
     key: 'SESSION_ID',
     maxAge: 30 * 24 * 3600 * 1000, // 30 天

@@ -67,5 +67,7 @@ module.exports = app => {
   router.post('/admin/manager/doEdit', controller.admin.manager.doEdit);
   router.post('/admin/manager/changepsw', controller.admin.manager.changepsw);
 
+  router.get('/admin/apply/varifying', controller.admin.apply.varifying);
+
 
 };

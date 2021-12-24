@@ -172,28 +172,31 @@
             showCancelButton: false,
             confirmButtonColor: '#3085d6',
             confirmButtonText: '确定',
-        })
+        }).then(function (result) {
+            if (result.value) {
+                app.ajaxPost("/home/doAddphoto", {
+                    photo: $("#photo").val(),
+                    idcard_z: $("#idcard_z").val(),
+                    idcard_f: $("#idcard_f").val()
+                }, function (res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        window.location.href = "/home/index";
 
-        app.ajaxPost("/home/doAddphoto", {
-            photo: $("#photo").val(),
-            idcard_z: $("#idcard_z").val(),
-            idcard_f: $("#idcard_f").val()
-        }, function (res) {
-            console.log(res);
-            if (res.code == 0) {
-                window.location.href = "/home/index";
-
-            } else {
-                Swal.fire({
-                    title: "温馨提示",
-                    text: res.msg,
-                    icon: 'info',
-                    showCancelButton: false,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: '确定',
+                    } else {
+                        Swal.fire({
+                            title: "温馨提示",
+                            text: res.msg,
+                            icon: 'info',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: '确定',
+                        })
+                    }
                 })
             }
         })
+        
     })
 </script>
 {% endblock %}

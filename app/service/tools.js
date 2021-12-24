@@ -11,6 +11,8 @@ const fs = require('fs');
 const sm3 = require('sm3');
 const Service = require('egg').Service;
 
+
+
 class ToolsService extends Service {
     //生成验证码
     async captcha() {
@@ -61,7 +63,20 @@ class ToolsService extends Service {
     }
 
     //发送验证码  sendMsg
-    async sendMsg(){
+    async sendMsg(phone,index,vari){
+  
+        let msgArr=[
+            ["2431012153320","验证码为"+vari+"，有效期为30分钟。"],
+            ["2431012153324","考生"+vari+"你好，你的报考信息已通过审核，请前往报考平台查看并进行缴费。"],
+            ["2431012153322","考生"+vari+"你好，你的报考信息审核未通过，请前往报考平台查看原因。"]
+        ];
+
+        let messageContent=msgArr[index][1];
+        console.log("messageContent============");
+        console.log(messageContent);
+        var templateId=msgArr[index][0];
+
+
         let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
         /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
         let maxPos = chars.length;
@@ -76,68 +91,75 @@ class ToolsService extends Service {
         var appSecret="d9409d6c396732451b1a9391dc141a06";
 
         var serialNumber=new Date().getTime()+"1234567";
-        var contentData={
-            "messageContent": "验证码为4578，有效期为30分钟。",
-            "serialNumber": serialNumber,
-            "templateId": "2431012153320",
-            "userNumber": "18062591515",
-        }
-        var contentStr="messageContent="+contentData.messageContent
-                        +"&serialNumber="+contentData.serialNumber
-                        +"&templateId="+contentData.templateId
-                        +"&userNumber="+contentData.userNumber;
+        // var contentData={
+        //     "messageContent": messageContent,
+        //     "serialNumber": serialNumber,
+        //     "templateId": templateId,
+        //     "userNumber": phone,
+        // }
+        // var contentStr="messageContent="+contentData.messageContent
+        //                 +"&serialNumber="+contentData.serialNumber
+        //                 +"&templateId="+contentData.templateId
+        //                 +"&userNumber="+contentData.userNumber;
 
-        var content=encodeURIComponent(contentStr);
+     
+        // var content=encodeURIComponent(contentStr);
 
-        var signStr=spCode+appKey+appSecret+content+requestId;
-        var sign=sm3(signStr);
-        console.log("====sign=====");
-        console.log(sign);
-        console.log("====serialNumber=====");
-        console.log(serialNumber);
-
-        console.log("====content=====");
-        console.log(content);
+        // var signStr=spCode+appKey+appSecret+content+requestId;
+        // var sign=sm3(signStr);
+        // console.log("contentStr===============");
+        // console.log(contentStr);
+        // console.log("sign===============");
+        // console.log(sign);
+        // console.log("requestId===============");
+        // console.log(requestId);
         
-        let res = await this.ctx.curl("https://api.ums86.com/api/sms/send", {
-            method: 'POST',
-            headers: {
-                //"content-type":"application/json;charset=utf-8",
-                
-                "x-app-key": appKey,
-                "x-request-id": requestId,
-                "x-sign": sign,
-                "x-sp-code": spCode,
-            },
-            body: {
-                MessageContent:"验证码为4578，有效期为30分钟。",
-                UserNumber:"18062591515",
-                templateId:"2431012153320",
-                SerialNumber:serialNumber
-            },
-            dataType: 'text'
-        });
-
-
-        // let res = await this.ctx.curl("https://api.ums86.com:9600/sms/Api/Send.do", {
+        // let res = await this.ctx.curl("https://api.ums86.com/api/sms/send", {
         //     method: 'POST',
         //     headers: {
-        //         //"Content-Type": "application/x-www-form-urlencoded;charset=GB2312",
-                
+        //         //"content-type":"application/json;charset=utf-8",
+        //         "x-app-key": appKey,
+        //         "x-request-id": requestId,
+        //         "x-sign": sign,
+        //         "x-sp-code": spCode,
         //     },
-        //     data: {
-        //         SpCode:spCode,
-        //         LoginName:appKey,
-        //         Password:appSecret,
-        //         MessageContent:"验证码为1234，有效期为30分钟。",
-        //         UserNumber:"18607135858",
-        //         templateId:"2431012153320",
+        //     form: {
+        //         MessageContent:messageContent,
+        //         UserNumber:phone,
+        //         templateId:templateId,
         //         SerialNumber:serialNumber
         //     },
-        //     //dataType: 'json',
-        //     timeout:30000
+        //     dataType: 'text'
         // });
-        return res
+
+        let res = await this.ctx.curl("https://api.ums86.com:9600/sms/Api/SendUTF8.do", {
+            method: 'POST',
+            headers: {
+                //"content-type": "application/x-www-form-urlencoded;charset=GB2312",
+                
+            },
+            data: {
+                SpCode:spCode,
+                LoginName:appKey,
+                Password:appSecret,
+                MessageContent:messageContent,
+                UserNumber:phone,
+                templateId:templateId,
+                SerialNumber:serialNumber
+            },
+            dataType: 'text',
+        });
+
+        // res.data
+        // result=0&description=发送短信成功&taskid=2431908751617&faillist=&task_id=2431908751617
+        // result=1&description=提交参数不能为空
+        let str=res.data;
+        var arr=str.split("&");
+        var result={};
+        for (let i = 0; i < arr.length; i++) {
+            result[arr[i].split("=")[0]]=arr[i].split("=")[1];
+        }
+        return result
 
 
     }

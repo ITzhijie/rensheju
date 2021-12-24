@@ -237,7 +237,9 @@
     </div>
 </div>
 <script>
-
+    if($(".table0 tbody").find("tr").length==0) {
+        $(".table0 tbody").html('<tr><td class="text-center" colspan="6">暂无对应报考信息</td></tr>');
+    }
     $(".tabBox li").click(function(){
         var index=$(this).index();
         console.log(index);
@@ -246,7 +248,14 @@
 
         $(".table"+index).show();
         if ($(".table"+index+" tbody").find("tr").length==0) {
-            $(".table"+index+" tbody").html('<tr><td class="text-center" colspan="4">暂无对应报考信息</td></tr>');
+            var colspan=4;
+            if (index!=3) {
+                colspan=colspan+index+1;
+            }
+            if (index==0) {
+                colspan=6
+            }
+            $(".table"+index+" tbody").html('<tr><td class="text-center" colspan="'+colspan+'">暂无对应报考信息</td></tr>');
         }
     })
   

@@ -46,11 +46,11 @@
 		<form class="col-xs-6 col-xs-offset-3">
 			<div class="form-group">
 			  <label >姓名</label>
-			  <input type="text" class="form-control input-lg" name="uname" required>
+			  <input type="text" id="uname" class="form-control input-lg" name="uname" required>
 			</div>
 			<div class="form-group">
 			  <label >身份证号码</label>
-			  <input type="text" class="form-control input-lg" name="idcode" required>
+			  <input type="text" id="idcode" class="form-control input-lg" name="idcode" required>
             </div>
             
 			<div class="form-group">
@@ -61,25 +61,25 @@
 			<div class="form-group">
                 <label >验证码</label>
                 <div class=" form-inline">
-                    <input type="text" class="form-control input-lg yzmInput" name="code" required>
+                    <input type="text" id="code" class="form-control input-lg yzmInput" name="code" required>
                     <button type="button" class="btn btn-lg btn-default pull-right sendBtn">发送验证码</button>
                 </div>
               
             </div>
 			<div class="form-group">
 			  <label >密码</label>
-			  <input type="password" class="form-control input-lg"  name="pwd" required>
+			  <input type="password" id="pwd" class="form-control input-lg"  name="pwd" required>
             </div>
             
 			<div class="form-group mb10">
                 <label >确认密码</label>
-                <input type="password" class="form-control input-lg"  name="repwd" required>
+                <input type="password" id="repwd" class="form-control input-lg"  name="repwd" required>
               </div>
 			<div class="text-right  mb10">
 				<a href="/">已有账号，去登陆</a>
 			</div>
 
-			<button type="submit" class="btn btn-primary btn-lg btn-block">立即注册</button>
+			<button type="button" class="registerBtn btn btn-primary btn-lg btn-block">立即注册</button>
 		  </form>
 	</div>
 </div>
@@ -91,7 +91,7 @@
 			Swal.fire({
 				title: "温馨提示",
 				text: "请填写正确手机号",
-				icon: 'info',
+				icon: 'warning',
 				showCancelButton: false,
 				allowOutsideClick:false,
 				confirmButtonColor: '#3085d6',
@@ -118,13 +118,73 @@
 			phone:$("#phone").val()
 		},function(res){
 			console.log(res);
-			
+			if (res.code!=0) {
+				clearInterval(timer);
+				$(".sendBtn").text("发送验证码").removeClass("disabled");
+				Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'warning',
+					showCancelButton: false,
+					allowOutsideClick:false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '确定',
+				})
+			}
 		});
 
-
-
-
-		
 	})
+
+	$(".registerBtn").click(function(){
+		if(!$("#uname").val()||!$("#idcode").val()||!$("#phone").val()||!$("#code").val()||!$("#pwd").val()){
+            Swal.fire({
+                title: "温馨提示",
+                text: "请填写完整注册信息",
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+		}
+		
+		if($("#pwd").val()!=$("#repwd").val()){
+            Swal.fire({
+                title: "温馨提示",
+                text: "两次密码不统一，请重新输入",
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+		}
+		app.ajaxPost("/doRegister",{
+			uname:$("#uname").val(),
+			idcode:$("#idcode").val(),
+			phone:$("#phone").val(),
+			pwd:$("#pwd").val()
+		},function(res){
+			console.log(res);
+			if (res.code==0) {
+				window.location.href="/home/addphoto";
+				
+			}else{
+				Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'warning',
+					showCancelButton: false,
+					allowOutsideClick:false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '确定',
+				})
+			}
+		});
+
+	})
+
+
+
 </script>
 {% endblock %}

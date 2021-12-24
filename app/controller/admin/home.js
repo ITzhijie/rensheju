@@ -70,17 +70,18 @@ class Controller extends BaseController {
         var registData = this.ctx.request.body;
 
         //首先判断用户code是否正确
-        var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
-        if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
+        // var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
+        // if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
+        //     await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
             
-        }else{
-            repData={
-                code:1,
-                msg:"验证码错误或失效，请重试",
-            }
-            this.ctx.body=repData;
-            return
-        }
+        // }else{
+        //     repData={
+        //         code:1,
+        //         msg:"验证码错误或失效，请重试",
+        //     }
+        //     this.ctx.body=repData;
+        //     return
+        // }
         
         var res1 = await this.ctx.model.User.findOne({phone:registData.phone});
         if (res1) {
@@ -95,7 +96,7 @@ class Controller extends BaseController {
         if (res2) {
             repData={
                 code:3,
-                msg:"该身份证已经绑定尾号为"+res2.phone+"的手机，请用该手机号登录，若非您本人绑定，请到人社局处理。",
+                msg:"该身份证已经绑定尾号为"+res2.phone.substr(7,4)+"的手机，请用该手机号登录，若非您本人绑定，请到人社局处理。",
             }
             this.ctx.body=repData;
             return
@@ -172,44 +173,20 @@ class Controller extends BaseController {
         var code = Math.floor(Math.random() * 10000);
         if (code < 1000) {code += 1000};
 
-        // var codeRes = await this.ctx.model.Code.findOne({ "phone": phone }).sort({"add_time":-1});
-        // console.log(codeRes);
-        // let t=new Date() - codeRes.add_time;
-        // console.log(t);
-
-        var data=await this.ctx.service.tools.sendMsg();
+        var data=await this.ctx.service.tools.sendMsg(phone,0,code);
 
         console.log(data);
-
-
-        // var spCode="265309";
-        // var appKey="xn_ksy";
-        // var appSecret="d9409d6c396732451b1a9391dc141a06";
-        // var requestId="1640271876527ojQ4U3";
-        // var contentData={
-        //     "messageContent": "验证码为3333，有效期为30分钟。",
-        //     "serialNumber": "12345678900123456789",
-        //     "templateId": "2431012153320",
-        //     "userNumber": "18607135858",
-        // }
-        // var contentStr="messageContent="+contentData.messageContent
-        //                 +"&serialNumber="+contentData.serialNumber
-        //                 +"&templateId="+contentData.templateId
-        //                 +"&userNumber="+contentData.userNumber;
-
-        // var content= encodeURIComponent(contentStr);
-        // console.log("content=======================");
-        // console.log(content);
-        
-        // var signStr=spCode+appKey+appSecret+content+requestId;
-        // var sign=sm3(signStr);
-        // console.log("sign=======================");
-        // console.log(sign);
+        if(data.result=="0"){
+            await new this.ctx.model.Code({
+                phone,
+                code
+            }).save();
+        }
 
         this.ctx.body={
-            code:0,
-            msg:"验证码发送成功",
-            // data:data
+            code:data.result,
+            msg:data.description,
+            data:data
         }
 
     }
