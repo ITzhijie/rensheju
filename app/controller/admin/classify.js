@@ -169,8 +169,34 @@ class Controller extends BaseController {
 
     }
 
-
     
+    async getClassifyLists() {
+
+        const {ctx}=this;
+        var exam_id = this.ctx.request.body.exam_id;
+        var classifyLists;
+        if (exam_id) {
+            classifyLists= await this.ctx.model.Classify.find({exam_id:exam_id});
+        }else{
+            if (this.ctx.session.adminInfo.is_super == 1) {
+                classifyLists= await this.ctx.model.Classify.find();
+                
+            }else{
+                let admin_organ_id=this.ctx.session.adminInfo.organ_id;
+                classifyLists= await this.ctx.model.Classify.find({
+                    organ_id:admin_organ_id
+                });
+            }
+            
+        }
+
+        this.ctx.body={
+            code:0,
+            msg:"获取专业列表成功",
+            data:classifyLists
+        }
+
+    }
 
 }
 

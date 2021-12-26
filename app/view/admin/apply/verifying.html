@@ -1,0 +1,140 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 待审核列表 {% endblock %}
+
+{% block main %}
+<style>
+    #examSelect{
+        margin-right: 30px;
+    }
+</style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">待审核列表</h3>
+
+                            <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
+
+                            <div class="card-tools">
+
+                                <div class="input-group input-group" style="width: 500px;margin:0;">
+
+                                    <select class="form-control" id="examSelect">
+                                        <option value="" {% if exam_id=="" %}selected{% endif %}>全部</option>
+
+                                        {% for item in examLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                    <select class="form-control" id="classifySelect">
+                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部</option>
+
+                                        {% for item in classifyLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==classify_id.toString() %}selected{% endif %}>{{item.classify_name}}</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>报考类别</th>
+                                        <th>报考专业</th>
+                                        <th>专业代码</th>
+                                        <th>报考时间</th>
+                                        <th>状态</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.uname}}</td>
+                                        <td>{{list.phone}}</td>
+                                        <td>{{list.exam[0].exam_name}}</td>
+                                        <td>{{list.classify[0].classify_name}}</td>
+                                        <td>{{list.classify[0].classify_code}}</td>
+                                        <td>{{helper.formatTime(list.apply_time)}}</td>
+                                        <td><span class="text-warning">待审核</span></td>
+                                        
+
+                                        <td class="text-center">
+                                            <a href="/admin/apply/verifyPage?id={{list._id}}">审核</a>
+
+                                      
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时未设置专业信息，请前往设置</div>
+                            {% endif %}
+                        </div>
+                        {% if totalPages > 1 %}
+                        <div class="card-footer">
+                            <div id="page" class="pagination float-right"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script>
+        $("#searchBtn").click(function(){
+            window.location.href="/admin/apply/verifying?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val();
+        })
+        $("#examSelect").change(function(){
+            app.ajaxPost("/admin/classify/getClassifyLists", {
+                exam_id: $(this).val()
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var str='<option value="">全部</option>';
+                    for (let i = 0; i < lists.length; i++) {
+                        str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
+                    }
+                    $("#classifySelect").html(str);
+                }
+            })
+
+        })
+
+        $('#page').jqPaginator({
+            totalPages: Number('{{totalPages}}'),
+            visiblePages: 8,
+            currentPage: Number('{{page}}'),
+            onPageChange: function (num, type) {
+                console.log('当前第' + num + '页', type);
+    
+                if (type == 'change') {
+                    window.location.href="/admin/apply/verifying?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num;;
+    
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

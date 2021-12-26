@@ -86,10 +86,18 @@
     
             {% block main %} "我是layout页面的默认内容" {% endblock %}
     
-
+        {% if links.length>0 %}
         <div class="linkBox">
-            友情链接： <a href="#">全国人大</a> | <a href="#">全国政协</a> | <a href="#">国家监察委员会</a> | <a href="#">最高人民法院</a>
+            友情链接： 
+            {% for item in links %}
+            {% if loop.index==1 %}
+            <a href="{{item.link_url}}" target="_blank">{{item.link_name}}</a>
+            {% else %}
+             | <a href="{{item.link_url}}" target="_blank">{{item.link_name}}</a>
+            {% endif %}
+            {% endfor %}
         </div>
+        {% endif %}
     
     </div>
     <footer>

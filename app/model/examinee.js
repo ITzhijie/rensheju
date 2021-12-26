@@ -5,6 +5,9 @@ module.exports = app => {
 
 	//报名考生表
 	const schema = new Schema({
+        // 所属机构	
+		organ_id: { type: Schema.Types.ObjectId },
+        
         user_id:{ type: Schema.Types.ObjectId },
         // 姓名
         uname: { type: String },

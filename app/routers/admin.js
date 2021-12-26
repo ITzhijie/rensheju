@@ -59,7 +59,10 @@ module.exports = app => {
   router.post('/admin/classify/doAdd', controller.admin.classify.doAdd);
   router.get('/admin/classify/edit', controller.admin.classify.edit);
   router.post('/admin/classify/doEdit', controller.admin.classify.doEdit);
+  router.post('/admin/classify/getClassifyLists', controller.admin.classify.getClassifyLists);
 
+
+  
   router.get('/admin/manager', controller.admin.manager.index);
   router.get('/admin/manager/add', controller.admin.manager.add);
   router.post('/admin/manager/doAdd', controller.admin.manager.doAdd);
@@ -67,7 +70,8 @@ module.exports = app => {
   router.post('/admin/manager/doEdit', controller.admin.manager.doEdit);
   router.post('/admin/manager/changepsw', controller.admin.manager.changepsw);
 
-  router.get('/admin/apply/varifying', controller.admin.apply.varifying);
+  router.get('/admin/apply/verifying', controller.admin.apply.verifying);
+  router.get('/admin/apply/verifyPage', controller.admin.apply.verifyPage);
 
-
+  
 };

@@ -1,0 +1,130 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 审核报考信息 {% endblock %}
+
+{% block main %}
+
+<style>
+      .titleBox{
+        padding: 0px 15px;
+        border-left: 4px solid #007bff;
+        color: #007bff;
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+    .titleBox span{
+        color: coral;
+        font-weight: 500;
+    }
+    .confirmBtn{
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+    .left{
+        float: left;
+        width: 100px;
+        text-align: right;
+        font-size: 16px;
+        margin-right: 20px;
+        color: #666;
+    }
+    .right{
+        overflow: hidden;
+        font-size: 16px;
+
+    }
+    .baseInfoList{
+        margin-bottom: 20px;
+    }
+    .right img{
+        width: 200px;
+        height: 128px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+    .right .photo{
+        width: 150px;
+        height: 210px;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">审核报考信息</h3>
+                    </div>
+                    <div class="card-body"  id="preImg">
+                        <div class="titleBox">考试信息</div>
+                        
+                        <div class="baseInfoList">
+                            <div class="left">考试类别</div>
+                            <div class="right">{{examineeInfo.exam[0].exam_name}}（{{examineeInfo.exam[0].exam_year}}）</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">考试专业</div>
+                            <div class="right">{{examineeInfo.classify[0].classify_name}}</div>
+                        </div>
+
+                        <div class="titleBox">基本信息</div>
+
+                        <div class="baseInfoList">
+                            <div class="left">姓名</div>
+                            <div class="right">{{examineeInfo.uname}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">手机号</div>
+                            <div class="right">{{examineeInfo.phone}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">身份证号</div>
+                            <div class="right">{{examineeInfo.idcode}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">身份证照片</div>
+                            <div class="right">
+                                <img src="{{examineeInfo.idcard_z}}">
+                                <img src="{{examineeInfo.idcard_f}}">
+                            </div>
+                        </div>
+            
+                        <div class="baseInfoList">
+                            <div class="left">登记照</div>
+                            <div class="right">
+                                <img class="photo" src="{{examineeInfo.photo}}">
+                            </div>
+                        </div>
+                    
+                        <div class="titleBox">报名附件<span>（{{examineeInfo.classify[0].annex}}）</span></div>
+                    
+                        <div class="baseInfoList">
+                            <div class="left">上传附件</div>
+                            <div class="right">
+                                {% for item in examineeInfo.apply_annex.split(",") %}
+                                <img class="photo" src="{{item}}">
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                    </div>
+                       
+                    <form role="form" action="/admin/link/doAdd" method="post">
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('#preImg').viewer();//图片预览
+</script>
+
+{% endblock %}

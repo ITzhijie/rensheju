@@ -226,6 +226,7 @@
         app.ajaxPost("/home/doConfirm", {
             exam_id: '{{classifyData.exam_id}}',
             classify_id: '{{classifyData._id}}',
+            organ_id: '{{classifyData.organ_id}}',
             apply_annex: $("#apply_annex").val()
         }, function (res) {
             console.log(res);

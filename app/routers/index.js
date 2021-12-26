@@ -12,6 +12,8 @@ module.exports = app => {
   router.post('/doRegister', controller.admin.home.doRegister);
 
   router.get('/forget', controller.admin.home.forget);
+  router.post('/doForget', controller.admin.home.doForget);
+
   router.post('/sendCode', controller.admin.home.sendCode);
 
 

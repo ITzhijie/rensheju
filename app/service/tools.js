@@ -74,23 +74,23 @@ class ToolsService extends Service {
         let messageContent=msgArr[index][1];
         console.log("messageContent============");
         console.log(messageContent);
-        var templateId=msgArr[index][0];
+        let templateId=msgArr[index][0];
 
 
-        let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-        /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-        let maxPos = chars.length;
-        var requestId = '';
-        for (let i = 0; i < 6; i++) {
-            requestId += chars.charAt(Math.floor(Math.random() * maxPos));
-        }
-        requestId=new Date().getTime()+requestId;
+        // let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        // /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        // let maxPos = chars.length;
+        // var requestId = '';
+        // for (let i = 0; i < 6; i++) {
+        //     requestId += chars.charAt(Math.floor(Math.random() * maxPos));
+        // }
+        // requestId=new Date().getTime()+requestId;
 
-        var spCode="265309";
-        var appKey="xn_ksy";
-        var appSecret="d9409d6c396732451b1a9391dc141a06";
+        let spCode="265309";
+        let appKey="xn_ksy";
+        let appSecret="d9409d6c396732451b1a9391dc141a06";
 
-        var serialNumber=new Date().getTime()+"1234567";
+        let serialNumber=new Date().getTime()+"1234567";
         // var contentData={
         //     "messageContent": messageContent,
         //     "serialNumber": serialNumber,
@@ -154,8 +154,8 @@ class ToolsService extends Service {
         // result=0&description=发送短信成功&taskid=2431908751617&faillist=&task_id=2431908751617
         // result=1&description=提交参数不能为空
         let str=res.data;
-        var arr=str.split("&");
-        var result={};
+        let arr=str.split("&");
+        let result={};
         for (let i = 0; i < arr.length; i++) {
             result[arr[i].split("=")[0]]=arr[i].split("=")[1];
         }

@@ -70,18 +70,29 @@ class Controller extends BaseController {
         var registData = this.ctx.request.body;
 
         //首先判断用户code是否正确
-        // var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
-        // if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
-        //     await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
+        var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
+        console.log('首先判断用户code是否正确=========');
+        
+        console.log(coderes);
+
+        console.log(coderes.code==registData.code);
+        console.log(coderes.code);
+        console.log(registData);
+        
+        console.log(new Date().getTime()-coderes.add_time.getTime()<1800000);
+        
+        
+        if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
+            await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
             
-        // }else{
-        //     repData={
-        //         code:1,
-        //         msg:"验证码错误或失效，请重试",
-        //     }
-        //     this.ctx.body=repData;
-        //     return
-        // }
+        }else{
+            repData={
+                code:1,
+                msg:"验证码错误或失效，请重试",
+            }
+            this.ctx.body=repData;
+            return
+        }
         
         var res1 = await this.ctx.model.User.findOne({phone:registData.phone});
         if (res1) {
@@ -167,6 +178,63 @@ class Controller extends BaseController {
         await this.ctx.render('index/forget', {});
 
     }
+
+    //重置密码 doForget
+
+    async doForget(){
+        let repData={
+            code:0,
+            msg:"",
+        }
+        var registData = this.ctx.request.body;
+
+        //首先判断用户code是否正确
+        var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
+        if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
+            await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
+            
+        }else{
+            repData={
+                code:1,
+                msg:"验证码错误或失效，请重试",
+            }
+            this.ctx.body=repData;
+            return
+        }
+        
+        var res1 = await this.ctx.model.User.findOne({
+            uname:registData.uname,
+            phone:registData.phone,
+            idcode:registData.idcode,
+        });
+        if (!res1) {
+            repData={
+                code:2,
+                msg:"未找到相应用户信息，请检查姓名、手机号、身份证信息是否正确",
+            }
+            this.ctx.body=repData;
+            return
+        }
+
+
+
+        //更新密码
+        
+        registData.pwd = await this.service.tools.md5(registData.pwd);
+
+        await this.ctx.model.User.updateOne({ "_id": res1._id }, {pwd:registData.pwd});
+
+        
+        repData={
+            code:0,
+            msg:"更新密码成功"
+        }
+        this.ctx.body=repData;
+
+    }
+
+
+
     //发送信息
     async sendCode(){
         var phone = this.ctx.request.body.phone;
@@ -299,7 +367,7 @@ class Controller extends BaseController {
             photo:userInfo.photo,
             idcard_z:userInfo.idcard_z,
             idcard_f:userInfo.idcard_f,
-
+            organ_id:data.organ_id,
             exam_id:data.exam_id,
             classify_id:data.classify_id,
             apply_annex:data.apply_annex,

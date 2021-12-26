@@ -19,7 +19,10 @@ module.exports = options => {
 
         var config = await ctx.model.Config.findOne();
         ctx.state.config=config;
-
+        var links = await ctx.model.Link.find();
+        ctx.state.links=links;
+        console.log(links);
+        
         await next();
     };
 };
