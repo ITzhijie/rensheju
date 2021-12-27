@@ -76,5 +76,8 @@ module.exports = app => {
   router.get('/admin/apply/verifyed', controller.admin.apply.verifyed);
   router.get('/admin/apply/verifyedDetail', controller.admin.apply.verifyedDetail);
 
+  router.get('/admin/apply/payLists', controller.admin.apply.payLists);//缴费管理
+  router.get('/admin/apply/payDetail', controller.admin.apply.payDetail);//缴费详情
+
   
 };

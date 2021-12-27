@@ -1,0 +1,172 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 缴费列表 {% endblock %}
+
+{% block main %}
+<style>
+    #examSelect,#classifySelect,#pay_status{
+        margin-right: 20px;
+    }
+    table td .text-check{
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff !important;
+    }
+    .keySearchBox{
+        float: right;
+        margin-left: 20px;
+    }
+  
+</style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">缴费列表</h3>
+
+                            
+                            <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
+
+                            <div class="card-tools">
+
+                                <div class="input-group input-group" style="width: 750px;margin:0;">
+
+                                    <select class="form-control" id="examSelect">
+                                        <option value="" {% if exam_id=="" %}selected{% endif %}>全部（考试类型）</option>
+
+                                        {% for item in examLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                    <select class="form-control" id="classifySelect">
+                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试专业）</option>
+
+                                        {% for item in classifyLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==classify_id.toString() %}selected{% endif %}>{{item.classify_name}}</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                    
+                                    <select class="form-control" id="pay_status">
+                                        <option value="3" {% if pay_status=="" or pay_status==3 %}selected{% endif %}>全部（缴费状态）</option>
+                                        
+                                        <option value="1" {% if pay_status==1 %}selected{% endif %}>通过</option>
+                                        <option value="0" {% if pay_status==0 %}selected{% endif %}>未通过</option>
+    
+                                    </select>
+
+                                    <input type="text" id="keyword" class="form-control float-right"
+                                    placeholder="输入姓名或手机号" value="{{keyword}}">
+
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>报考类别</th>
+                                        <th>报考专业</th>
+                                        
+                                        <th>状态</th>
+                                        <th>缴费金额</th>
+                                        <th>缴费时间</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.uname}}</td>
+                                        <td>{{list.phone}}</td>
+                                        <td>{{list.exam[0].exam_name}}</td>
+                                        <td>{{list.classify[0].classify_name}}</td>
+                                        <td>
+                                            {% if list.pay_status==1 %}
+                                            <span class="text-success">已缴费</span>
+                                            {% else %}
+                                            <span class="text-danger">未缴费</span>
+
+                                            {% endif %}
+                                        </td>
+                                        <td>{{list.pay_fee}}</td>
+                                        <td>{{helper.formatTime(list.pay_time)}}</td>
+                                    
+
+                                        <td class="text-center">
+                                            <a href="/admin/apply/payDetail?id={{list._id}}">详情</a>
+
+                                      
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂时没有待审核考生信息</div>
+                            {% endif %}
+                        </div>
+                        {% if totalPages > 1 %}
+                        <div class="card-footer">
+                            <div id="page" class="pagination float-right"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script>
+        $("#searchBtn").click(function(){
+            window.location.href="/admin/apply/payLists?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&pay_status="+$("#pay_status").val()+"&keyword="+$("#keyword").val();
+        })
+        $("#examSelect").change(function(){
+            app.ajaxPost("/admin/classify/getClassifyLists", {
+                exam_id: $(this).val()
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var str='<option value="">全部</option>';
+                    for (let i = 0; i < lists.length; i++) {
+                        str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
+                    }
+                    $("#classifySelect").html(str);
+                }
+            })
+
+        })
+
+        $('#page').jqPaginator({
+            totalPages: Number('{{totalPages}}'),
+            visiblePages: 8,
+            currentPage: Number('{{page}}'),
+            onPageChange: function (num, type) {
+                console.log('当前第' + num + '页', type);
+    
+                if (type == 'change') {
+                    window.location.href="/admin/apply/payLists?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num+"&pay_status={{pay_status}}&keyword={{keyword}}";
+    
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

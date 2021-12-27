@@ -1,0 +1,166 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 报考信息详情 {% endblock %}
+
+{% block main %}
+
+<style>
+      .titleBox{
+        padding: 0px 15px;
+        border-left: 4px solid #007bff;
+        color: #007bff;
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+    .titleBox span{
+        color: coral;
+        font-weight: 500;
+    }
+    .confirmBtn{
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+    .left{
+        float: left;
+        width: 100px;
+        text-align: right;
+        font-size: 16px;
+        margin-right: 20px;
+        color: #666;
+    }
+    .right{
+        overflow: hidden;
+        font-size: 16px;
+
+    }
+    .baseInfoList{
+        margin-bottom: 20px;
+    }
+    .right img{
+        width: 200px;
+        height: 128px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+    .right .photo{
+        width: 150px;
+        height: 210px;
+    }
+    textarea{
+        resize: none;
+    }
+    .checkTitle{
+        color: rgb(255, 122, 13);
+        border-left: 4px solid  rgb(255, 122, 13);
+    }
+    .btn-danger{
+        margin-right: 20px;
+    }
+    .veriRes-success{
+        color: #28a745 !important;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">报考信息详情</h3>
+                    </div>
+                    <div class="card-body"  id="preImg">
+                        <div class="baseInfoList">
+                            {% if examineeInfo.pay_status==0 %}
+                            <div class="card bg-danger">
+                                <div class="card-header">
+                                    <h3 class="card-title">未缴费</h3>
+                                </div>
+                                
+                            </div>
+                            {% else %}
+                            <div class="card bg-success">
+                                <div class="card-header">
+                                    <h3 class="card-title">已缴费</h3>
+                                </div>
+                                <div class="card-body">
+                                    已于{{helper.formatTime3(examineeInfo.pay_time)}}成功缴纳报名费{{examineeInfo.pay_fee}}元
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="titleBox">考试信息</div>
+                        
+                        <div class="baseInfoList">
+                            <div class="left">考试类别</div>
+                            <div class="right">{{examineeInfo.exam[0].exam_name}}（{{examineeInfo.exam[0].exam_year}}）</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">考试专业</div>
+                            <div class="right">{{examineeInfo.classify[0].classify_name}}</div>
+                        </div>
+
+                        <div class="titleBox">基本信息</div>
+
+                        <div class="baseInfoList">
+                            <div class="left">姓名</div>
+                            <div class="right">{{examineeInfo.uname}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">手机号</div>
+                            <div class="right">{{examineeInfo.phone}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">身份证号</div>
+                            <div class="right">{{examineeInfo.idcode}}</div>
+                        </div>
+                        <div class="baseInfoList">
+                            <div class="left">身份证照片</div>
+                            <div class="right">
+                                <img src="{{examineeInfo.idcard_z}}">
+                                <img src="{{examineeInfo.idcard_f}}">
+                            </div>
+                        </div>
+            
+                        <div class="baseInfoList">
+                            <div class="left">登记照</div>
+                            <div class="right">
+                                <img class="photo" src="{{examineeInfo.photo}}">
+                            </div>
+                        </div>
+                    
+                        {% if examineeInfo.classify[0].annex %}
+                        <div class="titleBox">报名附件<span>（{{examineeInfo.classify[0].annex}}）</span></div>
+                    
+                        <div class="baseInfoList">
+                            <div class="left">上传附件</div>
+                            <div class="right">
+                                {% if examineeInfo.apply_annex %}
+                                {% for item in examineeInfo.apply_annex.split(",") %}
+                                <img class="photo" src="{{item}}">
+                                {% endfor %}
+                                {% else %}
+                                <p class="text-danger text-bold">该用户未上传附件信息</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                       
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('#preImg').viewer();//图片预览
+
+    
+</script>
+
+{% endblock %}

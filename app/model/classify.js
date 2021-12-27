@@ -27,6 +27,11 @@ module.exports = app => {
         apply_fee: { type: Number },
         // 附件要求	
         annex:{ type: String },
+        
+        // 考场分配状态
+        room_status: { type: Number, default: 0 },
+        // 分数上传状态
+        score_status: { type: Number, default: 0 },
 
 		add_time: {
 			type: Date,
