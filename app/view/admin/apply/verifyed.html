@@ -1,10 +1,10 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 待审核列表 {% endblock %}
+{% block title %} 已审核列表 {% endblock %}
 
 {% block main %}
 <style>
-    #examSelect{
+    #examSelect,#classifySelect{
         margin-right: 30px;
     }
     table td .text-check{
@@ -21,13 +21,13 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">待审核列表</h3>
+                            <h3 class="card-title">已审核列表</h3>
 
                             <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
 
                             <div class="card-tools">
 
-                                <div class="input-group input-group" style="width: 500px;margin:0;">
+                                <div class="input-group input-group" style="width: 600px;margin:0;">
 
                                     <select class="form-control" id="examSelect">
                                         <option value="" {% if exam_id=="" %}selected{% endif %}>全部（考试类型）</option>
@@ -47,6 +47,14 @@
     
                                         {% endfor %}
                                     </select>
+                                    
+                                    <select class="form-control" id="verify_status">
+                                        <option value="" {% if verify_status=="" %}selected{% endif %}>全部（状态）</option>
+                                        
+                                        <option value="1" {% if verify_status==1 %}selected{% endif %}>通过</option>
+                                        <option value="2" {% if verify_status==2 %}selected{% endif %}>未通过</option>
+    
+                                    </select>
                                 </div>
 
                             </div>
@@ -60,9 +68,10 @@
                                         <th>手机号</th>
                                         <th>报考类别</th>
                                         <th>报考专业</th>
-                                        <th>专业代码</th>
-                                        <th>报考时间</th>
+                                        
                                         <th>状态</th>
+                                        <th>审核人</th>
+                                        <th>审核时间</th>
                                         <th class="text-center">操作</th>
                                     </tr>
                                 </thead>
@@ -75,15 +84,22 @@
                                         <td>{{list.phone}}</td>
                                         <td>{{list.exam[0].exam_name}}</td>
                                         <td>{{list.classify[0].classify_name}}</td>
-                                        <td>{{list.classify[0].classify_code}}</td>
-                                        <td>{{helper.formatTime(list.apply_time)}}</td>
-                                        <td><span class="text-warning">待审核</span></td>
+                                        <td>
+                                            {% if list.verify_status==1 %}
+                                            <span class="text-success">通过</span>
+                                            {% else %}
+                                            <span class="text-danger">未通过</span>
+
+                                            {% endif %}
+                                        </td>
+                                        <td>{{list.admin[0].username}}</td>
+                                        <td>{{helper.formatTime(list.verify_time)}}</td>
+                                        
                                         
 
                                         <td class="text-center">
-                                            <a href="/admin/apply/verifyPage?id={{list._id}}">审核</a>
+                                            <a href="/admin/apply/verifyedDetail?id={{list._id}}">详情</a>
 
-                                            <a class="text-check" href="/admin/apply/doVerify?id={{list._id}}&verify_status=1&backpage=/admin/apply/verifying?exam_id={{exam_id}}@@classify_id={{classify_id}}@@page={{page}}">通过</a>
                                       
                                         </td>
                                     </tr>
@@ -109,7 +125,7 @@
     </section>
     <script>
         $("#searchBtn").click(function(){
-            window.location.href="/admin/apply/verifying?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val();
+            window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&verify_status="+$("#verify_status").val();
         })
         $("#examSelect").change(function(){
             app.ajaxPost("/admin/classify/getClassifyLists", {
@@ -136,7 +152,7 @@
                 console.log('当前第' + num + '页', type);
     
                 if (type == 'change') {
-                    window.location.href="/admin/apply/verifying?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num;;
+                    window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num+"&verify_status={{verify_status}}";
     
                 }
             }

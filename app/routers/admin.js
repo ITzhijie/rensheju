@@ -72,6 +72,9 @@ module.exports = app => {
 
   router.get('/admin/apply/verifying', controller.admin.apply.verifying);
   router.get('/admin/apply/verifyPage', controller.admin.apply.verifyPage);
+  router.get('/admin/apply/doVerify', controller.admin.apply.doVerify);
+  router.get('/admin/apply/verifyed', controller.admin.apply.verifyed);
+  router.get('/admin/apply/verifyedDetail', controller.admin.apply.verifyedDetail);
 
   
 };
