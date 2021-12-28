@@ -1,0 +1,142 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 已分配考场考试列表 {% endblock %}
+
+{% block main %}
+
+<style>
+    #examSelect{
+        margin-right: 30px;
+    }
+</style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">已分配考场考试列表</h3>
+
+                            <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
+
+                            <div class="card-tools">
+
+                                <div class="input-group input-group" style="width: 500px;margin:0;">
+
+                                    <select class="form-control" id="examSelect">
+                                        <option value="" {% if exam_id=="" %}selected{% endif %}>全部（考试类型）</option>
+
+                                        {% for item in examLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                    <select class="form-control" id="classifySelect">
+                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试专业）</option>
+
+                                        {% for item in classifyLists %}
+                                        
+                                        <option value="{{item._id}}" {% if item._id.toString()==classify_id.toString() %}selected{% endif %}>{{item.classify_name}}</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>考试名称</th>
+                                        <th>专业名称</th>
+                                        <th>专业代码</th>
+                                        <th>人数</th>
+                                        <th>考试日期</th>
+
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.exam[0].exam_name}}</td>
+                                        <td>{{list.classify_name}}</td>
+                                        <td>{{list.classify_code}}</td>
+                                        <td>{{list.examinee_roomed.length}}</td>
+
+                                        <td>{{helper.formatTime2(list.exam_start)}} 至 {{helper.formatTime2(list.exam_end)}}</td>
+                                        
+
+                                        <td class="text-center">
+                                            <a href="/admin/classify/edit?id={{list._id}}">分配详情</a>
+
+                                      
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂无已分配考场考试</div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if totalPages > 1 %}
+                        <div class="card-footer">
+                            <div id="page" class="pagination float-right"></div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script>
+        $("#searchBtn").click(function(){
+            window.location.href="/admin/allocate/allocated?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val();
+        })
+        $("#examSelect").change(function(){
+            app.ajaxPost("/admin/classify/getClassifyLists", {
+                exam_id: $(this).val()
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var str='<option value="">全部</option>';
+                    for (let i = 0; i < lists.length; i++) {
+                        str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
+                    }
+                    $("#classifySelect").html(str);
+                }
+            })
+
+        })
+
+        
+        $('#page').jqPaginator({
+            totalPages: Number('{{totalPages}}'),
+            visiblePages: 8,
+            currentPage: Number('{{page}}'),
+            onPageChange: function (num, type) {
+                console.log('当前第' + num + '页', type);
+    
+                if (type == 'change') {
+                    window.location.href="/admin/allocate/allocated?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num;;
+    
+                }
+            }
+        });
+    </script>
+
+{% endblock %}
