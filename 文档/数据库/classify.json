@@ -1,0 +1,110 @@
+[{
+  "_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_name": "一级消防",
+  "classify_code": "1111",
+  "apply_start": {
+    "$date": "2021-12-19T16:00:00Z"
+  },
+  "apply_end": {
+    "$date": "2021-12-22T15:59:00Z"
+  },
+  "exam_start": {
+    "$date": "2021-12-28T16:00:00Z"
+  },
+  "exam_end": {
+    "$date": "2021-12-29T15:59:00Z"
+  },
+  "pay_end": {
+    "$date": "2021-12-24T15:59:00Z"
+  },
+  "apply_fee": 100,
+  "annex": "范德萨发达的是",
+  "organ_id": {
+    "$oid": "61b8ac448a2a3e4a135d589e"
+  },
+  "add_time": {
+    "$date": "2021-12-20T09:02:55.520Z"
+  },
+  "update_time": {
+    "$date": "2021-12-20T09:02:55.520Z"
+  }
+},{
+  "_id": {
+    "$oid": "61ca83fec4d29c69f8e35192"
+  },
+  "room_status": 0,
+  "score_status": 0,
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_name": "二级消防",
+  "classify_code": "2222",
+  "apply_start": {
+    "$date": "2021-12-27T16:00:00Z"
+  },
+  "apply_end": {
+    "$date": "2021-12-29T15:59:00Z"
+  },
+  "pay_end": {
+    "$date": "2021-12-30T15:59:00Z"
+  },
+  "apply_fee": 100,
+  "annex": "请上传学位证",
+  "exam_start": {
+    "$date": "2021-12-27T16:00:00Z"
+  },
+  "exam_end": {
+    "$date": "2021-12-28T15:59:00Z"
+  },
+  "organ_id": {
+    "$oid": "61b8ac448a2a3e4a135d589e"
+  },
+  "add_time": {
+    "$date": "2021-12-28T03:26:54.622Z"
+  },
+  "update_time": {
+    "$date": "2021-12-28T03:26:54.622Z"
+  }
+},{
+  "_id": {
+    "$oid": "61ca8452c4d29c69f8e35194"
+  },
+  "room_status": 0,
+  "score_status": 0,
+  "exam_id": {
+    "$oid": "61baf371d279a190849abbce"
+  },
+  "classify_name": "幼教（初级）",
+  "classify_code": "3333",
+  "apply_start": {
+    "$date": "2021-12-24T16:00:00Z"
+  },
+  "apply_end": {
+    "$date": "2021-12-26T15:59:00Z"
+  },
+  "pay_end": {
+    "$date": "2021-12-27T15:59:00Z"
+  },
+  "apply_fee": 99,
+  "annex": "上传毕业证",
+  "exam_start": {
+    "$date": "2021-12-27T16:00:00Z"
+  },
+  "exam_end": {
+    "$date": "2021-12-28T15:59:00Z"
+  },
+  "organ_id": {
+    "$oid": "61b8ac448a2a3e4a135d589e"
+  },
+  "add_time": {
+    "$date": "2021-12-28T03:28:18.632Z"
+  },
+  "update_time": {
+    "$date": "2021-12-28T03:28:18.632Z"
+  }
+}]

@@ -1,0 +1,264 @@
+[{
+  "_id": {
+    "$oid": "61c19637f409fdbf00fae4fe"
+  },
+  "verify_status": 1,
+  "pay_status": 0,
+  "room_status": 0,
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "许大头",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  }
+},{
+  "_id": {
+    "$oid": "61c292e8509bfbcf46c6b123"
+  },
+  "verify_status": 2,
+  "pay_status": 0,
+  "room_status": 0,
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "许大头",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-27T07:54:00.853Z"
+  },
+  "verify_admin": {
+    "$oid": "5df0f6a272391a382803ecc1"
+  },
+  "verify_time": {
+    "$date": "2021-12-27T07:54:00.852Z"
+  },
+  "verify_reason": "dfadfdsf"
+},{
+  "_id": {
+    "$oid": "61c2c1a5509bfbcf46c6bb91"
+  },
+  "verify_status": 1,
+  "pay_status": 1,
+  "room_status": 0,
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "许大头",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  }
+},{
+  "_id": {
+    "$oid": "61c2e13c509bfbcf46c6c93b"
+  },
+  "verify_status": 1,
+  "pay_status": 1,
+  "room_status": 1,
+  "downcard_date": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "room_name": "咸宁学院",
+  "room_addr": "咸宁大道33号",
+  "room_num": "25",
+  "seat_num": "07",
+  "exam_card": "20211112507",
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "许大头",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  }
+},{
+  "_id": {
+    "$oid": "61c2ea06509bfbcf46c6cd3c"
+  },
+  "verify_status": 1,
+  "pay_status": 1,
+  "room_status": 1,
+  "result_status": 1,
+  "downcard_date": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "room_name": "咸宁学院",
+  "room_addr": "咸宁大道33号",
+  "room_num": "25",
+  "seat_num": "07",
+  "exam_card": "20211112507",
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "许大头",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  }
+},{
+  "_id": {
+    "$oid": "61c58be2fd88c68f88467ee8"
+  },
+  "verify_status": 1,
+  "pay_status": 0,
+  "room_status": 0,
+  "result_status": 0,
+  "user_id": {
+    "$oid": "61c5886bfd88c68f88467ee7"
+  },
+  "uname": "许愿池",
+  "idcode": "421083199006045931",
+  "phone": "18607135859",
+  "photo": "/public/admin/upload/20211224/1640335813164.png",
+  "idcard_z": "/public/admin/upload/20211224/1640335796924.jpg",
+  "idcard_f": "/public/admin/upload/20211224/1640335806054.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "/public/admin/upload/20211224/1640336350043.png",
+  "apply_time": {
+    "$date": "2021-12-24T08:59:14.649Z"
+  },
+  "add_time": {
+    "$date": "2021-12-24T08:59:14.652Z"
+  },
+  "update_time": {
+    "$date": "2021-12-27T08:39:18.487Z"
+  },
+  "verify_admin": {
+    "$oid": "5df0f6a272391a382803ecc1"
+  },
+  "verify_reason": "鬼地方高浮雕",
+  "verify_time": {
+    "$date": "2021-12-27T08:39:18.487Z"
+  }
+},{
+  "_id": {
+    "$oid": "61c96b46509bfbcf46c7a111"
+  },
+  "verify_status": 0,
+  "pay_status": 0,
+  "room_status": 0,
+  "user_id": {
+    "$oid": "61befa06f7ce5ab67f72f09e"
+  },
+  "uname": "三世小达摩",
+  "idcode": "421083199006045930",
+  "phone": "18607135858",
+  "photo": "/public/admin/upload/20211219/1639926799894.png",
+  "idcard_z": "/public/admin/upload/20211219/1639926781115.png",
+  "idcard_f": "/public/admin/upload/20211219/1639926788968.png",
+  "exam_id": {
+    "$oid": "61bae4680df1969b6c288d30"
+  },
+  "classify_id": {
+    "$oid": "61c046bfe01b41aacc5236d0"
+  },
+  "apply_annex": "",
+  "apply_time": {
+    "$date": "2021-12-21T08:54:15.015Z"
+  },
+  "add_time": {
+    "$date": "2021-12-21T08:54:15.019Z"
+  },
+  "update_time": {
+    "$date": "2021-12-27T08:24:08.759Z"
+  },
+  "verify_admin": {
+    "$oid": "5df0f6a272391a382803ecc1"
+  },
+  "verify_time": {
+    "$date": "2021-12-27T08:24:08.759Z"
+  },
+  "verify_reason": "附件信息都没传，报个锤子名"
+}]
