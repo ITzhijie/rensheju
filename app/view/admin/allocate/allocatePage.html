@@ -1,12 +1,16 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 待分配 {% endblock %}
+{% block title %} 已审核列表 {% endblock %}
 
 {% block main %}
-
 <style>
-    #examSelect{
+    #examSelect,#classifySelect{
         margin-right: 30px;
+    }
+    table td .text-check{
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff !important;
     }
 </style>
     <section class="content">
@@ -17,13 +21,13 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">待分配考场考试列表</h3>
+                            <h3 class="card-title">已审核列表</h3>
 
                             <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
 
                             <div class="card-tools">
 
-                                <div class="input-group input-group" style="width: 500px;margin:0;">
+                                <div class="input-group input-group" style="width: 600px;margin:0;">
 
                                     <select class="form-control" id="examSelect">
                                         <option value="" {% if exam_id=="" %}selected{% endif %}>全部（考试类型）</option>
@@ -43,6 +47,14 @@
     
                                         {% endfor %}
                                     </select>
+                                    
+                                    <select class="form-control" id="verify_status">
+                                        <option value="" {% if verify_status=="" %}selected{% endif %}>全部（状态）</option>
+                                        
+                                        <option value="1" {% if verify_status==1 %}selected{% endif %}>通过</option>
+                                        <option value="2" {% if verify_status==2 %}selected{% endif %}>未通过</option>
+    
+                                    </select>
                                 </div>
 
                             </div>
@@ -52,15 +64,15 @@
                                 <thead>
                                     <tr>
                                         <th>序号</th>
-                                        <th>考试名称</th>
-                                        <th>专业名称</th>
-                                        <th>专业代码</th>
-                                        <th>审核通过人数</th>
-                                        <th>缴费人数</th>
-                                        <th>缴费截止日期</th>
-                                        <th>已分配人数</th>
-
-                                        <th class="text-center">操作</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>报考类别</th>
+                                        <th>报考专业</th>
+                                        <th>考试日期</th>
+                                        <th>考点名称</th>
+                                        <th>考场号</th>
+                                        <th>座位号</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,37 +80,37 @@
 
                                     <tr>
                                         <td>{{loop.index}}</td>
+                                        <td>{{list.uname}}</td>
+                                        <td>{{list.phone}}</td>
                                         <td>{{list.exam[0].exam_name}}</td>
-                                        <td>{{list.classify_name}}</td>
-                                        <td>{{list.classify_code}}</td>
-                                        <td>{{list.examinee_verifyed.length}}</td>
-                                        <td>{{list.examinee_payed.length}}</td>
-
-                                        <td>{{helper.formatTime(list.pay_end)}}</td>
-                                        <td>{{list.examinee_roomed.length}}</td>
+                                        <td>{{list.classify[0].classify_name}}</td>
+                                        <td>
+                                            {{helper.formatTime2(list.classify[0].exam_start)}}
+                                            至 
+                                            {{helper.formatTime2(list.classify[0].exam_end)}}
+                                        </td>
+                                        <td>{{list.room_name}}</td>
+                                        <td>{{list.room_num}}</td>
+                                        <td>{{list.seat_num}}</td>
+                                        
+                                        
                                         
 
-                                        <td class="text-center">
-                                            <a href="/admin/allocate/allocatePage?exam_id={{list.exam_id}}&classify_id={{list._id}}">分配考场</a>
-
-                                      
-                                        </td>
+                                       
                                     </tr>
 
                                     {% endfor %}
                                 </tbody>
                             </table>
                             {% if lists.length == 0 %}
-                            <div class="text-center py-2">暂无可分配考场考试</div>
+                            <div class="text-center py-2">暂无已审核考生信息</div>
                             {% endif %}
                         </div>
-                        
                         {% if totalPages > 1 %}
                         <div class="card-footer">
                             <div id="page" class="pagination float-right"></div>
                         </div>
                         {% endif %}
-
                     </div>
                    
                 </div>
@@ -108,7 +120,7 @@
     </section>
     <script>
         $("#searchBtn").click(function(){
-            window.location.href="/admin/allocate/allocating?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val();
+            window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&verify_status="+$("#verify_status").val();
         })
         $("#examSelect").change(function(){
             app.ajaxPost("/admin/classify/getClassifyLists", {
@@ -127,7 +139,6 @@
 
         })
 
-        
         $('#page').jqPaginator({
             totalPages: Number('{{totalPages}}'),
             visiblePages: 8,
@@ -136,7 +147,7 @@
                 console.log('当前第' + num + '页', type);
     
                 if (type == 'change') {
-                    window.location.href="/admin/allocate/allocating?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num;;
+                    window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num+"&verify_status={{verify_status}}";
     
                 }
             }

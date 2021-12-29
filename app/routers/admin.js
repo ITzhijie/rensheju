@@ -80,6 +80,8 @@ module.exports = app => {
   router.get('/admin/apply/payDetail', controller.admin.apply.payDetail);//缴费详情
 
   router.get('/admin/allocate/allocating', controller.admin.allocate.allocating);//待分配
+  router.get('/admin/allocate/allocatePage', controller.admin.allocate.allocatePage);//分配页面
+  
   router.get('/admin/allocate/allocated', controller.admin.allocate.allocated);//已分配
   router.get('/admin/allocate/endLists', controller.admin.allocate.endLists);//已结束
 
