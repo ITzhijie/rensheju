@@ -20,6 +20,9 @@ module.exports = app => {
   //wangEditor上传图片
   router.post('/admin/wangUpload', controller.admin.base.wangUpload);
 
+  //下载文件
+  router.get('/admin/downFiles', controller.admin.base.downFiles);
+
   router.get('/admin', controller.admin.main.index);
   router.get('/admin/welcome', controller.admin.main.welcome);
 

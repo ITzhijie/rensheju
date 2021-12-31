@@ -4,13 +4,24 @@
 
 {% block main %}
 <style>
-    #examSelect,#classifySelect{
-        margin-right: 30px;
-    }
+    
     table td .text-check{
         background-color: #28a745;
         border-color: #28a745;
         color: #fff !important;
+    }
+    .downBtn{
+        margin-right: 30px;
+    }
+    #InputFile{
+        cursor: pointer;
+    }
+    .tip{
+        color: coral;
+        margin-bottom: 0;
+        height: 38px;
+        line-height: 38px;
+        font-size: 18px;
     }
 </style>
     <section class="content">
@@ -21,43 +32,27 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">已审核列表</h3>
+                            <h3 class="card-title">分配考场</h3>
 
-                            <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
-
-                            <div class="card-tools">
-
-                                <div class="input-group input-group" style="width: 600px;margin:0;">
-
-                                    <select class="form-control" id="examSelect">
-                                        <option value="" {% if exam_id=="" %}selected{% endif %}>全部（考试类型）</option>
-
-                                        {% for item in examLists %}
-                                        
-                                        <option value="{{item._id}}" {% if item._id.toString()==exam_id.toString() %}selected{% endif %}>{{item.exam_name}}({{item.exam_year}})</option>
-    
-                                        {% endfor %}
-                                    </select>
-                                    <select class="form-control" id="classifySelect">
-                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试专业）</option>
-
-                                        {% for item in classifyLists %}
-                                        
-                                        <option value="{{item._id}}" {% if item._id.toString()==classify_id.toString() %}selected{% endif %}>{{item.classify_name}}</option>
-    
-                                        {% endfor %}
-                                    </select>
-                                    
-                                    <select class="form-control" id="verify_status">
-                                        <option value="" {% if verify_status=="" %}selected{% endif %}>全部（状态）</option>
-                                        
-                                        <option value="1" {% if verify_status==1 %}selected{% endif %}>通过</option>
-                                        <option value="2" {% if verify_status==2 %}selected{% endif %}>未通过</option>
-    
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="card-header row">
+                            <div class="col-8">
+                                <p class="tip">导入前请先下载模板，按照模板内容进行考场编辑，格式不得有误，否则信息将不准确。</p>
 
                             </div>
+                            <form class="input-group col-4" id="idcardForm" enctype="multipart/form-data" method="post"
+                            name="fileinfo">
+                                <a href="/admin/downFiles?filename=考场分配模板.xlsx" class="btn btn-primary pull-right downBtn">下载模板</a>
+
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="InputFile">
+                                        <label class="custom-file-label" for="InputFile">请上传.xlsx文件</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class=" btn btn-primary" id="">导入</button>
+                                    </div>
+                                
+                            </form>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover  table-bordered">
@@ -122,36 +117,56 @@
         $("#searchBtn").click(function(){
             window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&verify_status="+$("#verify_status").val();
         })
-        $("#examSelect").change(function(){
-            app.ajaxPost("/admin/classify/getClassifyLists", {
-                exam_id: $(this).val()
-            }, function (res) {
-                console.log(res);
-                if (res.code==0) {
-                    var lists=res.data;
-                    var str='<option value="">全部</option>';
-                    for (let i = 0; i < lists.length; i++) {
-                        str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
-                    }
-                    $("#classifySelect").html(str);
-                }
-            })
+        
+
+        // $('#page').jqPaginator({
+        //     totalPages: Number('{{totalPages}}'),
+        //     visiblePages: 8,
+        //     currentPage: Number('{{page}}'),
+        //     onPageChange: function (num, type) {
+        //         console.log('当前第' + num + '页', type);
+    
+        //         if (type == 'change') {
+        //             window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num+"&verify_status={{verify_status}}";
+    
+        //         }
+        //     }
+        // });
+
+        //选择文件
+        $("#InputFile").change(function(e){
+            var supportedType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+			var file = e.target.files[0];
+            console.log(file);
+            
+            if (!file) {
+				return
+			}
+            if (file.type!=supportedType) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "文件格式只支持.xlsx表格文件",
+                    icon: 'error',
+                    confirmButtonText: '好的'
+                })
+                return
+            }
+            
+            if (file.type!=supportedType) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "文件格式只支持.xlsx表格文件",
+                    icon: 'error',
+                    confirmButtonText: '好的'
+                })
+                return
+            }
 
         })
 
-        $('#page').jqPaginator({
-            totalPages: Number('{{totalPages}}'),
-            visiblePages: 8,
-            currentPage: Number('{{page}}'),
-            onPageChange: function (num, type) {
-                console.log('当前第' + num + '页', type);
-    
-                if (type == 'change') {
-                    window.location.href="/admin/apply/verifyed?exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val()+"&page=" + num+"&verify_status={{verify_status}}";
-    
-                }
-            }
-        });
+
+
     </script>
 
 {% endblock %}

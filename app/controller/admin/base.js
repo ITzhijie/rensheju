@@ -202,6 +202,17 @@ class BaseController extends Controller {
 
     }
 
+    //下载模板
+    async downFiles(){
+        var filename = this.ctx.request.query.filename; 
+        var filePath = 'app/public/admin/download/'+filename;
+
+        this.ctx.attachment(filePath);
+        this.ctx.set("Content-Type", "application/octet-stream");
+        this.ctx.body =fs.createReadStream(filePath);
+        
+    }
+
 }
 
 module.exports = BaseController;
