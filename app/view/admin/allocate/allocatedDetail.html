@@ -1,0 +1,126 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 已审核列表 {% endblock %}
+
+{% block main %}
+<style>
+    
+    table td .text-check{
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff !important;
+    }
+    .downBtn{
+        margin-right: 30px;
+    }
+    #InputFile{
+        cursor: pointer;
+    }
+    .tip{
+        color: coral;
+        margin-bottom: 0;
+        height: 38px;
+        line-height: 38px;
+        font-size: 16px;
+    }
+    /* .custom-file-label::after{
+        content: "导入";
+        background-color: #28a745;
+        color: #fff !important;
+    } */
+</style>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card ">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">考生详情</h3>
+
+                        </div>
+                        
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>报考类别</th>
+                                        <th>报考专业</th>
+                                        <th>考试日期</th>
+                                        <th>准考证号</th>
+                                        <th>考点名称</th>
+                                        <th>考场号</th>
+                                        <th>座位号</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for list in lists %}
+
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{list.uname}}</td>
+                                        <td>{{list.phone}}</td>
+                                        <td>{{list.exam[0].exam_name}}</td>
+                                        <td>{{list.classify[0].classify_name}}</td>
+                                        <td>
+                                            {{helper.formatTime2(list.classify[0].exam_start)}}
+                                            至 
+                                            {{helper.formatTime2(list.classify[0].exam_end)}}
+                                        </td>
+                                        <td>{{list.exam_card}}</td>
+                                        <td>{{list.room_name}}</td>
+                                        <td>{{list.room_num}}</td>
+                                        <td>{{list.seat_num}}</td>
+                                        
+                                        
+                                        
+
+                                       
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if lists.length == 0 %}
+                            <div class="text-center py-2">暂无已审核考生信息</div>
+                            {% endif %}
+                        </div>
+                        {% if totalPages > 1 %}
+                        <div class="card-footer">
+                            <div id="page" class="pagination float-right"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script>
+        
+
+        $('#page').jqPaginator({
+            totalPages: Number('{{totalPages}}'),
+            visiblePages: 8,
+            currentPage: Number('{{page}}'),
+            onPageChange: function (num, type) {
+                console.log('当前第' + num + '页', type);
+    
+                if (type == 'change') {
+                    window.location.href="/admin/allocate/allocatedDetail?exam_id={{exam_id}}&classify_id={{classify_id}}&page=" + num;
+    
+                }
+            }
+        });
+       
+
+
+    </script>
+
+{% endblock %}

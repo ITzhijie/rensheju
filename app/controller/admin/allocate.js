@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 var BaseController = require('./base.js');
 
 class Controller extends BaseController {
@@ -27,11 +29,11 @@ class Controller extends BaseController {
 
         let page = this.ctx.request.query.page||1;
 
-        let lists=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page);
-        console.log("分配页面lists=========");
-        console.log(lists);
+        let data=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page);
+        console.log("分配页面data=========");
+        console.log(data);
 
-        await this.ctx.render('admin/allocate/allocatePage', {lists});
+        await this.ctx.render('admin/allocate/allocatePage', data);
     }
 
     //已分配
@@ -157,7 +159,22 @@ class Controller extends BaseController {
        
 
 	}
+    
+    async allocatedDetail(){
+        let exam_id = this.ctx.request.query.exam_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.exam_id) : "";
+        let classify_id = this.ctx.request.query.classify_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.classify_id) : "";
 
+        console.log(exam_id);
+        console.log(classify_id);
+
+        let page = this.ctx.request.query.page||1;
+
+        let data=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page,1);
+        console.log("分配页面data=========");
+        console.log(data);
+
+        await this.ctx.render('admin/allocate/allocatedDetail', data);
+    }
     //已结束
     async endLists() {
         // 大于考试结束时间 exam_end  room_status 分配状态为1
@@ -282,7 +299,102 @@ class Controller extends BaseController {
 
 	}
 
+    async scoreDetail(){
+        let exam_id = this.ctx.request.query.exam_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.exam_id) : "";
+        let classify_id = this.ctx.request.query.classify_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.classify_id) : "";
 
+        let page = this.ctx.request.query.page||1;
+
+        let data=await this.ctx.service.getData.getscoreExaminee(exam_id,classify_id,page);
+        console.log("分配页面data=========");
+        console.log(data);
+
+
+        //获取上传文件名称
+        var classifyInfo = await this.ctx.model.Classify.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },
+            {
+                $match: {
+                    "_id":classify_id
+                }
+            }
+        ]);
+        var filename=classifyInfo[0].exam[0].exam_name+classifyInfo[0].exam[0].exam_year+"（"+classifyInfo[0].classify_name+")成绩模板";
+        data.filename=filename;
+
+        var subjectLists = await this.ctx.model.Subject.find({classify_id:classify_id});
+        data.subjectLists=subjectLists;
+
+        await this.ctx.render('admin/allocate/scoreDetail', data);
+
+
+    }
+
+    async downScoreExaminees(){
+        let classify_id = this.ctx.request.query.classify_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.classify_id) : "";
+        var subjectLists = await this.ctx.model.Subject.find({classify_id:classify_id});
+        var title = ['序号','姓名','手机号','身份证号','准考证号'];
+        for (let i = 0; i < subjectLists.length; i++) {
+            title.push(subjectLists[i].subject_name);
+        }
+        console.log('========title========');
+        console.log(title);
+        
+       
+        var examineeLists = await this.ctx.model.Examinee.find({
+            classify_id:classify_id,
+            room_status:1,
+            verify_status:1,
+            pay_status:1
+        });
+
+        var results=[];
+        for (let i = 0; i < examineeLists.length; i++) {
+            var obj={
+                "index":i+1,
+                "uname":examineeLists[i].uname,
+                "phone":examineeLists[i].phone,
+                "idcode":examineeLists[i].idcode,
+                "exam_card":examineeLists[i].exam_card
+            }
+            results.push(obj);
+        }
+        console.log(results);
+        
+        var classifyInfo = await this.ctx.model.Classify.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },
+            {
+                $match: {
+                    "_id":classify_id
+                }
+            }
+        ]);
+
+        var filename=classifyInfo[0].exam[0].exam_name+classifyInfo[0].exam[0].exam_year+"（"+classifyInfo[0].classify_name+")成绩模板";
+        var filePath=await this.service.tools.buildExcel(title,results,filename);
+
+        this.ctx.attachment(filePath);
+        this.ctx.set("Content-Type", "application/octet-stream");
+        this.ctx.body =fs.createReadStream(filePath);
+        fs.unlink(filePath,function(err){
+            console.log("文件删除了");
+        });
+
+    }
 
 }
 

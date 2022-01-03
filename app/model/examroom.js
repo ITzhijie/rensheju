@@ -5,7 +5,12 @@ module.exports = app => {
 
 	//考场表
 	const schema = new Schema({
- 
+ 	
+        // 报名考试
+        exam_id: { type: Schema.Types.ObjectId },
+        // 报名专业
+        classify_id: { type: Schema.Types.ObjectId },
+        
         // 考点名称
         room_name: { type: String },
         // 考点地址

@@ -36,6 +36,7 @@ module.exports = app => {
   router.post('/import', controller.home.importExcel);
   router.get('/export', controller.home.exportExcel);
 
+  router.get('/import', controller.home.index);
 
  
 };

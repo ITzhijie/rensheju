@@ -23,6 +23,13 @@ module.exports = app => {
   //下载文件
   router.get('/admin/downFiles', controller.admin.base.downFiles);
 
+  //上传表格 /admin/uploadAllocate
+  router.post('/admin/uploadAllocate', controller.admin.upload.uploadAllocate);//上传座位分配表
+
+  router.post('/admin/uploadScore', controller.admin.upload.uploadScore);//上传座位分配表
+
+
+
   router.get('/admin', controller.admin.main.index);
   router.get('/admin/welcome', controller.admin.main.welcome);
 
@@ -86,7 +93,11 @@ module.exports = app => {
   router.get('/admin/allocate/allocatePage', controller.admin.allocate.allocatePage);//分配页面
   
   router.get('/admin/allocate/allocated', controller.admin.allocate.allocated);//已分配
+  router.get('/admin/allocate/allocatedDetail', controller.admin.allocate.allocatedDetail);//已分配详情页面
+  
   router.get('/admin/allocate/endLists', controller.admin.allocate.endLists);//已结束
+  router.get('/admin/allocate/scoreDetail', controller.admin.allocate.scoreDetail);//分数详情
+  router.get('/admin/allocate/downScoreExaminees', controller.admin.allocate.downScoreExaminees);//下载考生信息模板
 
   
 };

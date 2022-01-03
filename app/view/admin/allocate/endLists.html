@@ -8,6 +8,9 @@
     #examSelect{
         margin-right: 30px;
     }
+    table td a.uploadScoreBtn{
+        background-color: coral;
+    }
 </style>
     <section class="content">
         <div class="container-fluid">
@@ -86,10 +89,10 @@
                                         <td class="text-center">
 
                                             {% if list.score_status==0 %}
-                                            <a href="/admin/classify/edit?id={{list._id}}">上传</a>
+                                            <a class="uploadScoreBtn" href="/admin/allocate/scoreDetail?exam_id={{list.exam_id}}&classify_id={{list._id}}">上传分数</a>
 
                                             {% else %}
-                                            <a href="/admin/classify/edit?id={{list._id}}">详情</a>
+                                            <a href="/admin/allocate/scoreDetail?exam_id={{list.exam_id}}&classify_id={{list._id}}">查看详情</a>
 
                                             {% endif %}
 

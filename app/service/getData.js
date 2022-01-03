@@ -192,8 +192,8 @@ class ToolsService extends Service {
     }
 
     //获取待分配考生数据
-    async getAllocatingExaminee(exam_id,classify_id,page){
-        var pageSize = 10;
+    async getAllocatingExaminee(exam_id,classify_id,page,room_status){
+        var pageSize = 5;
 
         let findJson1 = {
             $lookup: {
@@ -225,6 +225,9 @@ class ToolsService extends Service {
             matchJson.$match.classify_id=classify_id;
         }
 
+        if (room_status) {
+            matchJson.$match.room_status=room_status;
+        }
         var allLists = await this.ctx.model.Examinee.aggregate([
             findJson1,
             findJson2,
@@ -237,7 +240,7 @@ class ToolsService extends Service {
         if (page <= 0) {
             page = 1;
         }
-        var examinees = await this.ctx.model.Examinee.aggregate([
+        var lists = await this.ctx.model.Examinee.aggregate([
             findJson1,
             findJson2,
             matchJson,
@@ -247,14 +250,115 @@ class ToolsService extends Service {
             { "$skip": (page - 1) * pageSize },
             { "$limit": pageSize }
         ]);
-        return examinees;
+        return {
+            lists,exam_id,classify_id,
+            totalPages: Math.ceil(totalNum / pageSize),
+            page: page,
+            totalNum:totalNum
+        };
 
 
 
 
     }
 
+    //获取考生分数
+    async getscoreExaminee(exam_id,classify_id,page){
+        var pageSize = 5;
 
+        let findJson1 = {
+            $lookup: {
+                from: 'exam',
+                localField: 'exam_id',
+                foreignField: '_id',
+                as: 'exam'
+            }
+        }
+        let findJson2 = {
+            $lookup: {
+                from: 'classify',
+                localField: 'classify_id',                
+                foreignField: '_id',
+                as: 'classify'
+            }
+        }
+
+        var findJson3 = {
+            $lookup: {
+                from: "score",
+                let: { examinee_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$examinee_id", "$$examinee_id"] }
+                                    ]
+                            },
+                            // $or: [
+                            //     { "brand_name": { "$regex": keyword } },
+                            // ]
+                        }
+                    },
+                    // { $group: { _id: "$pay_status", total: { $sum: "$num" } } }
+                ],
+                as: "scorelists"
+            },
+
+        };
+
+        let matchJson = {
+            $match: {
+                verify_status:1,
+                pay_status:1,
+                room_status:1
+            }
+        }
+
+        if (exam_id) {
+            matchJson.$match.exam_id=exam_id;
+        }
+        if (classify_id) {
+            matchJson.$match.classify_id=classify_id;
+        }
+
+      
+        var allLists = await this.ctx.model.Examinee.aggregate([
+            findJson1,
+            findJson2,
+            findJson3,
+            matchJson
+        ]);
+        var totalNum = allLists.length;
+        if (page > Math.ceil(totalNum / pageSize)) {
+            page = Math.ceil(totalNum / pageSize)
+        }
+        if (page <= 0) {
+            page = 1;
+        }
+        var lists = await this.ctx.model.Examinee.aggregate([
+            findJson1,
+            findJson2,
+            findJson3,
+            matchJson,
+            {
+                $sort: { room_status: 1 }
+            },
+            { "$skip": (page - 1) * pageSize },
+            { "$limit": pageSize }
+        ]);
+        return {
+            lists,exam_id,classify_id,
+            totalPages: Math.ceil(totalNum / pageSize),
+            page: page,
+            totalNum:totalNum
+        };
+
+
+
+    }
 }
 
 module.exports = ToolsService;

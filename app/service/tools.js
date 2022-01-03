@@ -212,7 +212,8 @@ class ToolsService extends Service {
     }
 
     //生成表格
-    async buildExcel(titleArr,dataArr){
+    async buildExcel(titleArr,dataArr,filename){
+        var filename=filename||"下载模板";
         var data = [];
         data.push(titleArr);
         //再把每一行数据加进去
@@ -220,10 +221,10 @@ class ToolsService extends Service {
             data.push(Object.values(result));
         });
         //由于各列数据长度不同，可以设置一下列宽
-        const options = {'!cols': [{ wch: 10 }, { wch: 5 }, { wch: 15 }, { wch: 20 } ]};
+        const options = {'!cols': [{ wch: 5 }, { wch: 10}, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 } ]};
         //生成表格
         var buffer = XLSX.build([{name:'sheet1',data:data }], options);
-        var filePath = 'app/public/admin/download/text1.xlsx';
+        var filePath = 'app/public/admin/download/'+filename+'.xlsx';
         fs.writeFileSync(filePath,buffer,{'flag':'w'});//
 
         return filePath;
