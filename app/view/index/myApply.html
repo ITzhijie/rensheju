@@ -304,10 +304,11 @@
 
 <script>
     
-    var path=$('canvas').getCanvasImage();
+    var path=$('#cardCanvas').getCanvasImage();
     console.log(path);
     $('#cardModal').modal('show');
-    getcanvasInfo("61d40b6a3380de98082c7f0e");
+    // getcanvasInfo("61d40b6a3380de98082c7f0e");
+    getcanvasInfo("61d44ed9d76c8fe6e881098d");
     function getcanvasInfo(examinee_id){
         app.ajaxPost("/home/getScoreInfo",{
 			examinee_id:examinee_id
@@ -386,91 +387,111 @@
                     x1: 15, y1: 295,
                     x2: 685, y2: 295
                 },
+                p14: {
+                    type: 'line',
+                    x1: 180, y1: 255,
+                    x2: 180, y2: 295
+                },
+                p15: {
+                    type: 'line',
+                    x1: 320, y1: 255,
+                    x2: 320, y2: 295
+                },
+                p16: {
+                    type: 'line',
+                    x1: 450, y1: 255,
+                    x2: 450, y2: 295
+                },
+                p17: {
+                    type: 'line',
+                    x1: 566, y1: 255,
+                    x2: 566, y2: 295
+                },
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 //fontStyle: 'bold',
                 fontSize: '20px',
-                text: res.data.exam[0].exam_name,
+                text: res.data.exam[0].exam_name+"（"+res.data.classify[0].classify_name+"）",
                 x: 350, y: 37,
             });
             
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '24px',
                 text: '准考证',
                 x: 350, y: 70,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '考区',
                 x: 48, y: 115,
             });
             
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '咸宁考区',
                 x: 137, y: 115,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '考点名称',
                 x: 228, y: 115,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: res.data.room_name,
                 x: 400, y: 115,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '姓名',
                 x: 48, y: 155,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: res.data.uname,
                 x: 137, y: 155,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '准考证号',
                 x: 228, y: 155,
             });
             
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '13px',
                 text: res.data.exam_card,
                 x: 328, y: 155,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '专业代码',
                 x: 428, y: 156,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: res.data.classify[0].classify_code,
                 x: 510, y: 156,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '身份证号',
                 x: 48, y: 195,
             });
             
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: res.data.idcode,
@@ -478,27 +499,126 @@
                 align:'right',
                 maxWidth: 300
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: '考点地址',
                 x: 48, y: 235,
             });
-            $('canvas').drawText({
+            $('#cardCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '14px',
                 text: res.data.room_addr,
                 x: 300, y: 235,
             });
             //画登记照
-            $('canvas').drawImage({
+            $('#cardCanvas').drawImage({
                 source: res.data.photo,
                 x: 570, y: 99,
                 width: 110,
                 height: 150,
                 fromCenter: false
             });
+            //科目标题
+            $('#cardCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: "考试科目",
+                x: 105, y: 275,
+            });
+            $('#cardCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: "考试日期",
+                x: 250, y: 275,
+            });
             
+            $('#cardCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: "考试时间",
+                x: 380, y: 275,
+            });
+            $('#cardCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: "考场号",
+                x: 505, y: 275,
+            });
+            $('#cardCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: "座位号",
+                x: 620, y: 275,
+            });
+
+            var subjectArr=res.data.subject;
+            for (let i = 0; i < subjectArr.length; i++) {
+                $('#cardCanvas').drawPath({
+                    strokeStyle: '#000',
+                    strokeWidth: 1,
+                    //考试科目部分
+                    p1: {
+                        type: 'line',
+                        x1: 15, y1: 295+40*(i+1),
+                        x2: 685, y2: 295+40*(i+1)
+                    },
+                    p2: {
+                        type: 'line',
+                        x1: 180, y1: 255+40*(i+1),
+                        x2: 180, y2: 295+40*(i+1)
+                    },
+                    p3: {
+                        type: 'line',
+                        x1: 320, y1: 255+40*(i+1),
+                        x2: 320, y2: 295+40*(i+1)
+                    },
+                    p4: {
+                        type: 'line',
+                        x1: 450, y1: 255+40*(i+1),
+                        x2: 450, y2: 295+40*(i+1)
+                    },
+                    p5: {
+                        type: 'line',
+                        x1: 566, y1: 255+40*(i+1),
+                        x2: 566, y2: 295+40*(i+1)
+                    },
+                });
+                $('#cardCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '14px',
+                    text: subjectArr[i].subject_name,
+                    x: 105, y: 275+40*(i+1),
+                });
+                $('#cardCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '14px',
+                    text: '{{helper.formatTime3('+subjectArr[i].exam_date+')}}',
+                    x: 250, y: 275+40*(i+1),
+                });
+                
+                $('#cardCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '14px',
+                    text: subjectArr[i].exam_time,
+                    x: 380, y: 275+40*(i+1),
+                });
+                $('#cardCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '14px',
+                    text: res.data.room_num,
+                    x: 505, y: 275+40*(i+1),
+                });
+                $('#cardCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '14px',
+                    text: res.data.seat_num,
+                    x: 620, y: 275+40*(i+1),
+                });
+            }
+
+
+
         })
     }
     $(".downCard").click(function(){
