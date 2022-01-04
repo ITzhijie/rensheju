@@ -270,8 +270,49 @@ class Controller extends BaseController {
     
     //我的报名
     async myApply(){
-        
+        var findJson3 = {
+            $lookup: {
+                from: "score",
+                let: { examinee_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$examinee_id", "$$examinee_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                ],
+                as: "scorelists"
+            },
 
+        };
+        var findJson4 = {
+            $lookup: {
+                from: "subject",
+                let: { classify_id: "$classify_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                        }
+                    },
+                ],
+                as: "subject"
+            },
+
+        };
         var lists = await this.ctx.model.Examinee.aggregate([
             {
                 $lookup: {
@@ -288,6 +329,8 @@ class Controller extends BaseController {
                     as: 'classify'
                 }
             },
+            findJson3,
+            findJson4,
             {
                 $match: {
                     "user_id":this.app.mongoose.Types.ObjectId(this.ctx.session.userInfo._id)
@@ -299,6 +342,7 @@ class Controller extends BaseController {
         ]);
         console.log(lists);
         let nowDate=new Date();
+        
         await this.ctx.render('index/myApply', {lists,nowDate});
 
     }
@@ -397,6 +441,101 @@ class Controller extends BaseController {
         
     }
 
+    async getScoreInfo(){
+        var examinee_id=this.ctx.request.body.examinee_id;
+
+        var examinee = await this.ctx.model.Examinee.findOne({
+            "_id":examinee_id
+        });
+        var findJson3 = {
+            $lookup: {
+                from: "score",
+                let: { examinee_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$examinee_id", "$$examinee_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                ],
+                as: "scorelists"
+            },
+
+        };
+        var findJson4 = {
+            $lookup: {
+                from: "subject",
+                let: { classify_id: "$classify_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                        }
+                    },
+                ],
+                as: "subject"
+            },
+
+        };
+        var datas = await this.ctx.model.Examinee.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },{
+                $lookup: {
+                    from: 'classify',
+                    localField: 'classify_id',
+                    foreignField: '_id',
+                    as: 'classify'
+                }
+            },
+            findJson3,
+            findJson4,
+            {
+                $match: {
+                    "_id":this.app.mongoose.Types.ObjectId(examinee_id)
+                }
+            }
+        ]);
+
+        this.ctx.body={
+            code:0,
+            msg:"获取成绩成功",
+            data:datas[0]
+        }
+    }
+
+    async changePayStatus(){
+        var examinee_id=this.ctx.request.body.examinee_id;
+        var fee=this.ctx.request.body.fee;
+
+        await this.ctx.model.Examinee.updateOne({ "_id": examinee_id }, {
+            pay_status:1,
+            pay_time:new Date(),
+            pay_fee:fee
+        });
+        this.ctx.body={
+            code:0,
+            msg:"缴费成功"
+        }
+    }
 
 }
 

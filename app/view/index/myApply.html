@@ -67,6 +67,13 @@
     .table0{
         display: table;
     }
+    .tableScore{
+        display: table !important;
+        margin-bottom: 0;
+    }
+    #cardModal .modal-dialog{
+        min-width: 734px !important;
+    }
 </style>
 <div class="topBox">
     <span>你好，{{userInfo.uname}}</span>
@@ -151,7 +158,7 @@
                     <td><span class="label label-success">审核通过待缴费</span></td>
                     <td>{{helper.formatTime2(list.classify[0].pay_end)}}</td>
                     <td>
-                        <span class="handlebtn payBtn" data-id="{{list._id}}">缴费</span>
+                        <span class="handlebtn payBtn" data-fee="{{list.classify[0].apply_fee}}" data-id="{{list._id}}">缴费</span>
                     </td>
                 </tr>
                 {% endif %}
@@ -236,7 +243,286 @@
         </table>
     </div>
 </div>
+<!-- 准考证 Modal -->
+<div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">准考证</h4>
+            </div>
+            <div class="modal-body">
+                <canvas id="cardCanvas" width="700" height="1000" style="border: 1px solid rgb(176, 204, 255);"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 查看成绩 Modal -->
+<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">查看成绩</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered tableScore" style="display: table;">
+                    <thead>
+                        <tr>
+                            <th>报考类型</th>
+                            <th>报考专业</th>
+                            <th>申论</th>
+                            <th>行测</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>人事考试</td>
+                            <td>二级消防</td>
+                            <td>67</td>
+                            <td>88</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    
+    var path=$('canvas').getCanvasImage();
+    console.log(path);
+    $('#cardModal').modal('show');
+    getcanvasInfo("61d40b6a3380de98082c7f0e");
+    function getcanvasInfo(examinee_id){
+        app.ajaxPost("/home/getScoreInfo",{
+			examinee_id:examinee_id
+		},function(res){
+            console.log(res);
+            $('#cardModal').modal('show');
+            $('#cardCanvas').drawPath({
+                strokeStyle: '#000',
+                strokeWidth: 1,
+                p1: {
+                    type: 'line',
+                    x1: 15, y1: 15,
+                    x2: 685, y2: 15,
+                    x3: 685, y3: 985,
+                    x4: 15, y4: 985,
+                    x5: 15, y5: 15
+                },
+                p2: {
+                    type: 'line',
+                    x1: 15, y1: 95,
+                    x2: 685, y2: 95
+                },
+                p3: {
+                    type: 'line',
+                    x1: 15, y1: 135,
+                    x2: 566, y2: 135
+                },
+                p4: {
+                    type: 'line',
+                    x1: 15, y1: 175,
+                    x2: 566, y2: 175
+                },
+                p5: {
+                    type: 'line',
+                    x1: 15, y1: 215,
+                    x2: 566, y2: 215
+                },
+                p6: {
+                    type: 'line',
+                    x1: 15, y1: 255,
+                    x2: 685, y2: 255
+                },
+                p7: {
+                    type: 'line',
+                    x1: 566, y1: 95,
+                    x2: 566, y2: 255
+                },
+                p8: {
+                    type: 'line',
+                    x1: 80, y1: 95,
+                    x2: 80, y2: 255
+                },
+                p9: {
+                    type: 'line',
+                    x1: 195, y1: 95,
+                    x2: 195, y2: 175
+                },
+                p10: {
+                    type: 'line',
+                    x1: 260, y1: 95,
+                    x2: 260, y2: 175
+                },
+                p11: {
+                    type: 'line',
+                    x1: 395, y1: 135,
+                    x2: 395, y2: 175
+                },
+                p12: {
+                    type: 'line',
+                    x1: 460, y1: 135,
+                    x2: 460, y2: 175
+                },
+                //考试科目部分
+                p13: {
+                    type: 'line',
+                    x1: 15, y1: 295,
+                    x2: 685, y2: 295
+                },
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                //fontStyle: 'bold',
+                fontSize: '20px',
+                text: res.data.exam[0].exam_name,
+                x: 350, y: 37,
+            });
+            
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '24px',
+                text: '准考证',
+                x: 350, y: 70,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '考区',
+                x: 48, y: 115,
+            });
+            
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '咸宁考区',
+                x: 137, y: 115,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '考点名称',
+                x: 228, y: 115,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: res.data.room_name,
+                x: 400, y: 115,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '姓名',
+                x: 48, y: 155,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: res.data.uname,
+                x: 137, y: 155,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '准考证号',
+                x: 228, y: 155,
+            });
+            
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '13px',
+                text: res.data.exam_card,
+                x: 328, y: 155,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '专业代码',
+                x: 428, y: 156,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: res.data.classify[0].classify_code,
+                x: 510, y: 156,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '身份证号',
+                x: 48, y: 195,
+            });
+            
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: res.data.idcode,
+                x: 300, y: 195,
+                align:'right',
+                maxWidth: 300
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: '考点地址',
+                x: 48, y: 235,
+            });
+            $('canvas').drawText({
+                fillStyle: '#000',
+                fontSize: '14px',
+                text: res.data.room_addr,
+                x: 300, y: 235,
+            });
+            //画登记照
+            $('canvas').drawImage({
+                source: res.data.photo,
+                x: 570, y: 99,
+                width: 110,
+                height: 150,
+                fromCenter: false
+            });
+            
+        })
+    }
+    $(".downCard").click(function(){
+        var examinee_id=$(this).attr("data-id");
+        app.ajaxPost("/home/getScoreInfo",{
+			examinee_id:examinee_id
+		},function(res){
+            console.log(res);
+            $('#cardModal').modal('show');
+            $('#cardCanvas').drawPath({
+                strokeStyle: '#000',
+                strokeWidth: 4,
+                p1: {
+                    type: 'line',
+                    x1: 200, y1: 50,
+                    x2: 100, y2: 150,
+                    x3: 200, y3: 150,
+                    x4: 120, y4: 200
+                }
+            });
+        })
+    })
+    
+
     if($(".table0 tbody").find("tr").length==0) {
         $(".table0 tbody").html('<tr><td class="text-center" colspan="6">暂无对应报考信息</td></tr>');
     }
@@ -271,6 +557,105 @@
             confirmButtonText: '确定',
         })
     })
+
+    //查看结果
+    $(".getResult").click(function(){
+        var examinee_id=$(this).attr("data-id");
+        
+        app.ajaxPost("/home/getScoreInfo",{
+			examinee_id:examinee_id
+		},function(res){
+			console.log(res);
+			if (res.code==0) {
+                
+                var subjectArr=res.data.subject;
+                var scoreArr=res.data.scorelists;
+
+                var subjectStr="";
+                var scoreStr="";
+
+                for (let i = 0; i < subjectArr.length; i++) {
+                    subjectStr+='<th>'+subjectArr[i].subject_name+'</th>';
+                }
+                for (let k = 0; k < scoreArr.length; k++) {
+                    scoreStr+='<td>'+scoreArr[k].core+'</td>';
+                    
+                }
+                var tableStr=
+                '<thead>'+
+                '    <tr>'+
+                '        <th>报考类型</th>'+
+                '        <th>报考专业</th>'+
+                subjectStr+
+                '    </tr>'+
+                '</thead>'+
+                '<tbody>'+
+                '    '+
+                '    <tr>'+
+                '        <td>'+res.data.exam[0].exam_name+'</td>'+
+                '        <td>'+res.data.classify[0].classify_name+'</td>'+
+                scoreStr+
+                '    </tr>'+
+                '   '+
+                '</tbody>';
+
+                $(".tableScore").html(tableStr);
+                $('#scoreModal').modal('show');
+				
+			}else{
+				Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'warning',
+					showCancelButton: false,
+					allowOutsideClick:false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '确定',
+				})
+			}
+		});
+
+
+
+
+    })
+
+    //缴费按钮
+    $(".payBtn").click(function(){
+        var examinee_id=$(this).attr("data-id");
+        var fee=$(this).attr("data-fee");
+
+        app.ajaxPost("/home/changePayStatus",{
+            examinee_id:examinee_id,
+            fee:fee
+		},function(res){
+            console.log(res);
+			if (res.code==0) {
+                Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'success',
+					showCancelButton: false,
+					allowOutsideClick:false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '好的',
+				}).then(function(){
+                    window.location.reload();
+                })
+            }else{
+                Swal.fire({
+					title: "温馨提示",
+					text: res.msg,
+					icon: 'warning',
+					showCancelButton: false,
+					allowOutsideClick:false,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '确定',
+				})
+            }
+        });
+    })
+
 </script>
 
 {% endblock %}

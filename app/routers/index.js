@@ -31,6 +31,9 @@ module.exports = app => {
   router.get('/home/confirm', controller.admin.home.confirm);//确认资料
   router.post('/home/doConfirm', controller.admin.home.doConfirm);//提交报名资料
 
+  router.post('/home/changePayStatus', controller.admin.home.changePayStatus);//改变支付状态
+  router.post('/home/getScoreInfo', controller.admin.home.getScoreInfo);//查看成绩
+
   
 
   router.post('/import', controller.home.importExcel);

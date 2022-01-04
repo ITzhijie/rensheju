@@ -151,8 +151,19 @@ class Controller extends BaseController {
         editData.apply_end=new Date(editData.apply_end+" 23:59");
         editData.pay_end=new Date(editData.pay_end+" 23:59");
       
-        editData.exam_start=new Date(subjectArr[0].exam_date+" 00:00");
-        editData.exam_end=new Date(subjectArr[subjectArr.length-1].exam_date+" 23:59");
+        
+        if (subjectArr[0].exam_date.length==10) {
+            editData.exam_start=new Date(subjectArr[0].exam_date+" 00:00");
+        }else{
+            editData.exam_start=new Date(subjectArr[0].exam_date);
+        }
+        if (subjectArr[subjectArr.length-1].exam_date.length==10) {
+            editData.exam_end=new Date(subjectArr[subjectArr.length-1].exam_date+" 23:59");
+
+        }else{
+            editData.exam_end=new Date(subjectArr[subjectArr.length-1].exam_date);
+        }
+
 
         await this.ctx.model.Classify.updateOne({ "_id": editData.id }, editData);
 
