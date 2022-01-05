@@ -14,6 +14,8 @@ module.exports = app => {
         exam_date: { type: Date },
         // 开始时间-结束时间	
         exam_time: { type: String },
+		//合格分数
+		pass_mark: { type: Number, default: 60 },
        
 		add_time: {
 			type: Date,

@@ -127,6 +127,7 @@
                                     <th>科目名称</th>
                                     <th>考试日期</th>
                                     <th>考试时间</th>
+                                    <th>合格分数</th>
                                     <th class="text-center">操作</th>
                                 </tr>
                             </thead>
@@ -137,6 +138,7 @@
                                     <td>{{list.subject_name}}</td>
                                     <td>{{helper.formatTime2(list.exam_date)}}</td>
                                     <td>{{list.exam_time}}</td>
+                                    <td>{{list.pass_mark}}</td>
                                     <td class="text-center">
                                         <button data-curIndex="{{loop.index0}}" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>
                                     </td>
@@ -162,6 +164,9 @@
                                     </td>
                                     <td>                                        
                                         <input type="text" class="form-control" id="exam_time" name="exam_time" required placeholder="例：9:00-12:00">
+                                    </td>
+                                    <td>                                
+                                        <input type="text" class="form-control" id="pass_mark" name="pass_mark" required placeholder="请输入合格分数线" value="60">
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-primary addClassifyBtn">增加</button>
@@ -258,7 +263,7 @@
     
     $(".addClassifyBtn").click(function(){
         
-        if (!$("#subject_name").val()||!$("#exam_date").val()||!$("#exam_time").val()) {
+        if (!$("#subject_name").val()||!$("#exam_date").val()||!$("#exam_time").val()||!$("#pass_mark").val()) {
             Swal.fire({
                 title: "温馨提示",
                 text: "请输入完整科目信息",
@@ -274,6 +279,7 @@
             subject_name:$("#subject_name").val(),
             exam_date:$("#exam_date").val(),
             exam_time:$("#exam_time").val(),
+            pass_mark:$("#pass_mark").val(),
         };
         subjectData.push(obj);
         $("#subjectArr").val(JSON.stringify(subjectData));
@@ -282,6 +288,7 @@
         '    <td>'+obj.subject_name+'</td>'+
         '    <td>'+obj.exam_date+'</td>'+
         '    <td>'+obj.exam_time+'</td>'+
+        '    <td>'+obj.pass_mark+'</td>'+
         '    <td class="text-center">'+
         '        <button data-curIndex="'+num+'" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>'+
         '    </td>'+
@@ -308,6 +315,7 @@
             '    <td>'+v.subject_name+'</td>'+
             '    <td>'+v.exam_date+'</td>'+
             '    <td>'+v.exam_time+'</td>'+
+            '    <td>'+v.pass_mark+'</td>'+
             '    <td class="text-center">'+
             '        <button data-curIndex="'+i+'" type="button" class="btn btn-danger deleteClassifyBtn">删除</button>'+
             '    </td>'+
