@@ -243,6 +243,7 @@
         </table>
     </div>
 </div>
+{{res.data.exam[0].content}}
 <!-- 准考证 Modal -->
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -253,7 +254,7 @@
                 <h4 class="modal-title" id="myModalLabel">准考证</h4>
             </div>
             <div class="modal-body">
-                <canvas id="cardCanvas" width="700" height="1000" style="border: 1px solid rgb(176, 204, 255);"></canvas>
+                <canvas id="cardCanvas" width="700" height="1000" style=" border: 1px solid rgb(176, 204, 255);"></canvas>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -301,20 +302,28 @@
         </div>
     </div>
 </div>
-
+<div id="attention" style="display: none;">
+    {{config.attention | safe}}
+</div>
 <script>
     
     var path=$('#cardCanvas').getCanvasImage();
     console.log(path);
-    $('#cardModal').modal('show');
+    //$('#cardModal').modal('show');
     // getcanvasInfo("61d40b6a3380de98082c7f0e");
-    getcanvasInfo("61d44ed9d76c8fe6e881098d");
+    // getcanvasInfo("61d44ed9d76c8fe6e881098d");
     function getcanvasInfo(examinee_id){
         app.ajaxPost("/home/getScoreInfo",{
 			examinee_id:examinee_id
 		},function(res){
             console.log(res);
             $('#cardModal').modal('show');
+            $('canvas').drawRect({
+                fillStyle: '#fff',
+                fromCenter: false,
+                x: 0, y: 0,
+                width: 700, height: 1000
+            })
             $('#cardCanvas').drawPath({
                 strokeStyle: '#000',
                 strokeWidth: 1,
@@ -617,29 +626,55 @@
                 });
             }
 
+            var length=0;
+            $("#attention p").each(function(i,v){
+                console.log(i);
+                console.log($(v).text());
+                var strArr=mySplit($(v).text().trim(),42);
+                for (let k = 0; k < strArr.length; k++) {
+                    const element = strArr[k];
+                    var x=60;
+                    if (k==0) {
+                        x=88
+                    }
+                    $('#cardCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '14px',//res.data.exam[0].content
+                        text: element,
+                        x: x, y: 420+length*35+k*30,
+                        align: 'left',
+                        respectAlign: true,
+                        //fromCenter: false,
+                        //maxWidth: 300
+                    });
+                } 
+                length+=strArr.length;
 
+            })
+            
 
         })
     }
+        function mySplit(str, leng) {
+            let arr = [];
+
+            let index = 0;
+            while (index < str.length) {
+                if (index==0) {
+                    arr.push(str.slice(index, index += (leng-2)));
+                    
+                }else{
+                    arr.push(str.slice(index, index += leng));
+
+                }
+            }
+            console.log(arr);
+            return arr;
+        }
     $(".downCard").click(function(){
         var examinee_id=$(this).attr("data-id");
-        app.ajaxPost("/home/getScoreInfo",{
-			examinee_id:examinee_id
-		},function(res){
-            console.log(res);
-            $('#cardModal').modal('show');
-            $('#cardCanvas').drawPath({
-                strokeStyle: '#000',
-                strokeWidth: 4,
-                p1: {
-                    type: 'line',
-                    x1: 200, y1: 50,
-                    x2: 100, y2: 150,
-                    x3: 200, y3: 150,
-                    x4: 120, y4: 200
-                }
-            });
-        })
+        getcanvasInfo(examinee_id)
+        
     })
     
 

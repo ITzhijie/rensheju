@@ -52,7 +52,7 @@
                         </div>
 
                     </div>
-                    <form role="form" action="/admin/config/doEdit" method="post">
+                    <form id="actionForm" role="form" action="/admin/config/doEdit" method="post">
                         <div class="card-body">
                             <div class="form-group col-md-12">
                                 <label for="bottom01">首页底部第一行文字</label>
@@ -73,19 +73,72 @@
                         
                         <input type="hidden" name="id" readonly value="{{data._id}}" />
                         <input id="logo_url" type="hidden" name="logo_url" value="{{data.logo_url}}">
+                        <input id="attention" type="hidden" name="attention" value="{{data.attention}}">
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
+                        
                     </form>
+                    <div class="col-md-12">
+                        <div class="card-body pt0">
+                    
+                            <label for="">准考证注意事项</label>
+                            <div id="editor">
+                                {{data.attention | safe}}
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary submitBtn">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script type="text/javascript" src="/public/admin/wangEditor/wangEditor.js"></script>
 
 <script>
     app.fileChange("idcardInput", "idcardPreview", "idcardForm", "logo_url", 1);
+
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.customConfig.menus = [
+        // 'head',  // 标题
+        // 'bold',  // 粗体
+        //'fontSize',  // 字号
+        //'fontName',  // 字体
+        //'italic',  // 斜体
+        //'underline',  // 下划线
+        //'strikeThrough',  // 删除线
+        //'foreColor',  // 文字颜色
+        //'backColor',  // 背景颜色
+        //'link',  // 插入链接
+        //'list',  // 列表
+        //'justify',  // 对齐方式
+        //'quote',  // 引用
+        //'emoticon',  // 表情
+        //'image',  // 插入图片
+        //'table',  // 表格
+        //'video',  // 插入视频
+        //'code',  // 插入代码
+        'undo',  // 撤销
+        'redo'  // 重复
+    ]
+    editor.customConfig.showLinkImg = false;
+    editor.customConfig.uploadImgServer = '/admin/wangUpload?_csrf=' + csrf;
+    editor.customConfig.uploadImgMaxLength = 10;
+    editor.customConfig.debug = 1;
+    editor.customConfig.height = 400;
+
+    editor.create()
+
+    $(".submitBtn").click(function () {
+        console.log(editor.txt.html());
+        $("#attention").val(editor.txt.html());
+
+        $("#actionForm").submit();
+    })
 </script>
 
 {% endblock %}

@@ -13,7 +13,9 @@ module.exports = app => {
         bottom02:{ type: String },
         // 底3
         bottom03:{ type: String },
-        
+		// 准考证注意事项
+		attention:{ type: String },
+		
 		add_time: {
 			type: Date,
 			default: Date.now
