@@ -98,6 +98,7 @@ module.exports = app => {
   router.get('/admin/allocate/endLists', controller.admin.allocate.endLists);//已结束
   router.get('/admin/allocate/scoreDetail', controller.admin.allocate.scoreDetail);//分数详情
   router.get('/admin/allocate/downScoreExaminees', controller.admin.allocate.downScoreExaminees);//下载考生信息模板
-
+  
+  router.get('/admin/statistics/dataDetail', controller.admin.statistics.dataDetail);//数据中心
   
 };

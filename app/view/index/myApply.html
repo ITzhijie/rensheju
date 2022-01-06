@@ -301,7 +301,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="modal-footer hegeFooter">
+            <div class="modal-footer " id="hegeFooter">
                 <button type="button" class="btn btn-primary showHege">下载合格证</button>
             </div>
         </div>
@@ -329,22 +329,42 @@
     {{config.attention | safe}}
 </div>
 <script>
+    var curId;
     $(".showHege").click(function(){
-        var examinee_id=$(this).attr("data-id");
-
-        passCanvas(examinee_id);
+        passCanvas(curId);
     })
     $('#hegeCanvas').drawImage({
-        source: '/public/index/images/hegezheng.png',
+        source: '/public/index/images/hegezheng_bg.png',
         x: 0, y: 0,
         width: 1000,
         height: 707,
         fromCenter: false
     });
-    setTimeout(function(){
-        passCanvas("61d44ed9d76c8fe6e881098d")
+    // setTimeout(function(){
+    //     //passCanvas("61d44ed9d76c8fe6e881098d");
+    //     passCanvas("61d40b6a3380de98082c7f0e")
 
-    },2000)
+    // },2000)
+    //下载合格证图片 downloadHege
+    $(".downloadHege").click(function(){
+        var path=$('#hegeCanvas').getCanvasImage();
+        console.log(path);
+        var a = document.createElement('a');          // 创建一个a节点插入的document
+        var event = new MouseEvent('click');           // 模拟鼠标click点击事件
+        a.download = '合格证';                  // 设置a节点的download属性值
+        a.href = path;                                 // 将图片的src赋值给a节点的href
+        a.dispatchEvent(event); 
+    })
+    $('#hegeModal').on('hidden.bs.modal', function (e) {
+        $('#hegeCanvas').clearCanvas();
+        $('#hegeCanvas').drawImage({
+            source: '/public/index/images/hegezheng_bg.png',
+            x: 0, y: 0,
+            width: 1000,
+            height: 707,
+            fromCenter: false
+        });
+    })
     function passCanvas(examinee_id){
         
         app.ajaxPost("/home/getScoreInfo",{
@@ -366,7 +386,17 @@
                 text: res.data.idcode,
                 x: 335, y: 375,
             });
-            
+            var genderNum=res.data.idcode.substr(16,1);
+            var gender="女"
+            if (genderNum%2==1) {
+                gender='男';
+            }
+            $('#hegeCanvas').drawText({
+                fillStyle: '#000',
+                fontSize: '18px',
+                text: gender,
+                x: 335, y: 308,
+            });
             $('#hegeCanvas').drawText({
                 fillStyle: '#000',
                 fontSize: '18px',
@@ -389,16 +419,55 @@
 
             var subjectArr=res.data.subject;
             var scoreArr=res.data.scorelists;
-
-        
-
+            var len=50;
+            if (subjectArr.length>2) {
+                len=30;
+            }
             for (let i = 0; i < subjectArr.length; i++) {
-                
+                $('#hegeCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '18px',
+                    text: subjectArr[i].subject_name,
+                    x: 730, y: 340+i*len,
+                    align:"right",
+                    respectAlign: true,
+                });
             }
             for (let k = 0; k < scoreArr.length; k++) {
-                
+                console.log(scoreArr[k].core);
+                $('#hegeCanvas').drawText({
+                    fillStyle: '#000',
+                    fontSize: '18px',
+                    text: scoreArr[k].core+" 分",
+                    x: 840, y: 340+k*len,
+                    align:"right",
+                    respectAlign: true,
+                });
             }
 
+            //画登记照
+            $('#hegeCanvas').drawImage({
+                source: res.data.photo,
+                x: 685, y: 103,
+                width: 135,
+                height: 190,
+                fromCenter: false
+            });
+
+            $('#hegeCanvas').drawText({
+                fillStyle: '#000',
+                fontStyle: 'bold',
+                fontSize: '20px',
+                text: "湖北省人事考试院",
+                x: 800, y: 549,
+            });
+            $('#hegeCanvas').drawText({
+                fillStyle: '#000',
+                fontStyle: 'bold',
+                fontSize: '16px',
+                text: '{{helper.formatTime3('+res.data.scorelists[0].update_time+')}}',
+                x: 800, y: 600,
+            });
 
         })
         
@@ -787,6 +856,7 @@
         a.href = path;                                 // 将图片的src赋值给a节点的href
         a.dispatchEvent(event); 
     })
+    
 
     $(".printCard").click(function () {
         var path = $('#cardCanvas').getCanvasImage();
@@ -837,7 +907,7 @@
     //查看结果
     $(".getResult").click(function(){
         var examinee_id=$(this).attr("data-id");
-        
+        curId=examinee_id;
         app.ajaxPost("/home/getScoreInfo",{
 			examinee_id:examinee_id
 		},function(res){
@@ -856,7 +926,7 @@
                 for (let k = 0; k < scoreArr.length; k++) {
                     scoreStr+='<td>'+scoreArr[k].core+'</td>';
                     if (scoreArr[k].core<subjectArr[k].pass_mark) {
-                        isPass=fasle;
+                        isPass=false;
                     }
                 }
                 var tableStr=
