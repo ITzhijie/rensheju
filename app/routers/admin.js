@@ -100,5 +100,6 @@ module.exports = app => {
   router.get('/admin/allocate/downScoreExaminees', controller.admin.allocate.downScoreExaminees);//下载考生信息模板
   
   router.get('/admin/statistics/dataDetail', controller.admin.statistics.dataDetail);//数据中心
+  router.get('/admin/statistics/downDataDetails', controller.admin.statistics.downDataDetails);//数据下载
   
 };

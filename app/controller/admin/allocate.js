@@ -385,7 +385,10 @@ class Controller extends BaseController {
         ]);
 
         var filename=classifyInfo[0].exam[0].exam_name+classifyInfo[0].exam[0].exam_year+"（"+classifyInfo[0].classify_name+")成绩模板";
-        var filePath=await this.service.tools.buildExcel(title,results,filename);
+        //由于各列数据长度不同，可以设置一下列宽
+        const options = {'!cols': [{ wch: 5 }, { wch: 10}, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 } ]};
+        
+        var filePath=await this.service.tools.buildExcel(title,results,options,filename);
 
         this.ctx.attachment(filePath);
         this.ctx.set("Content-Type", "application/octet-stream");

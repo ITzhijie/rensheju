@@ -359,6 +359,202 @@ class ToolsService extends Service {
 
 
     }
+
+    //获取数据中心详情
+    async getDataDetail(exam_id,classify_id){
+        let examLists,classifyLists;
+     
+        let findJson = {
+            $lookup: {
+                from: 'exam',
+                localField: 'exam_id',
+                foreignField: '_id',
+                as: 'exam'
+            }
+        }
+        //所有考生
+        var findJson1 = {
+            $lookup: {
+                from: "examinee",
+                let: { classify_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                        }
+                    },
+                    // { $group: { _id: "$verify_status", total: { $sum: "$num" } } }
+                ],
+                as: "examinee_all"
+            },
+        };
+        //待审核人数
+        var findJson2 = {
+            $lookup: {
+                from: "examinee",
+                let: { classify_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            verify_status:0,
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                    // { $group: { _id: "$verify_status", total: { $sum: "$num" } } }
+                ],
+                as: "examinee_verifying"
+            },
+        };
+        //审核通过人数
+        var findJson3 = {
+            $lookup: {
+                from: "examinee",
+                let: { classify_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            verify_status:1,
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                    // { $group: { _id: "$verify_status", total: { $sum: "$num" } } }
+                ],
+                as: "examinee_verifyed"
+            },
+        };
+        //缴费人数
+        var findJson4 = {
+            $lookup: {
+                from: "examinee",
+                let: { classify_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            verify_status:1,
+                            pay_status:1,
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                    // { $group: { _id: "$pay_status", total: { $sum: "$num" } } }
+                ],
+                as: "examinee_payed"
+            },
+        };
+        //未缴费人数
+        var findJson5 = {
+            $lookup: {
+                from: "examinee",
+                let: { classify_id: "$_id" },
+                pipeline: [
+                    {
+                        $match:
+                        {
+                            verify_status:1,
+                            pay_status:0,
+                            $expr: {
+                                $and:
+                                    [
+                                        { $eq: ["$classify_id", "$$classify_id"] }
+                                    ]
+                            },
+                            
+                        }
+                    },
+                    // { $group: { _id: "$pay_status", total: { $sum: "$num" } } }
+                ],
+                as: "examinee_nopay"
+            },
+        };
+        
+
+        let matchJson = {
+            $match: {
+                
+            }
+        }
+        if (exam_id) {
+            matchJson.$match.exam_id=exam_id;
+        }
+        if (classify_id) {
+            matchJson.$match._id=classify_id;
+        }
+        if (this.ctx.session.adminInfo.is_super == 1) {
+            examLists = await this.ctx.model.Exam.find();
+            //classifyLists = await this.ctx.model.Classify.find();
+            
+        } else {
+            let admin_organ_id=this.ctx.session.adminInfo.organ_id;
+            examLists = await this.ctx.model.Exam.find({organ_id:admin_organ_id});
+            //classifyLists = await this.ctx.model.Classify.find({organ_id:admin_organ_id});
+
+            matchJson.$match.organ_id=this.app.mongoose.Types.ObjectId(admin_organ_id);
+            
+            
+        }
+        if (exam_id) {
+            classifyLists= await this.ctx.model.Classify.find({exam_id:exam_id});
+        }else{
+            if (this.ctx.session.adminInfo.is_super == 1) {
+                classifyLists= await this.ctx.model.Classify.find();
+                
+            }else{
+                let admin_organ_id=this.ctx.session.adminInfo.organ_id;
+                classifyLists= await this.ctx.model.Classify.find({
+                    organ_id:admin_organ_id
+                });
+            }
+            
+        }
+
+        
+        
+     
+        var lists = await this.ctx.model.Classify.aggregate([
+            findJson,
+            findJson1,
+            findJson2,
+            findJson3,
+            findJson4,
+            findJson5,
+            matchJson,
+            {
+                $sort: { add_time: -1 }
+            }
+        ]);
+        console.log("lists=========++++++++++");
+        console.log(lists);
+        
+        return {
+            lists,exam_id,examLists,classify_id,classifyLists,
+        }
+    }
 }
 
 module.exports = ToolsService;
