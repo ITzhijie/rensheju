@@ -37,64 +37,51 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">考生详情</h3>
+                            <h3 class="card-title">考场安排详情</h3>
+                            <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
 
+                            <div class="card-tools">
+
+                                <div class="input-group input-group" style="width: 500px;margin:0;">
+
+                                    <select class="form-control" id="roomNameSelect">
+
+                                        {% for item in roomNameArr %}
+                                        
+                                        <option value="{{item}}" {% if item==room_name %}selected{% endif %}>{{item}}</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                    <select class="form-control" id="roomNumSelect">
+
+                                        {% for item in roomNumArr %}
+                                        
+                                        <option value="{{item}}" {% if item==room_num %}selected{% endif %}>{{item}}</option>
+    
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            </div>
                         </div>
                         
-                        <div class="card-body table-responsive p-0">
-                            <table class="table table-hover  table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>序号</th>
-                                        <th>姓名</th>
-                                        <th>手机号</th>
-                                        <th>报考类别</th>
-                                        <th>报考专业</th>
-                                        <th>考试日期</th>
-                                        <th>准考证号</th>
-                                        <th>考点名称</th>
-                                        <th>考场号</th>
-                                        <th>座位号</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for list in lists %}
+                        <div class="card-body table-responsive ">
+                            
 
-                                    <tr>
-                                        <td>{{loop.index}}</td>
-                                        <td>{{list.uname}}</td>
-                                        <td>{{list.phone}}</td>
-                                        <td>{{list.exam[0].exam_name}}</td>
-                                        <td>{{list.classify[0].classify_name}}</td>
-                                        <td>
-                                            {{helper.formatTime2(list.classify[0].exam_start)}}
-                                            至 
-                                            {{helper.formatTime2(list.classify[0].exam_end)}}
-                                        </td>
-                                        <td>{{list.exam_card}}</td>
-                                        <td>{{list.room_name}}</td>
-                                        <td>{{list.room_num}}</td>
-                                        <td>{{list.seat_num}}</td>
-                                        
-                                        
-                                        
-
-                                       
-                                    </tr>
-
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            {% for list in lists %}
+                            <div class="listBox">
+                                <img src="{{list.photo}}">
+                                <p>姓名：{{list.uname}}</p>
+                                <p>身份证：{{list.idcode}}</p>
+                                <p>考场号：{{list.room_num}}</p>
+                                <p>座位号：{{list.seat_num}}</p>
+                            </div>
+                            {% endfor %}
                             {% if lists.length == 0 %}
-                            <div class="text-center py-2">暂无已审核考生信息</div>
+                            <div class="text-center py-2">暂无考生信息</div>
                             {% endif %}
                         </div>
-                        {% if totalPages > 1 %}
-                        <div class="card-footer">
-                            <div id="page" class="pagination float-right"></div>
-                        </div>
-                        {% endif %}
+                   
                     </div>
                    
                 </div>
@@ -103,21 +90,24 @@
         </div>
     </section>
     <script>
-        
-
-        $('#page').jqPaginator({
-            totalPages: Number('{{totalPages}}'),
-            visiblePages: 8,
-            currentPage: Number('{{page}}'),
-            onPageChange: function (num, type) {
-                console.log('当前第' + num + '页', type);
-    
-                if (type == 'change') {
-                    window.location.href="/admin/allocate/allocatedDetail?exam_id={{exam_id}}&classify_id={{classify_id}}&page=" + num;
-    
+        $("#examSelect").change(function(){
+            app.ajaxPost("/admin/classify/getClassifyLists", {
+                exam_id: $(this).val()
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var str='<option value="">全部</option>';
+                    for (let i = 0; i < lists.length; i++) {
+                        str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
+                    }
+                    $("#classifySelect").html(str);
                 }
-            }
-        });
+            })
+
+        })
+
+     
        
 
 

@@ -163,17 +163,57 @@ class Controller extends BaseController {
     async allocatedDetail(){
         let exam_id = this.ctx.request.query.exam_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.exam_id) : "";
         let classify_id = this.ctx.request.query.classify_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.classify_id) : "";
+        let room_name=this.ctx.request.query.room_name;
+        let room_num=this.ctx.request.query.room_num;
 
         console.log(exam_id);
         console.log(classify_id);
 
-        let page = this.ctx.request.query.page||1;
 
-        let data=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page,1);
-        console.log("分配页面data=========");
-        console.log(data);
 
-        await this.ctx.render('admin/allocate/allocatedDetail', data);
+        var rooms = await this.ctx.model.Examroom.find({
+            exam_id: exam_id,
+            classify_id: classify_id
+        });
+        if (!room_name) {
+            room_name=rooms[0].room_name;
+            room_num=rooms[0].room_num;
+        }
+
+        var roomNameArr = [];//所有考点列表
+        for (let i = 0; i < rooms.length; i++) {
+            if (roomNameArr.indexOf(rooms[i].room_name) < 0) {
+                roomNameArr.push(rooms[i].room_name);
+            }
+        }
+        var rooms2 = await this.ctx.model.Examroom.find({
+            exam_id: exam_id,
+            classify_id: classify_id,
+            room_name:room_name
+        });
+        var roomNumArr=[];//所有考场号列表
+        for (let i = 0; i < rooms2.length; i++) {
+            if (roomNumArr.indexOf(rooms2[i].room_num) < 0) {
+                roomNumArr.push(rooms2[i].room_num);
+            }
+        }
+
+        //查询考场所有考生信息
+        var lists = await this.ctx.model.Examinee.find({
+            exam_id: exam_id,
+            classify_id: classify_id,
+            room_name:room_name,
+            room_num:room_num
+        });
+
+        // let page = this.ctx.request.query.page||1;
+        // let data=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page,1);
+        // console.log("分配页面data=========");
+        // console.log(data);
+
+        await this.ctx.render('admin/allocate/allocatedDetail', {
+            lists,exam_id,classify_id,room_name,room_num,roomNameArr,roomNumArr
+        });
     }
     //已结束
     async endLists() {
