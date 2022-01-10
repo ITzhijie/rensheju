@@ -3,6 +3,9 @@
 {% block title %} 已审核列表 {% endblock %}
 
 {% block main %}
+
+<script type="text/javascript" src="/public/index/js/jcanvas.min.js"></script>
+
 <style>
     
     table td .text-check{
@@ -28,6 +31,52 @@
         background-color: #28a745;
         color: #fff !important;
     } */
+    .cardBox{
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+    }
+    .listBox{
+        width: 152px;
+        margin: 8px;
+        font-size: 12px;
+        box-shadow: 1px 1px 4px 1px rgb(212, 212, 212);
+        padding: 5px;
+    }
+    .listBox img{
+        width: 140px;
+        height: 200px;
+        margin-bottom: 5px;
+    }
+    .listBox p{
+        margin-bottom: 3px;
+    }
+    .listBox p span{
+        margin-left: 10px;
+    }
+    .listBox p:first-of-type{
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .listBox p:nth-of-type(2){
+        font-size: 14px;
+    }
+    .input-group span{
+        display: inline-block;
+        height: 38px;
+        line-height: 38px;
+        margin-left: 15px;
+        font-size: 16px;
+        color: #999;
+    }
+    .card-header .toolBtn{
+        margin-left: 30px;
+    }
+    #seatCanvas{
+        position: fixed;
+        top: 100px;
+        left: 10000px;
+    }
 </style>
     <section class="content">
         <div class="container-fluid">
@@ -38,12 +87,14 @@
                         
                         <div class="card-header">
                             <h3 class="card-title">考场安排详情</h3>
+                            <button id="exportBtn" class="toolBtn btn btn-success float-right" style="font-size: 1rem;">导出座位表</button>
+
                             <button id="searchBtn" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">搜索</button>
 
                             <div class="card-tools">
 
-                                <div class="input-group input-group" style="width: 500px;margin:0;">
-
+                                <div class="input-group" style="width: 500px;margin:0;">
+                                    <span>考点名称：</span>
                                     <select class="form-control" id="roomNameSelect">
 
                                         {% for item in roomNameArr %}
@@ -52,6 +103,7 @@
     
                                         {% endfor %}
                                     </select>
+                                    <span>考场号：</span>
                                     <select class="form-control" id="roomNumSelect">
 
                                         {% for item in roomNumArr %}
@@ -65,18 +117,20 @@
                             </div>
                         </div>
                         
-                        <div class="card-body table-responsive ">
+                        <div class="card-body table-responsive cardBox">
                             
 
                             {% for list in lists %}
                             <div class="listBox">
                                 <img src="{{list.photo}}">
-                                <p>姓名：{{list.uname}}</p>
-                                <p>身份证：{{list.idcode}}</p>
-                                <p>考场号：{{list.room_num}}</p>
-                                <p>座位号：{{list.seat_num}}</p>
+                                <p>{{list.uname}}</p>
+                                <p>{{list.idcode}}</p>
+                                <p>考场号：{{list.room_num}} <span>座位号：{{list.seat_num}}</span> </p>
                             </div>
                             {% endfor %}
+                            
+
+
                             {% if lists.length == 0 %}
                             <div class="text-center py-2">暂无考生信息</div>
                             {% endif %}
@@ -89,7 +143,214 @@
 
         </div>
     </section>
+
+<!-- 座位表 Modal -->
+
+<canvas id="seatCanvas" width="980"></canvas>
+
     <script>
+        $("#exportBtn").click(function(){
+            if ($(".listBox").length==0) {
+                Swal.fire({
+                    title: "温馨提示",
+                    text: "该考场无考生信息",
+                    icon: 'info',
+                    showCancelButton: false,
+                    allowOutsideClick:false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: '好的',
+                })
+                return
+            }
+            drawCanvas();
+            var path=$('#seatCanvas').getCanvasImage();
+            console.log(path);
+            var a = document.createElement('a');          // 创建一个a节点插入的document
+            var event = new MouseEvent('click');           // 模拟鼠标click点击事件
+            a.download = '{{lists[0].room_name+lists[0].room_num}}号考场';                  // 设置a节点的download属性值
+            a.href = path;                                 // 将图片的src赋值给a节点的href
+            a.dispatchEvent(event); 
+        })
+        
+
+
+        function drawCanvas(){
+            app.ajaxPost("/admin/allocate/getSeatsLists", {
+                classify_id: '{{classify_id}}',
+                room_name: $("#roomNameSelect").val(),
+                room_num: $("#roomNumSelect").val(),
+
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var hLen= Math.ceil(lists.length/7);
+                    $("#seatCanvas").attr("width",980);
+                    $("#seatCanvas").attr("height",60+275*hLen);
+
+                    $("#seatCanvas").height((60+275*hLen)+"px");
+
+                    $('#seatCanvas').drawRect({
+                        fillStyle: '#fff',
+                        fromCenter: false,
+                        x: 0, y: 0,
+                        width: 980, height: 60+275*hLen
+                    })
+                    var drawPathObj={
+                        strokeStyle: '#000',
+                        strokeWidth: 1,
+                        p1: {
+                            type: 'line',
+                            x1: 0, y1: 0,
+                            x2: 980, y2: 0,
+                            x3: 980, y3: 60+275*hLen,
+                            x4: 0, y4: 60+275*hLen,
+                            x5: 0, y5: 0
+                        },
+                        p2: {
+                            type: 'line',
+                            x1: 140, y1: 60,
+                            x2: 140, y2: 60+275*hLen
+                        },
+                        p3: {
+                            type: 'line',
+                            x1: 280, y1: 60,
+                            x2: 280, y2: 60+275*hLen
+                        },
+                        p4: {
+                            type: 'line',
+                            x1: 420, y1: 60,
+                            x2: 420, y2: 60+275*hLen
+                        },
+                        p5: {
+                            type: 'line',
+                            x1: 560, y1: 60,
+                            x2: 560, y2: 60+275*hLen
+                        },
+                        p6: {
+                            type: 'line',
+                            x1: 700, y1: 60,
+                            x2: 700, y2: 60+275*hLen
+                        },
+
+                        p7: {
+                            type: 'line',
+                            x1: 840, y1: 60,
+                            x2: 840, y2: 60+275*hLen
+                        },
+                        p8: {
+                            type: 'line',
+                            x1: 0, y1: 60,
+                            x2: 980, y2: 60
+                        }
+                    };
+                    for (let i = 0; i < hLen; i++) {
+                        drawPathObj['p'+(i+9)]={
+                            type: 'line',
+                            x1: 0, y1: 60+275*(i+1),
+                            x2: 980, y2: 60+275*(i+1)
+                        }
+                    }
+
+                    $('#seatCanvas').drawPath(drawPathObj)
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '14pt',
+                        text: res.classifyData.exam[0].exam_name+"（"+res.classifyData.classify_name+"）",
+                        x: 490, y: 30,
+                    });
+
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '12pt',
+                        text: "考点："+res.data[0].room_name+"("+res.data[0].room_num+"号考场)",
+                        x: 960, y: 30,
+                        align:"right",
+                        respectAlign: true,
+                    });
+                    
+                    var i=0;
+                    var h=0;
+                    for (let k = 0; k < lists.length; k++) {
+                        
+                        i=k%7;
+                        h=Math.floor(k/7);
+                        $('#seatCanvas').drawImage({
+                            source: lists[i].photo,
+                            x: 10+140*i, y: 65+275*h,
+                            width: 120,
+                            height: 170,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontStyle: 'bold',
+                            fontSize: '14px',
+                            text: lists[i].uname,
+                            x: 10+140*i, y: 240+275*h,
+                            fromCenter: false
+                        });
+
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '12px',
+                            text: '座位号：'+lists[i].seat_num,
+                            x: 10+140*i, y: 258+275*h,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '12px',
+                            text: lists[i].exam_card,
+                            x: 10+140*i, y: 274+275*h,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '12px',
+                            text: lists[i].idcode,
+                            x: 10+140*i, y: 290+275*h,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '14px',
+                            text: '签字：',
+                            x: 10+140*i, y: 310+275*h,
+                            fromCenter: false
+                        });
+                    }
+                    
+
+
+
+
+                }
+            })
+            
+        }
+
+        $("#searchBtn").click(function(){
+            window.location.href="/admin/allocate/allocatedDetail?exam_id={{exam_id}}&classify_id={{classify_id}}&room_name="+$("#roomNameSelect").val()+"&room_num="+$("#roomNumSelect").val();
+        })
+        $("#roomNameSelect").change(function(){
+            app.ajaxPost("/admin/allocate/getRoomNumLists", {
+                classify_id: '{{classify_id}}',
+                room_name: $("#roomNameSelect").val()
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+                    var str='';
+                    for (let i = 0; i < lists.length; i++) {
+                        str+='<option value="'+lists[i].room_num+'">'+lists[i].room_num+'</option>'
+                    }
+                    $("#roomNumSelect").html(str);
+                }
+            })
+
+        })
+
         $("#examSelect").change(function(){
             app.ajaxPost("/admin/classify/getClassifyLists", {
                 exam_id: $(this).val()

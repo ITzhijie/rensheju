@@ -95,6 +95,10 @@ module.exports = app => {
   router.get('/admin/allocate/allocated', controller.admin.allocate.allocated);//已分配
   router.get('/admin/allocate/allocatedDetail', controller.admin.allocate.allocatedDetail);//已分配详情页面
   
+  router.post('/admin/allocate/getRoomNumLists', controller.admin.allocate.getRoomNumLists);//获取考场列表
+  router.post('/admin/allocate/getSeatsLists', controller.admin.allocate.getSeatsLists);//获取考场考生信息
+
+  
   router.get('/admin/allocate/endLists', controller.admin.allocate.endLists);//已结束
   router.get('/admin/allocate/scoreDetail', controller.admin.allocate.scoreDetail);//分数详情
   router.get('/admin/allocate/downScoreExaminees', controller.admin.allocate.downScoreExaminees);//下载考生信息模板

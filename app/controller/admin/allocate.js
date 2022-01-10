@@ -215,6 +215,59 @@ class Controller extends BaseController {
             lists,exam_id,classify_id,room_name,room_num,roomNameArr,roomNumArr
         });
     }
+    //获取指定考场考生信息 
+    async getSeatsLists(){
+        let classify_id=this.ctx.request.body.classify_id;
+        let room_name=this.ctx.request.body.room_name;
+        let room_num=this.ctx.request.body.room_num;
+
+        var lists = await this.ctx.model.Examinee.find({
+            classify_id: classify_id,
+            room_name:room_name,
+            room_num:room_num
+        });
+        let findJson = {
+            $lookup: {
+                from: 'exam',
+                localField: 'exam_id',
+                foreignField: '_id',
+                as: 'exam'
+            }
+        }
+        var classifys = await this.ctx.model.Classify.aggregate([
+            findJson,
+            {
+                $match: {
+                    "_id":this.app.mongoose.Types.ObjectId(classify_id)
+                }
+            }
+        ]);
+
+        this.ctx.body={
+            code:0,
+            msg:"获取考场考生列表成功",
+            data:lists,
+            classifyData:classifys[0]
+        }
+    }
+    //获取考场列表
+    async getRoomNumLists(){
+        let classify_id=this.ctx.request.body.classify_id;
+        let room_name=this.ctx.request.body.room_name;
+
+        var rooms = await this.ctx.model.Examroom.find({
+            classify_id: classify_id,
+            room_name:room_name
+        });
+
+        this.ctx.body={
+            code:0,
+            msg:"获取考场列表成功",
+            data:rooms
+        }
+    }
+
+
     //已结束
     async endLists() {
         // 大于考试结束时间 exam_end  room_status 分配状态为1
