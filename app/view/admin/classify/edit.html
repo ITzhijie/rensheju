@@ -65,7 +65,7 @@
                             
                             <div class="form-group col-md-6">
                                 <label for="classify_code">专业代码</label>
-                                <input type="text" class="form-control" id="classify_code" name="classify_code" value="{{data.classify_code}}" required>
+                                <input type="text" class="form-control" id="classify_code" name="classify_code" value="{{data.classify_code}}" required maxlength="5">
                             </div>
                             
                             <div class="form-group col-md-6">
@@ -233,7 +233,7 @@
 
 
     $(".submitBtn").click(function () {
-        if (!$("#classify_name").val()||!$("#classify_code").val()||!$("#apply_start").val()||!$("#apply_end").val()||!$("#pay_end").val()||$("#apply_fee").val()==""||!$("#annex").val()) {
+        if (!$("#classify_name").val()||!$("#classify_code").val()||!$("#apply_start").val()||!$("#apply_end").val()||!$("#pay_end").val()||$("#apply_fee").val()=="") {
             Swal.fire({
                 title: "温馨提示",
                 text: "请填写完整专业信息",

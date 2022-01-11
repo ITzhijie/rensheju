@@ -421,7 +421,7 @@ class Controller extends BaseController {
         var res = await this.ctx.model.Examinee.findOne({
             user_id:userInfo._id,
             classify_id:data.classify_id,
-            verify_status:1
+            verify_status:{$ne:2}
         });
         if(res){
             this.ctx.body={

@@ -144,12 +144,14 @@ class Controller extends BaseController {
     //审核操作
     async doVerify(){
         let data =this.ctx.request.query;
+        let info=await this.ctx.model.Examinee.findOne({"_id": data.id});
         if(data.verify_status==1){
             await this.ctx.model.Examinee.updateOne({ "_id": data.id }, {
                 verify_status:data.verify_status,
                 verify_admin:this.ctx.session.adminInfo._id,
                 verify_time:new Date()
             })
+            await this.ctx.service.tools.sendMsg(info.phone,1,info.uname);
 
         }
         if(data.verify_status==2){
@@ -159,6 +161,8 @@ class Controller extends BaseController {
                 verify_admin:this.ctx.session.adminInfo._id,
                 verify_time:new Date()
             })
+            await this.ctx.service.tools.sendMsg(info.phone,2,info.uname);
+
         }
         console.log("======backpage======");
         console.log(data.backpage);
