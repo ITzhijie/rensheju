@@ -525,16 +525,45 @@ class Controller extends BaseController {
     async changePayStatus(){
         var examinee_id=this.ctx.request.body.examinee_id;
         var fee=this.ctx.request.body.fee;
-
-        await this.ctx.model.Examinee.updateOne({ "_id": examinee_id }, {
-            pay_status:1,
-            pay_time:new Date(),
-            pay_fee:fee
-        });
-        this.ctx.body={
-            code:0,
-            msg:"缴费成功"
+        var datas = await this.ctx.model.Examinee.aggregate([
+            {
+                $lookup: {
+                    from: 'exam',
+                    localField: 'exam_id',
+                    foreignField: '_id',
+                    as: 'exam'
+                }
+            },{
+                $lookup: {
+                    from: 'classify',
+                    localField: 'classify_id',
+                    foreignField: '_id',
+                    as: 'classify'
+                }
+            },
+            {
+                $match: {
+                    "_id":this.app.mongoose.Types.ObjectId(examinee_id)
+                }
+            }
+        ]);
+        if(datas[0].classify[0].pay_end<new Date()){
+            this.ctx.body={
+                code:1,
+                msg:"已超过缴费时间，不可缴费"
+            }
+        }else{
+            await this.ctx.model.Examinee.updateOne({ "_id": examinee_id }, {
+                pay_status:1,
+                pay_time:new Date(),
+                pay_fee:fee
+            });
+            this.ctx.body={
+                code:0,
+                msg:"缴费成功"
+            }
         }
+        
     }
 
 }
