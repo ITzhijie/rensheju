@@ -74,7 +74,7 @@
     }
     #seatCanvas{
         position: fixed;
-        top: 100px;
+        top: 10000px;
         left: 10000px;
     }
 </style>
@@ -129,6 +129,7 @@
                             </div>
                             {% endfor %}
                             
+                            
 
 
                             {% if lists.length == 0 %}
@@ -146,7 +147,7 @@
 
 <!-- 座位表 Modal -->
 
-<canvas id="seatCanvas" width="980"></canvas>
+<canvas id="seatCanvas" width="1200" height="840"></canvas>
 
     <script>
         $("#exportBtn").click(function(){
@@ -173,8 +174,220 @@
         })
         
 
-
         function drawCanvas(){
+            app.ajaxPost("/admin/allocate/getSeatsLists", {
+                classify_id: '{{classify_id}}',
+                room_name: $("#roomNameSelect").val(),
+                room_num: $("#roomNumSelect").val(),
+
+            }, function (res) {
+                console.log(res);
+                if (res.code==0) {
+                    var lists=res.data;
+
+                    var hLen= Math.ceil(lists.length/7);
+                    // $("#seatCanvas").attr("width",980);
+                    // $("#seatCanvas").attr("height",60+275*hLen);
+
+                    //$("#seatCanvas").height((60+275*hLen)+"px");
+
+                    $('#seatCanvas').drawRect({
+                        fillStyle: '#fff',
+                        fromCenter: false,
+                        x: 0, y: 0,
+                        width: 1200, height: 840
+                    })
+                    var drawPathObj={
+                        strokeStyle: '#000',
+                        strokeWidth: 1,
+                        p1: {
+                            type: 'line',
+                            x1: 0, y1: 0,
+                            x2: 1200, y2: 0,
+                            x3: 1200, y3: 810,
+                            x4: 0, y4:810,
+                            x5: 0, y5: 0
+                        },
+                        p2: {
+                            type: 'line',
+                            x1: 200, y1: 50,
+                            x2: 200, y2: 810
+                        },
+                        p3: {
+                            type: 'line',
+                            x1: 400, y1: 50,
+                            x2: 400, y2: 810
+                        },
+                        p4: {
+                            type: 'line',
+                            x1: 600, y1: 50,
+                            x2: 600, y2: 810
+                        },
+                        p5: {
+                            type: 'line',
+                            x1: 800, y1: 50,
+                            x2: 800, y2: 810
+                        },
+                        p6: {
+                            type: 'line',
+                            x1: 1000, y1: 50,
+                            x2: 1000, y2: 810
+                        },
+                        p7: {
+                            type: 'line',
+                            x1: 0, y1: 50,
+                            x2: 1200, y2: 50
+                        },
+                        
+                        p8: {
+                            type: 'line',
+                            x1: 550, y1: 816,
+                            x2: 650, y2: 816,
+                            x3: 650, y3: 838,
+                            x4: 550, y4:838,
+                            x5: 550, y5: 816
+                        },
+                    };
+                    for (let i = 0; i < 4; i++) {
+                        drawPathObj['p'+(i+9)]={
+                            type: 'line',
+                            x1: 0, y1: 50+152*(i+1),
+                            x2: 1200, y2: 50+152*(i+1)
+                        }
+                    }
+
+                    $('#seatCanvas').drawPath(drawPathObj);
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '10pt',
+                        text: "讲台",
+                        x: 600, y: 828,
+                    });
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '14pt',
+                        text: res.classifyData.exam[0].exam_name+"（"+res.classifyData.classify_name+"）",
+                        x: 600, y: 20,
+                    });
+
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '11pt',
+                        text: "考点："+res.data[0].room_name+"("+res.data[0].room_addr+")",
+                        x: 20, y: 40,
+                        align:"left",
+                        respectAlign: true,
+                        maxWidth: 300
+                    });
+                    $('#seatCanvas').drawText({
+                        fillStyle: '#000',
+                        fontSize: '11pt',
+                        text: "考场号："+res.data[0].room_num+"    人数："+res.data.length,
+                        x: 1180, y: 40,
+                        align:"right",
+                        respectAlign: true,
+                    });
+                    var i=0;
+                    var h=0;
+                    for (let k = 0; k < lists.length; k++) {
+                        
+                        i=k%5;
+                        h=Math.floor(k/5);
+                        $('#seatCanvas').drawImage({
+                            source: lists[i].photo,
+                            x: 5+200*h, y: 840-30-26-100-152*i,
+                            width: 70,
+                            height: 100,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontStyle: 'bold',
+                            fontSize: '12px',
+                            text: '座位号：'+lists[i].seat_num,
+                            x: 80+200*h, y: 810-152-80+ 85-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            
+                            fontSize: '12px',
+                            text: "姓名："+lists[i].uname,
+                            x: 80+200*h, y: 810-152-80+101-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            
+                            fontSize: '10px',
+                            text: "身份证号：",
+                            x: 80+200*h, y: 810-152-80+118-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '10px',
+                            text: lists[i].idcode,
+                            x: 80+200*h, y: 810-152-80+135-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            
+                            fontSize: '10px',
+                            text: "准考证号：",
+                            x: 80+200*h, y: 810-152-80+152-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '10px',
+                            text: lists[i].exam_card,
+                            x: 80+200*h, y: 810-152-80+169-152*i,
+                            fromCenter: false
+                        });
+                        
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '11px',
+                            text: '进场签字：',
+                            x: 80+200*h, y: 810-152-80+190-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawText({
+                            fillStyle: '#000',
+                            fontSize: '11px',
+                            text: '交卷签字：',
+                            x: 80+200*h, y: 810-152-80+212-152*i,
+                            fromCenter: false
+                        });
+                        $('#seatCanvas').drawPath({
+                            strokeStyle: '#000',
+                            strokeWidth: 1,
+                            p1: {
+                                type: 'line',
+                                x1: 130+200*h, y1: 810-152-80+203-152*i,
+                                x2: 195+200*h, y2: 810-152-80+203-152*i,
+                            },
+                            p2: {
+                                type: 'line',
+                                x1: 130+200*h, y1: 810-152-80+230-152*i,
+                                x2: 195+200*h, y2: 810-152-80+230-152*i,
+                            },
+                        });
+                    }
+                    
+
+
+
+
+                }
+            })
+            
+        }
+
+        //自动按数量生成
+        function drawCanvasAuto(){
             app.ajaxPost("/admin/allocate/getSeatsLists", {
                 classify_id: '{{classify_id}}',
                 room_name: $("#roomNameSelect").val(),
@@ -329,6 +542,7 @@
             })
             
         }
+
 
         $("#searchBtn").click(function(){
             window.location.href="/admin/allocate/allocatedDetail?exam_id={{exam_id}}&classify_id={{classify_id}}&room_name="+$("#roomNameSelect").val()+"&room_num="+$("#roomNumSelect").val();

@@ -136,6 +136,17 @@
 	})
 
 	$(".registerBtn").click(function(){
+		if($("#idcode").val().length!=18){
+            Swal.fire({
+                title: "温馨提示",
+                text: "请输入正确长度的身份证号",
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '确定',
+            })
+            return
+		}
 		if(!$("#uname").val()||!$("#idcode").val()||!$("#phone").val()||!$("#code").val()||!$("#pwd").val()){
             Swal.fire({
                 title: "温馨提示",
@@ -147,6 +158,7 @@
             })
             return
 		}
+		
 		
 		if($("#pwd").val()!=$("#repwd").val()){
             Swal.fire({
