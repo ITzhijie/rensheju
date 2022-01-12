@@ -389,8 +389,10 @@ class ToolsService extends Service {
                             },
                         }
                     },
+                    //{$distinct:{user_id:1}}
                     // { $group: { _id: "$verify_status", total: { $sum: "$num" } } }
                 ],
+                //distinct:"user_id",
                 as: "examinee_all"
             },
         };
