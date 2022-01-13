@@ -9,7 +9,7 @@ class Controller extends BaseController {
         console.log(keyword);
 
         var page = this.ctx.request.query.page || 1;
-        var pageSize = 2;
+        var pageSize = 10;
 
 
         var findJson = {

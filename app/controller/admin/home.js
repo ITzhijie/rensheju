@@ -70,29 +70,29 @@ class Controller extends BaseController {
         var registData = this.ctx.request.body;
 
         //首先判断用户code是否正确
-        var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
-        console.log('首先判断用户code是否正确=========');
+        // var coderes = await this.ctx.model.Code.findOne({phone:registData.phone});
+        // console.log('首先判断用户code是否正确=========');
         
-        console.log(coderes);
+        // console.log(coderes);
 
-        console.log(coderes.code==registData.code);
-        console.log(coderes.code);
-        console.log(registData);
+        // console.log(coderes.code==registData.code);
+        // console.log(coderes.code);
+        // console.log(registData);
         
-        console.log(new Date().getTime()-coderes.add_time.getTime()<1800000);
+        // console.log(new Date().getTime()-coderes.add_time.getTime()<1800000);
         
         
-        if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
-            await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
+        // if (coderes&&coderes.code==registData.code&&new Date().getTime()-coderes.add_time.getTime()<1800000) {
+        //     await this.ctx.model.Code.deleteMany({ "phone":registData.phone });
             
-        }else{
-            repData={
-                code:1,
-                msg:"验证码错误或失效，请重试",
-            }
-            this.ctx.body=repData;
-            return
-        }
+        // }else{
+        //     repData={
+        //         code:1,
+        //         msg:"验证码错误或失效，请重试",
+        //     }
+        //     this.ctx.body=repData;
+        //     return
+        // }
         
         var res1 = await this.ctx.model.User.findOne({phone:registData.phone});
         if (res1) {

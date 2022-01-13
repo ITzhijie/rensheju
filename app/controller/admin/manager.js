@@ -53,7 +53,7 @@ class Controller extends BaseController {
 		} else {
 			//初始化平台id
 			if(addResult.organ_id=="61b8ac448a2a3e4a135d589e"){
-				addResult.is_super==1;
+				addResult.is_super=1;
 			}
 
 			var admin = new this.ctx.model.Admin(addResult);
@@ -96,10 +96,16 @@ class Controller extends BaseController {
 		var mobile = this.ctx.request.body.mobile;
 		var username = this.ctx.request.body.username;
 		var organ_id = this.ctx.request.body.organ_id;
+		var is_super=0;
+		if(organ_id=="61b8ac448a2a3e4a135d589e"){
+			is_super=1;
+		}
+
 		await this.ctx.model.Admin.updateOne({ "_id": id }, {
 			mobile,
 			organ_id,
-			username
+			username,
+			is_super
 		})
 
 		await this.success('/admin/manager', '修改用户信息成功')

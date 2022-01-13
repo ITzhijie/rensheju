@@ -193,7 +193,7 @@ class ToolsService extends Service {
 
     //获取待分配考生数据
     async getAllocatingExaminee(exam_id,classify_id,page,room_status){
-        var pageSize = 5;
+        var pageSize = 10;
 
         let findJson1 = {
             $lookup: {
@@ -264,7 +264,7 @@ class ToolsService extends Service {
 
     //获取考生分数
     async getscoreExaminee(exam_id,classify_id,page){
-        var pageSize = 5;
+        var pageSize = 10;
 
         let findJson1 = {
             $lookup: {
