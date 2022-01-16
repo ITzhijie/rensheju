@@ -166,6 +166,23 @@ class Controller extends BaseController {
         userInfo.idcard_f=idcard_f;
 
         this.ctx.session.userInfo = userInfo;
+
+        //补全报名信息
+        if (userInfo.is_batch==1) {
+            let classifyLists= await this.ctx.model.Examinee.find({
+                user_id:userInfo._id
+            });
+
+            for (let i = 0; i < classifyLists.length; i++) {
+                await this.ctx.model.Examinee.updateOne({ "_id": classifyLists[i]._id }, {
+                    photo:photo,
+                    idcard_z:idcard_z,
+                    idcard_f:idcard_f,
+                });
+            }
+
+        }
+
         this.ctx.body={
             code:0,
             msg:"更新成功"

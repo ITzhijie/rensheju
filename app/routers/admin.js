@@ -71,6 +71,8 @@ module.exports = app => {
   router.post('/admin/classify/doEdit', controller.admin.classify.doEdit);
   router.post('/admin/classify/getClassifyLists', controller.admin.classify.getClassifyLists);
 
+  router.get('/admin/batch', controller.admin.batch.index);
+  router.post('/admin/batchExaminee', controller.admin.batch.batchExaminee);
 
   
   router.get('/admin/manager', controller.admin.manager.index);

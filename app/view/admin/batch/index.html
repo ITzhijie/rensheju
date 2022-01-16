@@ -1,0 +1,212 @@
+{% extends "../public/layout.html" %}
+
+{% block title %} 管理员增加 {% endblock %}
+
+{% block main %}
+
+<style>
+    .tip{
+        margin-top: 20px;
+        color: coral;
+        font-size: 18px;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">批量导入考生</h3>
+                    </div>
+                        <div class="card-body">
+                            <div class="form-group col-md-6">
+                                <a href="/admin/downFiles?filename=考生批量导入模板.xlsx" class="btn btn-primary pull-right downBtn">下载考生模板</a>
+                                
+                                <p class="tip">提示：
+                                    <br>1、导入考生信息后，该考生将默认审核通过，且缴费成功。
+                                    <br>2、若导入考生未注册，系统将为该考生初始化平台登录信息，账号为手机号，密码为手机号后6位。
+                                </p>
+                            </div> 
+                            
+                            <div class="form-group col-md-6">
+                                <label for="examSelect">考试类别</label>
+                                <select class="form-control"  id="examSelect">
+                                    <option value="">请选择考试类别</option>
+
+                                    {% for item in examLists %}
+                                    <option value="{{item._id}}">{{item.exam_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div> 
+                            <div class="form-group col-md-6">
+                                <label for="classifySelect">考试专业</label>
+                                <select class="form-control" id="classifySelect">
+                                    <option value="">请先选择类别</option>
+
+                                    <!-- {% for item in classifyLists %}
+                                    <option value="{{item._id}}">{{item.classify_name}}</option>
+                                    {% endfor %} -->
+                                </select>
+                            </div> 
+                            <div class="form-group col-md-6">
+                                <label for="organ_id">选择文件</label>
+                                <form class="input-group" id="idcardForm" enctype="multipart/form-data" method="post" name="fileinfo">
+                                
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="InputFile" name="myfile">
+                                        <label class="custom-file-label" for="InputFile">请上传.xlsx文件</label>
+                                    </div>
+                                    
+                                
+                                </form>
+                            </div> 
+                            
+
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary submitBtn">批量导入</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#examSelect").change(function(){
+        app.ajaxPost("/admin/classify/getClassifyLists", {
+            exam_id: $(this).val()
+        }, function (res) {
+            console.log(res);
+            if (res.code==0) {
+                var lists=res.data;
+                var str='';
+                for (let i = 0; i < lists.length; i++) {
+                    str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
+                }
+                if (str=='') {
+                    str='<option>暂无对应专业</option>';
+                }
+                $("#classifySelect").html(str);
+            }
+        })
+
+    })
+
+    var formData,isChoose=false;
+
+     //选择文件
+     $("#InputFile").change(function(e){
+            var supportedType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+			var file = e.target.files[0];
+            console.log(file);
+            
+            if (!file) {
+				return
+			}
+            if (file.type!=supportedType) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "文件格式只支持.xlsx表格文件",
+                    icon: 'error',
+                    confirmButtonText: '好的'
+                })
+                return
+            }
+            
+            var form = $("#idcardForm");
+			formData = new FormData(form[0]);
+			console.log(formData);
+			
+            isChoose=true;
+        })
+
+    $(".submitBtn").click(function(){
+
+        if (!$("#classifySelect").val()) {
+            Swal.fire({
+                title: '温馨提示',
+                text: "请先选择对应考试的专业",
+                icon: 'info',
+                confirmButtonText: '好的'
+            })
+            return
+        }
+            
+        if (!isChoose) {
+            Swal.fire({
+                title: '温馨提示',
+                text: "请先选择基于模板填写的考生信息表格",
+                icon: 'info',
+                confirmButtonText: '好的'
+            })
+            return
+        }
+
+        Swal.fire({
+            title: '正在导入考生信息',
+            allowOutsideClick:false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        })
+
+        $.ajax({
+            type: 'POST',
+            url: '/admin/batchExaminee?_csrf=' + csrf+"&exam_id="+$("#examSelect").val()+"&classify_id="+$("#classifySelect").val(),
+            data: formData,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头 enctype="multipart/form-data"
+            contentType: false,
+            dataType: 'json',
+            enctype:"multipart/form-data",
+            
+            async: false,
+            success: function (res) {
+                Swal.close()
+                console.log(res);
+                if (res.code==0) {
+                    Swal.fire({
+                        title: "温馨提示",
+                        text: res.msg,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: '好的',
+                        allowOutsideClick:false,
+                    }).then(function(){
+                        window.location.reload();
+                    })
+                }else{
+                    isChoose=false;
+                    $("#InputFile").val(null);
+                    $(".custom-file-label").text("请上传.xlsx文件");
+                    Swal.fire({
+                        title: "温馨提示",
+                        text: res.msg,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: '确定',
+                    })
+                }
+            },
+            error: function (err) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: '网络原因，上传失败，请稍后再试。',
+                    icon: 'error',
+                    confirmButtonText: '好的'
+                })
+            }
+        });
+    })
+
+
+</script>
+
+{% endblock %}

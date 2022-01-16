@@ -86,7 +86,12 @@
                                     name="fileinfo">
                                     <input class="fileImg" type="file" id="idcardInput" multiple name="myfile">
                                     <div class="fileImgBox">
+                                        {% if data.idcard_z %}
                                         <img class="previewImg" id="idcardPreview" src="{{data.idcard_z}}">
+                                        {% else %}
+                                        <img class="previewImg" id="idcardPreview" src="/public/admin/images/add.png">
+                                        {% endif %}
+                                        
                                     </div>
                                 </form>
     
@@ -99,7 +104,11 @@
                                     name="fileinfo">
                                     <input class="fileImg" type="file" id="idcardInput2" multiple name="myfile">
                                     <div class="fileImgBox">
+                                        {% if data.idcard_z %}
                                         <img class="previewImg" id="idcardPreview2" src="{{data.idcard_f}}">
+                                        {% else %}
+                                        <img class="previewImg" id="idcardPreview2" src="/public/admin/images/add.png">
+                                        {% endif %}
                                     </div>
                                 </form>
     
@@ -112,7 +121,11 @@
                                     name="fileinfo">
                                     <input class="fileImg" type="file" id="idcardInput3" multiple name="myfile">
                                     <div class="fileImgBox">
+                                        {% if data.idcard_z %}
                                         <img class="previewImg" id="idcardPreview3" src="{{data.photo}}">
+                                        {% else %}
+                                        <img class="previewImg" id="idcardPreview3" src="/public/admin/images/addphoto.png">
+                                        {% endif %}
                                     </div>
                                 </form>
     

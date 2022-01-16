@@ -21,7 +21,11 @@ module.exports = app => {
 		idcard_f: { type: String },
 		// 状态		
 		status: { type: Number, default: 1 },
-		
+		// 是否是批量导入
+		is_batch: { type: Number, default: 0 },
+		// 批量导入人
+		batch_id: { type: Schema.Types.ObjectId },
+	   
 		add_time: {
 			type: Date,
 			default: Date.now
