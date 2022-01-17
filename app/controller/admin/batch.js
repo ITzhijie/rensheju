@@ -54,6 +54,8 @@ class Controller extends BaseController {
 
         let totalNum=data.length-1;
         let successNum=0;
+        let updateNum=0;
+
         for (let i = 1; i < data.length; i++) {
 
             var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;    //11位手机号码正则
@@ -109,6 +111,9 @@ class Controller extends BaseController {
                             batch_id:this.ctx.session.adminInfo._id
                         }).save();
 
+                        successNum++;
+
+
                     }else{
                         await this.ctx.model.Examinee.updateOne({ "_id": examineeRes[0]._id }, {
                             uname:data[i][1],
@@ -123,8 +128,8 @@ class Controller extends BaseController {
                             is_batch:1,
                             batch_id:this.ctx.session.adminInfo._id
                         });
+                        updateNum++;
                     }
-                    successNum++;
 
                 }
             }
@@ -173,7 +178,7 @@ class Controller extends BaseController {
 
         this.ctx.body ={
             code:0,
-            msg:"导入完成！总数量："+totalNum+"，成功导入数量："+successNum
+            msg:"导入完成！总数量："+totalNum+"，成功导入数量："+successNum+"，成功更新数量："+updateNum
         };
 
 
