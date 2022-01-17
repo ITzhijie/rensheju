@@ -60,42 +60,90 @@ class Controller extends BaseController {
             if (!reg_tel.test(data[i][2])||data[i][3].length!=18) {
                 continue
             }
-            successNum++;
 
             //1 遍历表格信息。查询考生有没有注册过，没有就注册  初始化密码为身份证后6位
 
             let user_id;
+
             var idcodeRes = await this.ctx.model.User.find({
                 idcode:data[i][3],
             });
-            if (idcodeRes.length==0) {
-                var phoneRes = await this.ctx.model.User.find({
+            var phoneRes = await this.ctx.model.User.find({
+                phone:data[i][2],
+            });
+
+
+            //都有就不注册 查询考生信息 有就更新 没有就生成
+            if (idcodeRes.length>0 && phoneRes.length>0) {
+                let ures = await this.ctx.model.User.find({
+                    uname:data[i][1],
                     phone:data[i][2],
+                    idcode:data[i][3]
                 });
-                if (phoneRes.length==0) {
-                    var pwd = await this.service.tools.md5(data[i][2].substr(5,6));
+                if (ures.length==1) {
+                    user_id=ures[0]._id;
 
-                    var newUserData =await new this.ctx.model.User({
-                        uname:data[i][1],
-                        phone:data[i][2],
-                        idcode:data[i][3],
-                        pwd:pwd,
-                        is_batch:1,
-                        batch_id:this.ctx.session.adminInfo._id
-                    }).save();
+                    let examineeRes = await this.ctx.model.Examinee.find({
+                        classify_id:classify_id,
+                        user_id:user_id,
+                        verify_status:{$lt:2}
+                    });
+                    if (examineeRes.length==0) {
 
-                    user_id=newUserData._id;
+                        await new this.ctx.model.Examinee({
+                            organ_id:this.ctx.session.adminInfo.organ_id,
+                            exam_id:exam_id,
+                            classify_id:classify_id,
+                            user_id:user_id,
+                            uname:data[i][1],
+                            phone:data[i][2],
+                            idcode:data[i][3],
+                            apply_time:new Date(),
+                            verify_status:1,
+                            verify_admin:this.ctx.session.adminInfo._id,
+                            verify_time:new Date(),
+                            pay_status:1,
+                            pay_time:new Date(),
+                            pay_fee:classifyInfo.apply_fee,
+                            is_batch:1,
+                            batch_id:this.ctx.session.adminInfo._id
+                        }).save();
+
+                    }else{
+                        await this.ctx.model.Examinee.updateOne({ "_id": examineeRes[0]._id }, {
+                            uname:data[i][1],
+                            phone:data[i][2],
+                            idcode:data[i][3],
+                            verify_status:1,
+                            verify_admin:this.ctx.session.adminInfo._id,
+                            verify_time:new Date(),
+                            pay_status:1,
+                            pay_time:new Date(),
+                            pay_fee:classifyInfo.apply_fee,
+                            is_batch:1,
+                            batch_id:this.ctx.session.adminInfo._id
+                        });
+                    }
+                    successNum++;
+
                 }
-            }else{
-                user_id=idcodeRes[0]._id;
             }
 
-            var examineeRes = await this.ctx.model.Examinee.find({
-                classify_id:classify_id,
-                user_id:user_id,
-                verify_status:{$lt:2}
-            });
-            if (examineeRes.length==0) {
+            //都没有就注册新用户 同时生成报考信息信息
+
+            if (idcodeRes.length==0 && phoneRes.length==0) {
+                var pwd = await this.service.tools.md5(data[i][2].substr(5,6));
+                var newUserData =await new this.ctx.model.User({
+                    uname:data[i][1],
+                    phone:data[i][2],
+                    idcode:data[i][3],
+                    pwd:pwd,
+                    is_batch:1,
+                    batch_id:this.ctx.session.adminInfo._id
+                }).save();
+
+                user_id=newUserData._id;
+
                 await new this.ctx.model.Examinee({
                     organ_id:this.ctx.session.adminInfo.organ_id,
                     exam_id:exam_id,
@@ -104,7 +152,6 @@ class Controller extends BaseController {
                     uname:data[i][1],
                     phone:data[i][2],
                     idcode:data[i][3],
-                    pwd:pwd,
                     apply_time:new Date(),
                     verify_status:1,
                     verify_admin:this.ctx.session.adminInfo._id,
@@ -115,21 +162,11 @@ class Controller extends BaseController {
                     is_batch:1,
                     batch_id:this.ctx.session.adminInfo._id
                 }).save();
-            }else{
-                await this.ctx.model.Examinee.updateOne({ "_id": examineeRes[0]._id }, {
-                    uname:data[i][1],
-                    phone:data[i][2],
-                    idcode:data[i][3],
-                    verify_status:1,
-                    verify_admin:this.ctx.session.adminInfo._id,
-                    verify_time:new Date(),
-                    pay_status:1,
-                    pay_time:new Date(),
-                    pay_fee:classifyInfo.apply_fee,
-                    is_batch:1,
-                    batch_id:this.ctx.session.adminInfo._id
-                });
+
+                successNum++;
+
             }
+
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
         }
 
