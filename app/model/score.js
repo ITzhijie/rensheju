@@ -3,12 +3,12 @@ module.exports = app => {
 	const Schema = mongoose.Schema;
 
 
-	//科目表
+	//专业表
 	const schema = new Schema({
 
         // 所属考生
         examinee_id: { type: Schema.Types.ObjectId },
-        // 所属科目
+        // 所属专业
         subject_id: { type: Schema.Types.ObjectId },
         // 考试日期
         core: { type: Number, default: 0 },

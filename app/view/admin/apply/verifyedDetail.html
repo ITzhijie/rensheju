@@ -69,7 +69,11 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">报考信息详情</h3>
+                        <h3 class="card-title">报考信息详情
+                            {% if examineeInfo.is_batch==1 %}
+                            （批量上传考生）
+                            {% endif %}
+                        </h3>
                     </div>
                     <div class="card-body"  id="preImg">
                         <div class="baseInfoList">
@@ -101,7 +105,7 @@
                             <div class="right">{{examineeInfo.exam[0].exam_name}}（{{examineeInfo.exam[0].exam_year}}）</div>
                         </div>
                         <div class="baseInfoList">
-                            <div class="left">考试专业</div>
+                            <div class="left">考试科目</div>
                             <div class="right">{{examineeInfo.classify[0].classify_name}}</div>
                         </div>
 
@@ -122,15 +126,23 @@
                         <div class="baseInfoList">
                             <div class="left">身份证照片</div>
                             <div class="right">
+                                {% if examineeInfo.is_batch==1 and examineeInfo.idcard_z==undefined %}
+                                <img src="/public/admin/images/pl01.png">
+                                {% else %}
                                 <img src="{{examineeInfo.idcard_z}}">
                                 <img src="{{examineeInfo.idcard_f}}">
+                                {% endif %}
                             </div>
                         </div>
             
                         <div class="baseInfoList">
                             <div class="left">登记照</div>
                             <div class="right">
+                                {% if examineeInfo.is_batch==1 and examineeInfo.photo==undefined %}
+                                <img class="photo" src="/public/admin/images/pl02.png">
+                                {% else %}
                                 <img class="photo" src="{{examineeInfo.photo}}">
+                                {% endif %}
                             </div>
                         </div>
                     

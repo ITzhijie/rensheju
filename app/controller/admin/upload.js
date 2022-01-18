@@ -111,7 +111,7 @@ class Controller extends BaseController {
                             }
             
 
-                            //准考证号生成规则 考试年份exam_year+专业号+考场号+座位号
+                            //准考证号生成规则 考试年份exam_year+科目号+考场号+座位号
                             var code = Math.floor(Math.random() * 10000);
                             if (code < 1000) {code += 1000};
                             var exam_card=examineeLists[0].exam[0].exam_year
@@ -191,7 +191,7 @@ class Controller extends BaseController {
         console.log('=========data==========');
         console.log(data);
 
-        //1.获取科目id
+        //1.获取专业id
         var subjectLists = await this.ctx.model.Subject.find({classify_id:classify_id});
 
         //2.校验格式
@@ -218,7 +218,7 @@ class Controller extends BaseController {
         /*
         * 遍历考生信息 
         * 查询考生id 
-        * 遍历科目 将分数储存进数据库 修改考生分数发布状态
+        * 遍历专业 将分数储存进数据库 修改考生分数发布状态
         * 查询是否所有的考生都发布分数 若所有的考生均发布
         * 
         *

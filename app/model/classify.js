@@ -3,15 +3,15 @@ module.exports = app => {
 	const Schema = mongoose.Schema;
 
 
-	//专业表
+	//科目表
 	const schema = new Schema({
 		// 所属机构	
 		organ_id: { type: Schema.Types.ObjectId },
         // 所属考试
         exam_id: { type: Schema.Types.ObjectId },
-        // 专业名称
+        // 科目名称
         classify_name: { type: String },
-        // 专业代码
+        // 科目代码
         classify_code: { type: String },
         // 报名开始时间	
         apply_start:  { type: Date },

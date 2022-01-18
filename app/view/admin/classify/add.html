@@ -42,7 +42,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">新增专业</h3>
+                        <h3 class="card-title">新增科目</h3>
                     </div>
                     <form id="actionForm" role="form" action="/admin/classify/doAdd" method="post">
                         <div class="card-body pb0">
@@ -59,12 +59,12 @@
                             </div> 
 
                             <div class="form-group col-md-6">
-                                <label for="classify_name">专业名称</label>
+                                <label for="classify_name">科目名称</label>
                                 <input type="text" class="form-control" id="classify_name" name="classify_name" required>
                             </div>
                             
                             <div class="form-group col-md-6">
-                                <label for="classify_code">专业代码</label>
+                                <label for="classify_code">科目代码</label>
                                 <input type="text" class="form-control" id="classify_code" name="classify_code" required maxlength="5">
                             </div>
                             
@@ -116,14 +116,14 @@
                     </form>
                     <div class="card-body pb0">
                         <div class="card-header card-second-header">
-                            <h3 class="card-title">科目信息 <span>（如考试科目无细分项，可直接填写专业名称）</span></h3>
+                            <h3 class="card-title">专业信息 <span>（如考试专业无细分项，可直接填写科目名称）</span></h3>
                         </div>
 
                         <table class="table table-hover  table-bordered classifyTable">
                             <thead>
                                 <tr>
                                     <th>序号</th>
-                                    <th>科目名称</th>
+                                    <th>专业名称</th>
                                     <th>考试日期</th>
                                     <th>考试时间</th>
                                     <th>合格分数</th>
@@ -137,7 +137,7 @@
                                 <tr>
                                     <td class="addIndex">1</td>
                                     <td>                                
-                                        <input type="text" class="form-control" id="subject_name" name="subject_name" required placeholder="输入科目名称">
+                                        <input type="text" class="form-control" id="subject_name" name="subject_name" required placeholder="输入专业名称">
                                     </td>
                                     <td>
                                         <div class='input-group date classifyDate'  id='datetimepicker4'>
@@ -223,7 +223,7 @@
         if (!$("#classify_name").val()||!$("#classify_code").val()||!$("#apply_start").val()||!$("#apply_end").val()||!$("#pay_end").val()||$("#apply_fee").val()=="") {
             Swal.fire({
                 title: "温馨提示",
-                text: "请填写完整专业信息",
+                text: "请填写完整科目信息",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonColor: '#3085d6',
@@ -234,7 +234,7 @@
         if ($(".classifyLists tr").length==0) {
             Swal.fire({
                 title: "温馨提示",
-                text: "请至少输入一项科目信息",
+                text: "请至少输入一项专业信息",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonColor: '#3085d6',
@@ -252,7 +252,7 @@
         if (!$("#subject_name").val()||!$("#exam_date").val()||!$("#exam_time").val()) {
             Swal.fire({
                 title: "温馨提示",
-                text: "请输入完整科目信息",
+                text: "请输入完整专业信息",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonColor: '#3085d6',

@@ -38,7 +38,7 @@
                                         {% endfor %}
                                     </select>
                                     <select class="form-control" id="classifySelect">
-                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试专业）</option>
+                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试科目）</option>
 
                                         {% for item in classifyLists %}
                                         
@@ -56,8 +56,8 @@
                                     <tr>
                                         <th>序号</th>
                                         <th>考试名称</th>
-                                        <th>专业名称</th>
-                                        <th>专业代码</th>
+                                        <th>科目名称</th>
+                                        <th>科目代码</th>
                                         <th>人数</th>
                                         <th>考试日期</th>
                                         <th>考试结果</th>

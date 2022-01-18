@@ -27,7 +27,7 @@ module.exports = app => {
   router.get('/home/myApply', controller.admin.home.myApply);//我的报名
   router.get('/home/myInfo', controller.admin.home.myInfo);//我的资料
   router.get('/home/examInfo', controller.admin.home.examInfo);//考试公告
-  router.get('/home/classifyLists', controller.admin.home.classifyLists);//选择专业
+  router.get('/home/classifyLists', controller.admin.home.classifyLists);//选择科目
   router.get('/home/confirm', controller.admin.home.confirm);//确认资料
   router.post('/home/doConfirm', controller.admin.home.doConfirm);//提交报名资料
 

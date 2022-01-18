@@ -41,7 +41,7 @@
                                         {% endfor %}
                                     </select>
                                     <select class="form-control" id="classifySelect">
-                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试专业）</option>
+                                        <option value="" {% if classify_id=="" %}selected{% endif %}>全部（考试科目）</option>
 
                                         {% for item in classifyLists %}
                                         
@@ -59,7 +59,7 @@
                                     <tr>
                                         <th>序号</th>
                                         <th>考试名称</th>
-                                        <th>专业名称</th>
+                                        <th>科目名称</th>
                                         <th>报考人数</th>
                                         <th>待审核人数</th>
                                         <th>审核通过人数</th>

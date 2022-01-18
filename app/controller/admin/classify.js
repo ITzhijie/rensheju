@@ -82,8 +82,8 @@ class Controller extends BaseController {
 
     async doAdd() {
         /*
-        * 1.储存专业信息 返回专业id
-        * 2.储存科目信息 JSON.parse转义 遍历储存
+        * 1.储存科目信息 返回科目id
+        * 2.储存专业信息 JSON.parse转义 遍历储存
         */
         const {ctx}=this;
         var addResult = this.ctx.request.body;
@@ -106,7 +106,7 @@ class Controller extends BaseController {
             new ctx.model.Subject(v).save();
         })
 
-        await this.success('/admin/classify', '增加专业成功');
+        await this.success('/admin/classify', '增加科目成功');
    
     }
 
@@ -176,7 +176,7 @@ class Controller extends BaseController {
 
 
 
-        await this.success('/admin/classify', '修改考试专业成功')
+        await this.success('/admin/classify', '修改考试科目成功')
 
     }
 
@@ -203,7 +203,7 @@ class Controller extends BaseController {
 
         this.ctx.body={
             code:0,
-            msg:"获取专业列表成功",
+            msg:"获取科目列表成功",
             data:classifyLists
         }
 

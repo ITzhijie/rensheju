@@ -380,7 +380,7 @@ class Controller extends BaseController {
         await this.ctx.render('index/examInfo', {data,classifyLists});
 
     }
-    //选择专业 exam_name
+    //选择科目 exam_name
     async classifyLists(){
         var id = this.ctx.request.query.id;
         var exam_name = this.ctx.request.query.exam_name;

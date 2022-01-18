@@ -8,7 +8,7 @@ module.exports = app => {
  	
         // 报名考试
         exam_id: { type: Schema.Types.ObjectId },
-        // 报名专业
+        // 报名科目
         classify_id: { type: Schema.Types.ObjectId },
         
         // 考点名称

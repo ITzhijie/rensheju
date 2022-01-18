@@ -1,6 +1,6 @@
 {% extends "../public/layout.html" %}
 
-{% block title %} 专业列表 {% endblock %}
+{% block title %} 科目列表 {% endblock %}
 
 {% block main %}
 
@@ -12,9 +12,9 @@
                     <div class="card ">
                         
                         <div class="card-header">
-                            <h3 class="card-title">专业列表</h3>
+                            <h3 class="card-title">科目列表</h3>
 
-                            <a href="/admin/classify/add" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">设置专业</a>
+                            <a href="/admin/classify/add" class="toolBtn btn btn-primary float-right" style="font-size: 1rem;">设置科目</a>
 
                             <div class="card-tools">
 
@@ -39,8 +39,8 @@
                                     <tr>
                                         <th>序号</th>
                                         <th>考试名称</th>
-                                        <th>专业名称</th>
-                                        <th>专业代码</th>
+                                        <th>科目名称</th>
+                                        <th>科目代码</th>
                                         <th>报名起止时间</th>
 
                                         <th class="text-center">操作</th>
@@ -68,7 +68,7 @@
                                 </tbody>
                             </table>
                             {% if lists.length == 0 %}
-                            <div class="text-center py-2">暂时未设置专业信息，请前往设置</div>
+                            <div class="text-center py-2">暂时未设置科目信息，请前往设置</div>
                             {% endif %}
                         </div>
                         
@@ -89,7 +89,7 @@
             var id=$(this).attr("data-id");
             if(status==0){
                 var title="确认发布上线吗";
-                var text="发布上线之前请确保该项考试专业、科目等信息设置完整";
+                var text="发布上线之前请确保该项考试科目、专业等信息设置完整";
             }else{
                 var title="确认下线吗";
                 var text="下线之后，考生不可看到报名入口，不影响此前报名数据";

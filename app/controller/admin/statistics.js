@@ -27,7 +27,7 @@ class Controller extends BaseController {
 
         let res=await this.ctx.service.getData.getDataDetail(exam_id,classify_id);
 
-        var title = ['序号','考试名称','专业名称','报考人数','待审核人数','审核通过人数','缴费人数','未缴费人数'];
+        var title = ['序号','考试名称','科目名称','报考人数','待审核人数','审核通过人数','缴费人数','未缴费人数'];
 
         console.log('========title========');
         console.log(title);

@@ -41,7 +41,7 @@
                                 </select>
                             </div> 
                             <div class="form-group col-md-6">
-                                <label for="classifySelect">考试专业</label>
+                                <label for="classifySelect">考试科目</label>
                                 <select class="form-control" id="classifySelect">
                                     <option value="">请先选择类别</option>
 
@@ -87,7 +87,7 @@
                     str+='<option value="'+lists[i]._id+'">'+lists[i].classify_name+'</option>'
                 }
                 if (str=='') {
-                    str='<option>暂无对应专业</option>';
+                    str='<option>暂无对应科目</option>';
                 }
                 $("#classifySelect").html(str);
             }
@@ -129,7 +129,7 @@
         if (!$("#classifySelect").val()) {
             Swal.fire({
                 title: '温馨提示',
-                text: "请先选择对应考试的专业",
+                text: "请先选择对应考试的科目",
                 icon: 'info',
                 confirmButtonText: '好的'
             })
