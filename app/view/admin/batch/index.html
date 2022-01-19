@@ -99,7 +99,7 @@
 
      //选择文件
      $("#InputFile").change(function(e){
-            var supportedType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            var supportedType = ["application/vnd.ms-excel",'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
 			var file = e.target.files[0];
             console.log(file);
@@ -107,10 +107,10 @@
             if (!file) {
 				return
 			}
-            if (file.type!=supportedType) {
+            if (supportedType.indexOf(file.type) < 0) {
                 Swal.fire({
                     title: 'Error!',
-                    text: "文件格式只支持.xlsx表格文件",
+                    text: "文件格式只支持.xlsx和.xls表格文件",
                     icon: 'error',
                     confirmButtonText: '好的'
                 })

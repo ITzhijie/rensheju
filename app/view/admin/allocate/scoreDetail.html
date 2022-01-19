@@ -206,7 +206,7 @@
 
         //选择文件
         $("#InputFile").change(function (e) {
-            var supportedType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            var supportedType = ["application/vnd.ms-excel",'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
             var file = e.target.files[0];
             console.log(file);
@@ -214,20 +214,20 @@
             if (!file) {
                 return
             }
-            if (file.type != supportedType) {
+            if (supportedType.indexOf(file.type) < 0) {
                 Swal.fire({
                     title: 'Error!',
-                    text: "文件格式只支持.xlsx表格文件",
+                    text: "文件格式只支持.xlsx和.xls表格文件",
                     icon: 'error',
                     confirmButtonText: '好的'
                 })
                 return
             }
 
-            if (file.name != "{{filename}}.xlsx") {
+            if (file.name.split(".xls")[0] != "{{filename}}") {
                 Swal.fire({
                     title: 'Error!',
-                    text: file.name+"文件名称与下载模板名称不一致，请先下载考生信息模板，编辑后再上传。正确文件名为：{{filename}}.xlsx",
+                    text: file.name+"文件名称与下载模板名称不一致，请先下载考生信息模板，编辑后再上传。正确文件名为：{{filename}}",
                     icon: 'error',
                     confirmButtonText: '好的'
                 })
