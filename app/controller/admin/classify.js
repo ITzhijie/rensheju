@@ -185,18 +185,24 @@ class Controller extends BaseController {
 
         const {ctx}=this;
         var exam_id = this.ctx.request.body.exam_id;
+        var ended = this.ctx.request.body.ended;//获取考试开始之前的科目
+        var findObj={};
+        if(ended){
+            findObj.exam_start={$gt:new Date()}
+        }
+
         var classifyLists;
         if (exam_id) {
-            classifyLists= await this.ctx.model.Classify.find({exam_id:exam_id});
+            findObj.exam_id=exam_id
+            classifyLists= await this.ctx.model.Classify.find(findObj);
         }else{
             if (this.ctx.session.adminInfo.is_super == 1) {
-                classifyLists= await this.ctx.model.Classify.find();
+                classifyLists= await this.ctx.model.Classify.find(findObj);
                 
             }else{
                 let admin_organ_id=this.ctx.session.adminInfo.organ_id;
-                classifyLists= await this.ctx.model.Classify.find({
-                    organ_id:admin_organ_id
-                });
+                findObj.organ_id=admin_organ_id
+                classifyLists= await this.ctx.model.Classify.find(findObj);
             }
             
         }

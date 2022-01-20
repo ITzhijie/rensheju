@@ -204,7 +204,7 @@ class Controller extends BaseController {
             classify_id: classify_id,
             room_name:room_name,
             room_num:room_num
-        });
+        }).sort({seat_num:1});
 
         // let page = this.ctx.request.query.page||1;
         // let data=await this.ctx.service.getData.getAllocatingExaminee(exam_id,classify_id,page,1);
@@ -225,7 +225,7 @@ class Controller extends BaseController {
             classify_id: classify_id,
             room_name:room_name,
             room_num:room_num
-        });
+        }).sort({seat_num:1});
         let findJson = {
             $lookup: {
                 from: 'exam',

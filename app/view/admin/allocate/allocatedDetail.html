@@ -122,7 +122,12 @@
 
                             {% for list in lists %}
                             <div class="listBox">
+                                {% if list.photo %}
                                 <img src="{{list.photo}}">
+                                {% else %}
+                                <img src="/public/admin/images/pl02.png">
+                                {% endif %}
+                                
                                 <p>{{list.uname}}</p>
                                 <p>{{list.idcode}}</p>
                                 <p>考场号：{{list.room_num}} <span>座位号：{{list.seat_num}}</span> </p>
@@ -164,13 +169,16 @@
                 return
             }
             drawCanvas();
-            var path=$('#seatCanvas').getCanvasImage();
-            console.log(path);
-            var a = document.createElement('a');          // 创建一个a节点插入的document
-            var event = new MouseEvent('click');           // 模拟鼠标click点击事件
-            a.download = '{{lists[0].room_name+lists[0].room_num}}号考场';                  // 设置a节点的download属性值
-            a.href = path;                                 // 将图片的src赋值给a节点的href
-            a.dispatchEvent(event); 
+            setTimeout(function(){
+                var path=$('#seatCanvas').getCanvasImage();
+                console.log(path);
+                var a = document.createElement('a');          // 创建一个a节点插入的document
+                var event = new MouseEvent('click');           // 模拟鼠标click点击事件
+                a.download = '{{lists[0].room_name+lists[0].room_num}}号考场';                  // 设置a节点的download属性值
+                a.href = path;                                 // 将图片的src赋值给a节点的href
+                a.dispatchEvent(event); 
+            },500)
+            
         })
         
 
@@ -293,8 +301,10 @@
                         
                         i=k%5;
                         h=Math.floor(k/5);
+                        let photoUrl= lists[k].photo||"/public/admin/images/pl03.png";
+
                         $('#seatCanvas').drawImage({
-                            source: lists[i].photo,
+                            source: photoUrl,
                             x: 5+200*h, y: 840-30-26-100-152*i,
                             width: 70,
                             height: 100,
@@ -304,7 +314,7 @@
                             fillStyle: '#000',
                             fontStyle: 'bold',
                             fontSize: '12px',
-                            text: '座位号：'+lists[i].seat_num,
+                            text: '座位号：'+lists[k].seat_num,
                             x: 80+200*h, y: 810-152-80+ 85-152*i,
                             fromCenter: false
                         });
@@ -312,7 +322,7 @@
                             fillStyle: '#000',
                             
                             fontSize: '12px',
-                            text: "姓名："+lists[i].uname,
+                            text: "姓名："+lists[k].uname,
                             x: 80+200*h, y: 810-152-80+101-152*i,
                             fromCenter: false
                         });
@@ -327,7 +337,7 @@
                         $('#seatCanvas').drawText({
                             fillStyle: '#000',
                             fontSize: '10px',
-                            text: lists[i].idcode,
+                            text: lists[k].idcode,
                             x: 80+200*h, y: 810-152-80+135-152*i,
                             fromCenter: false
                         });
@@ -342,7 +352,7 @@
                         $('#seatCanvas').drawText({
                             fillStyle: '#000',
                             fontSize: '10px',
-                            text: lists[i].exam_card,
+                            text: lists[k].exam_card,
                             x: 80+200*h, y: 810-152-80+169-152*i,
                             fromCenter: false
                         });
@@ -488,8 +498,9 @@
                         
                         i=k%7;
                         h=Math.floor(k/7);
+                        let photoUrl= lists[i].photo||"/public/admin/images/pl03.png";
                         $('#seatCanvas').drawImage({
-                            source: lists[i].photo,
+                            source:photoUrl,
                             x: 10+140*i, y: 65+275*h,
                             width: 120,
                             height: 170,

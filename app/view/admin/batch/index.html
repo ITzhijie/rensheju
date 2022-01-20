@@ -77,7 +77,8 @@
 <script>
     $("#examSelect").change(function(){
         app.ajaxPost("/admin/classify/getClassifyLists", {
-            exam_id: $(this).val()
+            exam_id: $(this).val(),
+            ended:1
         }, function (res) {
             console.log(res);
             if (res.code==0) {

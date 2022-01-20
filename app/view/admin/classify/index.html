@@ -42,6 +42,8 @@
                                         <th>科目名称</th>
                                         <th>科目代码</th>
                                         <th>报名起止时间</th>
+                                        <th>缴费截止时间</th>
+                                        <th>考试时间</th>
 
                                         <th class="text-center">操作</th>
                                     </tr>
@@ -55,6 +57,8 @@
                                         <td>{{list.classify_name}}</td>
                                         <td>{{list.classify_code}}</td>
                                         <td>{{helper.formatTime2(list.apply_start)}} 至 {{helper.formatTime2(list.apply_end)}}</td>
+                                        <td>{{helper.formatTime2(list.pay_end)}}</td>
+                                        <td>{{helper.formatTime2(list.exam_start)}} 至 {{helper.formatTime2(list.exam_end)}}</td>
                                         
 
                                         <td class="text-center">
