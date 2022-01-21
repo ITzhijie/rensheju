@@ -263,7 +263,7 @@ class ToolsService extends Service {
     }
 
     //获取考生分数
-    async getscoreExaminee(exam_id,classify_id,page){
+    async getscoreExaminee(exam_id,classify_id,page,keyword){
         var pageSize = 10;
 
         let findJson1 = {
@@ -313,7 +313,12 @@ class ToolsService extends Service {
             $match: {
                 verify_status:1,
                 pay_status:1,
-                room_status:1
+                room_status:1,
+                $or: [
+                    { "uname": { "$regex": keyword } },
+                    { "phone": { "$regex": keyword } },
+                    { "exam_card": { "$regex": keyword } }
+                ]
             }
         }
 
@@ -344,7 +349,7 @@ class ToolsService extends Service {
             findJson3,
             matchJson,
             {
-                $sort: { room_status: 1 }
+                $sort: { result_status: 1 }
             },
             { "$skip": (page - 1) * pageSize },
             { "$limit": pageSize }

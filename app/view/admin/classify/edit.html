@@ -110,6 +110,20 @@
                                 <label for="annex">附件要求 <span>（描述考生报名时需要上传的附件，附件以图片形式上传）</span></label>
                                 <input type="text" class="form-control" id="annex" name="annex" value="{{data.annex}}" required placeholder="例：需上传毕业证书与学位证书照片">
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="can_down">下载准考证权限</label>
+                                <select class="form-control" name="can_down" id="can_down">
+                                    <option value="1" {% if data.can_down==1 %}selected{% endif %}>开启</option>
+                                    <option value="0" {% if data.can_down==0 %}selected{% endif %}>关闭</option>
+                                </select>
+                            </div> 
+                            <div class="form-group col-md-6">
+                                <label for="can_check">成绩查询权限</label>
+                                <select class="form-control" name="can_check" id="can_check">
+                                    <option value="1" {% if data.can_check==1 %}selected{% endif %}>开启</option>
+                                    <option value="0" {% if data.can_check==0 %}selected{% endif %}>关闭</option>
+                                </select>
+                            </div> 
                         </div>
                         <input id="subjectArr" type="hidden" name="subjectArr" value="{{subjectStr}}">
                         <input id="_id" type="hidden" name="id" value="{{data._id}}">

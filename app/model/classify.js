@@ -33,6 +33,12 @@ module.exports = app => {
         // 分数上传状态
         score_status: { type: Number, default: 0 },
 
+        //是否可以下载准考证
+        can_down: { type: Number, default: 0 },
+        //是否可以查询成绩
+        can_check: { type: Number, default: 0 },
+
+
 		add_time: {
 			type: Date,
 			default: Date.now

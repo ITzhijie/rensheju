@@ -395,10 +395,11 @@ class Controller extends BaseController {
     async scoreDetail(){
         let exam_id = this.ctx.request.query.exam_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.exam_id) : "";
         let classify_id = this.ctx.request.query.classify_id ? this.app.mongoose.Types.ObjectId(this.ctx.request.query.classify_id) : "";
-
+        var keyword = this.ctx.request.query.keyword||"";
+        console.log(keyword);
         let page = this.ctx.request.query.page||1;
 
-        let data=await this.ctx.service.getData.getscoreExaminee(exam_id,classify_id,page);
+        let data=await this.ctx.service.getData.getscoreExaminee(exam_id,classify_id,page,keyword);
         console.log("分配页面data=========");
         console.log(data);
 
@@ -425,6 +426,7 @@ class Controller extends BaseController {
         var subjectLists = await this.ctx.model.Subject.find({classify_id:classify_id});
         data.subjectLists=subjectLists;
 
+        data.keyword=keyword;
         await this.ctx.render('admin/allocate/scoreDetail', data);
 
 

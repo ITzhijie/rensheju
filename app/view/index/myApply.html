@@ -198,11 +198,12 @@
                     <td>{{list.room_name}}</td>
 
                     <td>
-                        {% if  (nowDate > list.downcard_date) %}
-
+                        {% if  (nowDate > list.downcard_date) and list.classify[0].can_down==1 %}
                         <span class="handlebtn downCard" data-id="{{list._id}}">下载准考证</span>
                         {% endif %}
-                    
+                        {% if  (nowDate > list.downcard_date) and list.classify[0].can_down==0 %}
+                        <span class="label label-danger">下载通道已关闭</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endif %}
@@ -218,6 +219,7 @@
                     <th>报考科目</th>
                     <th>考试时间</th>
                     <th>考试结果</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -230,13 +232,25 @@
                     <td>{{helper.formatTime2(list.exam[0].exam_start)}}</td>
                     <td>
                         {% if  list.result_status==1 %}
+                            {% if list.classify[0].can_check==1 %}
+                            <span class="handlebtn getResult" data-id="{{list._id}}">查看</span>
+                            {% else %}
+                            <span class="label label-danger">查询通道已关闭</span>
 
-                        <span class="handlebtn getResult" data-id="{{list._id}}">查看</span>
+                            {% endif %}
                         {% else %}
                         <span class="label label-warning">待公布</span>
 
                         {% endif %}
                     
+                    </td>
+                    <td>
+                        {% if  (nowDate > list.downcard_date) and list.classify[0].can_down==1 %}
+                        <span class="handlebtn downCard" data-id="{{list._id}}">下载准考证</span>
+                        {% endif %}
+                        {% if  (nowDate > list.downcard_date) and list.classify[0].can_down==0 %}
+                        <span class="label label-danger">下载通道已关闭</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endif %}

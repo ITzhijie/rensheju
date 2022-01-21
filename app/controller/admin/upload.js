@@ -119,7 +119,8 @@ class Controller extends BaseController {
                             +code+room_num+seatArr[k];
                             
                             //下载日期 当天的第二天
-                            var dateStr1=new Date().getTime()+24*60*60*1000;
+                            //var dateStr1=new Date().getTime()+24*60*60*1000;
+                            var dateStr1=new Date().getTime();//当天
                             var dateStr2=sd.format(dateStr1,'YYYY-MM-DD');
                             var dateStr3=dateStr2+" 00:00";
     
